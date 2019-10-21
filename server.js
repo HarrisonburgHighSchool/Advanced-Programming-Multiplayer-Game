@@ -25,8 +25,10 @@ io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
       x: 300,
-      y: 300
+      y: 300,
+      //id = socket.id
     };
+    console.log("New Player: " + socket.id)
   });
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
@@ -42,6 +44,12 @@ io.on('connection', function(socket) {
     if (data.down) {
       player.y += 5;
     }
+
+  });
+  socket.on('disconnect', function() {
+    io.sockets.emit('message', 'disconnect recieved');
+    delete players[socket.id]
+    io.sockets.emit('message', 'disconnect resolved');
   });
 });setInterval(function() {
   io.sockets.emit('state', players);
