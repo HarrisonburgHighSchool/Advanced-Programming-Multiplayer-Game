@@ -41,7 +41,6 @@ document.addEventListener('keyup', function(event) {
       break;
   }
 });
-
 socket.emit('new player');
 setInterval(function() {
   socket.emit('movement', movement);
@@ -53,7 +52,7 @@ canvas.height = 600;
 var context = canvas.getContext('2d');
 socket.on('state', function(players) {
   context.clearRect(0, 0, 800, 600);
-  context.fillStyle = 'green';
+  context.fillStyle = 'navy';
   for (var id in players) {
     var player = players[id];
     context.beginPath();
