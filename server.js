@@ -26,6 +26,7 @@ io.on('connection', function(socket) {
     players[socket.id] = {
       x: 300,
       y: 300,
+      r: 10
       //id = socket.id
     };
     console.log("New Player: " + socket.id)
@@ -33,24 +34,49 @@ io.on('connection', function(socket) {
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
     if (data.left) {
-      player.x -= 5;
+      if (player.x - player.r >= 0) {
+        player.x -= 5;
+      }
     }
     if (data.up) {
-      player.y -= 5;
+      if (player.y - player.r >= 0) {
+        player.y -= 5;
+      }
     }
     if (data.right) {
-      player.x += 5;
+      if (player.x + player.r <= 800) {
+        player.x += 5;
+      }
     }
     if (data.down) {
-      player.y += 5;
+      if (player.y + player.r <= 600) {
+        player.y += 5;
+      }
     }
 
+    if (player.x - player.r <= 0) {
+      player.x = 0 + player.r;
+    }
+    if (player.x + player.r >= 800) {
+      player.x = 800 - player.r;
+    }
+    if (player.y - player.r <= 0) {
+      player.y = 0 + player.r;
+    }
+    if (player.y + player.r >= 600) {
+      player.y = 600 - player.r;
+    }
   });
+
+
+
   socket.on('disconnect', function() {
     io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
     io.sockets.emit('message', 'disconnect resolved');
   });
-});setInterval(function() {
+});
+
+setInterval(function() {
   io.sockets.emit('state', players);
 }, 1000 / 60);
