@@ -44,6 +44,7 @@ document.addEventListener('keyup', function(event) {
 socket.emit('new player');
 setInterval(function() {
   socket.emit('movement', movement);
+  // socket.emit('collision')
 }, 1000 / 60);
 
 var canvas = document.getElementById('canvas');
@@ -52,11 +53,13 @@ canvas.height = 600;
 var context = canvas.getContext('2d');
 socket.on('state', function(players) {
   context.clearRect(0, 0, 800, 600);
-  context.fillStyle = 'navy';
+
   for (var id in players) {
     var player = players[id];
     context.beginPath();
+    context.fillStyle = player.color;
     context.arc(player.x, player.y, 10, 0, 2 * Math.PI);
+    // context.arc(player.x, player.y, 10, .16666 * Math.PI, 1.833333*Math.PI);
     context.fill();
   }
 });

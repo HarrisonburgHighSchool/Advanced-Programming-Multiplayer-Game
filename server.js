@@ -26,8 +26,9 @@ io.on('connection', function(socket) {
     players[socket.id] = {
       x: 300,
       y: 300,
-      r: 10
-      //id = socket.id
+      r: 10,
+      id: socket.id,
+      color: 'green'
     };
     console.log("New Player: " + socket.id)
   });
@@ -66,7 +67,51 @@ io.on('connection', function(socket) {
     if (player.y + player.r >= 600) {
       player.y = 600 - player.r;
     }
+
+    var collision = false;
+    // var p2 = {
+    //   x: 0,
+    //   y: 0,
+    //   r: 10
+    // };
+    for (p2 in players) {
+      p2 = players[p2];
+      if (player.id != p2.id && p2.id != NaN) {
+        console.log(player.id)
+        console.log(p2.id)
+        var a = player.x - p2.x
+        var b = player.y - p2.y
+        var c = player.r*2
+        // if (math.distance([player.x, player.y], [p2.x, p2.y]) <= player.r) {
+        if (a*a + b*b <= c*c) {
+          collision = true;
+        }
+      }
+    }
+    if (collision == true) {
+      // player.x = Math.floor(Math.random()*801);
+      // player.y = Math.floor(Math.random()*601);
+      player.color = 'red';
+      console.log("collision between " + player.id + " and " + p2.id);
+      console.log(player.x + " , " + player.y);
+      console.log(p2.x + " , " + p2.y);
+    } else {
+      player.color = 'green';
+    }
   });
+
+  // socket.on('collision', function() {
+  //   var collision = false;
+  //   for (p2 in players) {
+  //     if (sqrt((player.x - p2.x)^2 + (player.y - p2.y)^2) <= player.r) {
+  //       collision = true;
+  //     }
+  //   }
+  //   if (collision) {
+  //     player.x = 0;
+  //     player.y = 0;
+  //   }
+  // }
 
 
 
