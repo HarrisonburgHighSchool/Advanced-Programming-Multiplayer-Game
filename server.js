@@ -28,7 +28,8 @@ io.on('connection', function(socket) {
       y: 300,
       r: 10,
       id: socket.id,
-      color: 'green'
+      color: 'green',
+      hp: 20
     };
     console.log("New Player: " + socket.id)
   });
@@ -68,6 +69,11 @@ io.on('connection', function(socket) {
       player.y = 600 - player.r;
     }
 
+    //Kill player
+    if(player.hp <= 0) {
+      delete players[socket.id];
+    }
+
     var collision = false;
     // var p2 = {
     //   x: 0,
@@ -77,8 +83,6 @@ io.on('connection', function(socket) {
     for (p2 in players) {
       p2 = players[p2];
       if (player.id != p2.id && p2.id != NaN) {
-        console.log(player.id)
-        console.log(p2.id)
         var a = player.x - p2.x
         var b = player.y - p2.y
         var c = player.r*2
@@ -93,36 +97,24 @@ io.on('connection', function(socket) {
       // player.y = Math.floor(Math.random()*601);
       player.color = 'red';
       console.log("collision between " + player.id + " and " + p2.id);
-      console.log(player.x + " , " + player.y);
-      console.log(p2.x + " , " + p2.y);
     } else {
       player.color = 'green';
     }
   });
-
-  // socket.on('collision', function() {
-  //   var collision = false;
-  //   for (p2 in players) {
-  //     if (sqrt((player.x - p2.x)^2 + (player.y - p2.y)^2) <= player.r) {
-  //       collision = true;
-  //     }
-  //   }
-  //   if (collision) {
-  //     player.x = 0;
-  //     player.y = 0;
-  //   }
-  // }
-
-
-
   socket.on('disconnect', function() {
     io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
-    io.sockets.emit('message', 'disconnect resolved');
+    io.sockets.emit('message', 'disconnect recieved');
+  });
+  socket.on('attack', function(data) {
+    var player = players[socket.id] || {};
+      if (data.self) {
+        player.hp -= 5;
+        delete players[socket.id]
+      }
   });
 });
 
 setInterval(function() {
   io.sockets.emit('state', players);
 }, 1000 / 60);
-

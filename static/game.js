@@ -9,6 +9,34 @@ var movement = {
   left: false,
   right: false
 }
+
+var attack = {
+  normal: false,
+  self: false
+}
+
+document.addEventListener('keydown', function(event) {
+  switch (event.keyCode) {
+    case 77: // M
+      attack.normal = true;
+      break;
+    case 75: //k
+      attack.self = true;
+      break;
+  }
+});
+
+document.addEventListener('keyup', function(event) {
+  switch (event.keyCode) {
+    case 77: // M
+      attack.normal = false;
+      break;
+    case 75: //k
+      attack.self = false;
+      break;
+  }
+});
+
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -54,7 +82,9 @@ socket.on('state', function(players) {
   // For every player object sent by the server...
   for (var id in players) {
     var player = players[id];
-    ellipse(player.x, player.y, 10); // Draw an ellipse
+    fill(player.color)
+    ellipse(player.x, player.y, 20); // Draw an ellipse
+    text(player.hp, player.x - 30, player.y - 30);
   }
 
   // Send movement data to the server
