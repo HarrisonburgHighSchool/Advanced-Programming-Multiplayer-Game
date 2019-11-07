@@ -21,6 +21,7 @@ setInterval(function() {
 }, 1000);
 
 var players = {};
+var bullets = [];
 io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
@@ -101,6 +102,20 @@ io.on('connection', function(socket) {
       player.color = 'green';
     }
   });
+
+
+  socket.on('mouseclick', function(data) {
+    var player = players[socket.id] || {};
+    if (data.left == true) {
+      bullets.push(new Bullet(player, data.mx, data.my));
+    }
+
+    console.log(data);
+
+  });
+
+
+
   socket.on('disconnect', function() {
     io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
@@ -114,6 +129,23 @@ io.on('connection', function(socket) {
       }
   });
 });
+
+class Bullet {
+ constructor(player, mx, my) {
+  //this.id = ;
+  this.pl_id = player.id;
+  this.x = player.x;
+  this.y = player.y;
+  //this.speed = ;
+  //this.theta = ;
+ }
+
+  move() {
+   this.x = this.x + 1;
+   this.y = this.y;
+  }
+}
+
 
 setInterval(function() {
   io.sockets.emit('state', players);

@@ -11,31 +11,31 @@ var movement = {
 }
 
 var attack = {
-  normal: false,
-  self: false
+  bullet: false,
 }
 
-document.addEventListener('keydown', function(event) {
-  switch (event.keyCode) {
-    case 77: // M
-      attack.normal = true;
-      break;
-    case 75: //k
-      attack.self = true;
-      break;
-  }
+var mouse = {
+  left: false,
+  mx: 0,
+  my: 0
+}
+
+
+document.addEventListener('click', function(event) {
+
+  mouse.left = true;
+  mouse.mx = mouseX;
+  mouse.my = mouseY;
+  socket.emit('mouseclick', mouse);
+  console.log('click');
+
 });
 
-document.addEventListener('keyup', function(event) {
-  switch (event.keyCode) {
-    case 77: // M
-      attack.normal = false;
-      break;
-    case 75: //k
-      attack.self = false;
-      break;
-  }
-});
+// document.addEventListener('mousereleased', function(event) {
+//
+//   mouse.left = false;
+//
+// });
 
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
@@ -77,7 +77,12 @@ function setup() {
 
 // This is basically the "draw" function
 socket.on('state', function(players) {
-  background(200);
+  background(255);
+  noFill();
+  strokeWeight(3);
+  rect(0, 0, 800, 600);
+  strokeWeight(1);
+  //line(mouseX, mouseY, players[socket.id].x, players[socket.id].y);
 
   // For every player object sent by the server...
   for (var id in players) {
@@ -89,4 +94,5 @@ socket.on('state', function(players) {
 
   // Send movement data to the server
   socket.emit('movement', movement);
+
 });
