@@ -41,22 +41,22 @@ document.addEventListener('keyup', function(event) {
       break;
   }
 });
-socket.emit('new player');
-setInterval(function() {
-  socket.emit('movement', movement);
-}, 1000 / 60);
 
-var canvas = document.getElementById('canvas');
-canvas.width = 800;
-canvas.height = 600;
-var context = canvas.getContext('2d');
+function setup() {
+  createCanvas(800, 600);
+  socket.emit('new player');
+}
+
+// This is basically the "draw" function
 socket.on('state', function(players) {
-  context.clearRect(0, 0, 800, 600);
-  context.fillStyle = 'navy';
+  background(200);
+
+  // For every player object sent by the server...
   for (var id in players) {
     var player = players[id];
-    context.beginPath();
-    context.arc(player.x, player.y, 10, 0, 2 * Math.PI);
-    context.fill();
+    ellipse(player.x, player.y, 10); // Draw an ellipse
   }
+
+  // Send movement data to the server
+  socket.emit('movement', movement);
 });
