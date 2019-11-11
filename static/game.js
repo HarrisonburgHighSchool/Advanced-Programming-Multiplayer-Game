@@ -76,13 +76,12 @@ function setup() {
 }
 
 // This is basically the "draw" function
-socket.on('state', function(players) {
+socket.on('state', function(players, bullets) {
   background(255);
   noFill();
   strokeWeight(3);
   rect(0, 0, 800, 600);
   strokeWeight(1);
-  //line(mouseX, mouseY, players[socket.id].x, players[socket.id].y);
 
   // For every player object sent by the server...
   for (var id in players) {
@@ -90,6 +89,21 @@ socket.on('state', function(players) {
     fill(player.color)
     ellipse(player.x, player.y, 20); // Draw an ellipse
     text(player.hp, player.x - 30, player.y - 30);
+      if (id == socket.id) {
+        line(mouseX, mouseY, player.x, player.y);
+      }
+    }
+
+  // for (var id in bullets) {
+  //   var bullet = bullets[id];
+  //   fill(211, 211, 211)
+  //   rect(bullet.x, bullet.y, 10, 10)
+  // }
+
+  for (var i = 0; i < bullets.length; i++) {
+    var bullet = bullets[i];
+    fill(255, 0, 0)
+    rect(bullet.x, bullet.y, 10, 10)
   }
 
   // Send movement data to the server

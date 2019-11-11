@@ -22,6 +22,34 @@ setInterval(function() {
 
 var players = {};
 var bullets = [];
+
+// updates bullets
+setInterval(function() {
+  for (var i = 0; i < bullets.length; i++) {
+    //movement
+    bullets[i].x = bullets[i].x + bullets[i].dx;
+    bullets[i].y = bullets[i].y + bullets[i].dy;
+    //wall collision
+    let collided = false;
+    if (bullets[i].x >= 800) {
+      collided = true;
+    }
+    if (bullets[i].x <= 0) {
+      collided = true;
+    }
+    if (bullets[i].y >= 600) {
+      collided = true;
+    }
+    if (bullets[i].y <= 0) {
+      collided = true;
+    }
+    if (collided) {
+      bullets.splice(i,1);
+      console.log("cruck");
+    }
+  }
+}, 1000/60);
+
 io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
@@ -132,12 +160,19 @@ io.on('connection', function(socket) {
 
 class Bullet {
  constructor(player, mx, my) {
-  //this.id = ;
   this.pl_id = player.id;
-  this.x = player.x;
-  this.y = player.y;
-  //this.speed = ;
-  //this.theta = ;
+  this.x = player.x-5;
+  this.y = player.y-5;
+  this.tempx = mx - player.x;
+  this.tempy = my - player.y;
+  this.orientation = Math.atan(this.tempy/this.tempx);
+  if (player.x > mx) {
+    this.dy = -Math.sin(this.orientation)*5;
+    this.dx = -Math.cos(this.orientation)*5;
+  } else {
+    this.dy = Math.sin(this.orientation)*5;
+    this.dx = Math.cos(this.orientation)*5;
+  }
  }
 
   move() {
@@ -148,5 +183,5 @@ class Bullet {
 
 
 setInterval(function() {
-  io.sockets.emit('state', players);
+  io.sockets.emit('state', players, bullets);
 }, 1000 / 60);
