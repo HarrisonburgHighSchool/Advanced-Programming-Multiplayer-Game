@@ -4,10 +4,10 @@ var socket = io();
 socket.on('message', function(data) {
   console.log(data);
 });
-//
-let plx= 200;
-let ply = 200;
-// let bubble;
+
+// let plx= 200;
+// let ply = 200;
+
 
 function setup() {
   createCanvas(800, 600);
@@ -15,8 +15,6 @@ function setup() {
   player = new Player();
 }
 
-// This is basically the "draw" function
-// socket.on('state', function(players) {
 function draw(){
   background(200);
   {
@@ -24,13 +22,10 @@ function draw(){
     let ply = player.y + 96
     let c = dist(mouseX,mouseY, plx, ply);
     let d = constrain(c,0,100);
-    let x = -((d/c) * (plx-mouseX))+ply
+    let x = -((d/c) * (plx-mouseX))+plx
     let y = -((d/c) * (ply-mouseY))+ply
-  //   // For every player object sent by the server...
-
-  ellipse(x,y,10)
+      ellipse(x,y,10)
 }
-//ellipse(plx,ply,50);
 
   //Send movement data to the server
   image(player.img, player.x, player.y)
