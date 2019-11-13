@@ -1,56 +1,41 @@
+
 var socket = io();
 
 socket.on('message', function(data) {
   console.log(data);
 });
+//
+let plx= 200;
+let ply = 200;
+// let bubble;
 
 function setup() {
-  createCanvas(1000, 1000);
-  imgg = loadImage('assets/Grass1.png');
-  imgr = loadImage('assets/Rock1.gif');
-  imgt = loadImage('assets/tree1.png');
-  imgt2 = loadImage('assets/tree2.png');
+  createCanvas(800, 600);
   socket.emit('new player');
   player = new Player();
 }
 
-function draw() {
-
-  {
-    for (x = 0; x < 6; x++) {
-      for (y = 0; y < 6; y++) {
-        image(
-          imgg,
-          192 * x,
-          192 * y
-        );
-      }
-    }
-  }
+// This is basically the "draw" function
+// socket.on('state', function(players) {
+function draw(){
+  background(200);
   {
     let plx = player.x + 96
     let ply = player.y + 96
-    let c = dist(mouseX, mouseY, plx, ply);
-    let d = constrain(c, 0, 100);
-    let x = -((d / c) * (plx - mouseX)) + plx
-    let y = -((d / c) * (ply - mouseY)) + ply
-    //   // For every player object sent by the server...
+    let c = dist(mouseX,mouseY, plx, ply);
+    let d = constrain(c,0,100);
+    let x = -((d/c) * (plx-mouseX))+ply
+    let y = -((d/c) * (ply-mouseY))+ply
+  //   // For every player object sent by the server...
 
-    ellipse(x, y, 10)
-  }
+  ellipse(x,y,10)
+}
+//ellipse(plx,ply,50);
 
-  image(imgr, 0, 5);
-  image(imgr, 322, 5);
-  image(imgr, 350, 200);
-  //
-  image(imgr, 200, 300);
-  image(imgr, 80, 300);
-  //
-  image(imgt, 0, 10);
-  image(imgt2, 100, 5);
-  //player
+  //Send movement data to the server
   image(player.img, player.x, player.y)
-  if (player.left == true) {
+
+  if(player.left == true) {
     player.x = player.x - 10;
     player.img = player.imgs["left"];
   }
@@ -65,7 +50,8 @@ function draw() {
   if (player.down == true) {
     player.y = player.y + 10
     player.img = player.imgs["down"];
-  }
+}
+
 }
 
 function keyPressed() {
@@ -82,7 +68,6 @@ function keyPressed() {
     player.down = true;
   }
 }
-
 function keyReleased() {
   if (keyCode === LEFT_ARROW) {
     player.left = false;
@@ -103,16 +88,15 @@ class Player {
     this.x = 200;
     this.y = 200;
     this.imgs = {
-      "down": loadImage('assets/stomperD.png'),
-      "right": loadImage('assets/stomperR.png'),
-      "up": loadImage('assets/stomperU.png'),
-      "left": loadImage('assets/stomperL.png')
+      "down": loadImage('/assets/Down.png'),
+      "right": loadImage('/assets/Right.png'),
+      "up":loadImage('/assets/Up.png'),
+      "left": loadImage('/assets/Left.png')
     }
     this.img = this.imgs["down"];
     this.right = false;
     this.left = false;
-    this.up = false;
+    this.up = false
     this.down = false
-
   }
 }
