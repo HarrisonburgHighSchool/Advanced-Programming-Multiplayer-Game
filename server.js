@@ -155,7 +155,7 @@ io.on('connection', function(socket) {
         player.hp -= 5;
         delete players[socket.id]
       }
-  });
+  });0
 });
 
 class Bullet {
@@ -183,5 +183,23 @@ class Bullet {
 
 
 setInterval(function() {
-  io.sockets.emit('state', players, bullets);
+  // io.sockets.emit('state', players, bullets);
+  for (var id in players) {
+    var playersOnScreen = [];
+    var player = players[id];
+    for (p2id in players) {
+      var p2 = players[p2id];
+      if (player.id != p2.id && p2.id != NaN) {
+        var a = player.x - p2.x
+        var b = player.y - p2.y
+        var c = 100
+        if (a*a + b*b <= c*c) {
+          playersOnScreen.push(players[p2id]);
+        }
+      }
+    }
+    io.sockets.connected[id].emit('state', players[id], bullets);
+    io.sockets.connected[id].emit('nearby', playersOnScreen);
+  }
+
 }, 1000 / 60);

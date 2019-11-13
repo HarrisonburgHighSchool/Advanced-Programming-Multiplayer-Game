@@ -76,23 +76,21 @@ function setup() {
 }
 
 // This is basically the "draw" function
-socket.on('state', function(players, bullets) {
-  background(255);
+socket.on('state', function(player, bullets) {
+  background(100);
   noFill();
   strokeWeight(3);
   rect(0, 0, 800, 600);
   strokeWeight(1);
 
-  // For every player object sent by the server...
-  for (var id in players) {
-    var player = players[id];
-    fill(player.color)
-    ellipse(player.x, player.y, 20); // Draw an ellipse
-    text(player.hp, player.x - 30, player.y - 30);
-      if (id == socket.id) {
-        line(mouseX, mouseY, player.x, player.y);
-      }
-    }
+  noFill();
+  fill(255,255,255)
+  ellipse(player.x, player.y, 200); // Draw an ellipse
+  fill(player.color)
+  ellipse(player.x, player.y, 20); // Draw an ellipse
+  text(player.hp, player.x - 30, player.y - 30);
+
+  line(mouseX, mouseY, player.x, player.y);
 
   // for (var id in bullets) {
   //   var bullet = bullets[id];
@@ -108,5 +106,16 @@ socket.on('state', function(players, bullets) {
 
   // Send movement data to the server
   socket.emit('movement', movement);
+
+});
+
+socket.on('nearby', function(playersOnScreen) {
+  // For every player object sent by the server...
+  for (var i = 0; i < playersOnScreen.length; i++) {
+    var player = playersOnScreen[i];
+    fill(player.color)
+    ellipse(player.x, player.y, 20); // Draw an ellipse
+    text(player.hp, player.x - 30, player.y - 30);
+  }
 
 });
