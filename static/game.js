@@ -1,62 +1,37 @@
-var socket = io();
-socket.on('message', function(data) {
-  console.log(data);
-});
+let spritesheet;
+let spritedata;
 
-var movement = {
-  up: false,
-  down: false,
-  left: false,
-  right: false
+let animation = [];
+
+let stomper;
+
+function preload()  {
+  spritedata = loadJSON('/assets/stomper.json');
+  spritesheet = loadImage('/assets/Stomper Movements 4 Front.png');
 }
-document.addEventListener('keydown', function(event) {
-  switch (event.keyCode) {
-    case 65: // A
-      movement.left = true;
-      break;
-    case 87: // W
-      movement.up = true;
-      break;
-    case 68: // D
-      movement.right = true;
-      break;
-    case 83: // S
-      movement.down = true;
-      break;
-  }
-});
-document.addEventListener('keyup', function(event) {
-  switch (event.keyCode) {
-    case 65: // A
-      movement.left = false;
-      break;
-    case 87: // W
-      movement.up = false;
-      break;
-    case 68: // D
-      movement.right = false;
-      break;
-    case 83: // S
-      movement.down = false;
-      break;
-  }
-});
+
 
 function setup() {
-  createCanvas(800, 600);
-  socket.emit('new player');
-}
-
-// This is basically the "draw" function
-socket.on('state', function(players) {
-  background(200);
-
-  // For every player object sent by the server...
-  for (var id in players) {
-    var player = players[id];
-    ellipse(player.x, player.y, 10); // Draw an ellipse
+  createCanvas(640, 480);
+  let frames = spritedata.frames;
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h,) ;
+    animation.push(img);
   }
 
-  // Send movement data to the server
-  socket.emit('movement', movement);
-});
+
+  stomper = new Sprite(animation, 0, 50, 1);
+
+}
+
+function draw() {
+  background(0);
+
+
+  stomper.show();
+  stomper.animate();
+
+
+  //image(animation[frameCount % animation.length], 0, 0);
+}
