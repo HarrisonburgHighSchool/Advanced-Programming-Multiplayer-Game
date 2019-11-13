@@ -4,57 +4,99 @@ var socket = io();
 socket.on('message', function(data) {
   console.log(data);
 });
-
-let plx= 50;
-let ply = 50;
-let bubble;
+//
+let plx= 200;
+let ply = 200;
+// let bubble;
 
 function setup() {
   createCanvas(800, 600);
   socket.emit('new player');
-  bubble = new Bubble();
-  print(bubble.x,bubble.y);
+  player = new Player();
 }
 
 // This is basically the "draw" function
 // socket.on('state', function(players) {
 function draw(){
   background(200);
-let c = dist(mouseX,mouseY, plx, ply);
-let d = constrain(c,0,100);
+  {
+    let plx = player.x + 96
+    let ply = player.y + 96
+    let c = dist(mouseX,mouseY, plx, ply);
+    let d = constrain(c,0,100);
+    let x = -((d/c) * (plx-mouseX))+ply
+    let y = -((d/c) * (ply-mouseY))+ply
+  //   // For every player object sent by the server...
 
-let x = -((d/c) * (plx-mouseX))+plx
-let y = -((d/c) * (ply-mouseY))+ply
-  // For every player object sent by the server...
-
-ellipse(x,y,10)
-ellipse(plx,ply,50);
+  ellipse(x,y,10)
+}
+//ellipse(plx,ply,50);
 
   //Send movement data to the server
-bubble.move();
-bubble.show();
+  image(player.img, player.x, player.y)
 
-
-}
-// function show() {
-//   stroke(255);
-//   strokeweight(4);
-//   noFill();
-//   ellipse(bubble.x, bubble.y, 24, 24);
-// }
-class Bubble{
-  constructor(){
-this.x = 200;
-this.y = 200;
-}
-move() {
-   bubble.x = bubble.x + random (-5,5);
-   bubble.y = bubble.y + random (-5,5);
+  if(player.left == true) {
+    player.x = player.x - 10;
+    player.img = player.imgs["left"];
   }
-  show() {
-    stroke(255);
-    strokeweight(20);
-    noFill();
-    ellipse(bubble.x, bubble.y, 24, 24);
+  if (player.right == true) {
+    player.x = player.x + 10
+    player.img = player.imgs["right"];
+  }
+  if (player.up == true) {
+    player.y = player.y - 10
+    player.img = player.imgs["up"];
+  }
+  if (player.down == true) {
+    player.y = player.y + 10
+    player.img = player.imgs["down"];
+}
+
+}
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    player.left = true;
+  }
+  if (keyCode === RIGHT_ARROW) {
+    player.right = true;
+  }
+  if (keyCode === UP_ARROW) {
+    player.up = true;
+  }
+  if (keyCode === DOWN_ARROW) {
+    player.down = true;
+  }
+}
+function keyReleased() {
+  if (keyCode === LEFT_ARROW) {
+    player.left = false;
+  }
+  if (keyCode === RIGHT_ARROW) {
+    player.right = false;
+  }
+  if (keyCode === UP_ARROW) {
+    player.up = false;
+  }
+  if (keyCode === DOWN_ARROW) {
+    player.down = false;
+  }
+}
+
+class Player {
+  constructor() {
+    this.x = 200;
+    this.y = 200;
+    this.imgs = {
+      "down": loadImage('/assets/Down.png'),
+      "right": loadImage('/assets/Right.png'),
+      "up":loadImage('/assets/Up.png'),
+      "left": loadImage('/assets/Left.png')
+    }
+    this.img = this.imgs["down"];
+    this.right = false;
+    this.left = false;
+    this.up = false
+    this.down = false
   }
 }
