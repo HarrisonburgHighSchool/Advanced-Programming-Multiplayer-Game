@@ -4,7 +4,7 @@ var socket = io();
 socket.on('message', function(data) {
   console.log(data);
 });
-
+.0........................
 function setup() {
   createCanvas(1000, 1000);
   imgg = loadImage('assets/Grass1.png');
@@ -116,6 +116,7 @@ class Player {
     this.down = false
 
   }
+}
 
 
 // Animation code
