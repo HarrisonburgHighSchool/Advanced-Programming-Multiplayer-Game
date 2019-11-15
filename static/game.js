@@ -1,21 +1,51 @@
-
 var socket = io();
 
 socket.on('message', function(data) {
   console.log(data);
 });
-.0........................
+
+// let plx= 200;
+// let ply = 200;
+
+
+let spritesheet;
+let spritedata;
+
+let animation = [];
+
+let stomper;
+
+function preload() {
+  spritedata = loadJSON('/assets/stomper.json');
+  spritesheet = loadImage('/assets/Stomper Movements 4 Front.png');
+}
+
 function setup() {
   createCanvas(1000, 1000);
+  let frames = spritedata.frames;
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h, );
+    animation.push(img);
+  }
+
+
+  player = new Sprite(animation, 0, 50, 1);
+
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
   socket.emit('new player');
-  player = new Player();
+  //player = new Player();
 }
 
 function draw() {
+
+
+
+
+  //image(animation[frameCount % animation.length], 0, 0);
 
   {
     for (x = 0; x < 6; x++) {
@@ -40,6 +70,7 @@ function draw() {
     ellipse(x, y, 10)
   }
 
+
   image(imgr, 0, 5);
   image(imgr, 322, 5);
   image(imgr, 350, 200);
@@ -50,7 +81,14 @@ function draw() {
   image(imgt, 0, 10);
   image(imgt2, 100, 5);
   //player
-  image(player.img, player.x, player.y)
+  //image(player.img, player.x, player.y)
+
+  player.show();
+
+  if() {
+    player.animate();
+  }
+
   if (player.left == true) {
     player.x = player.x - 10;
     player.img = player.imgs["left"];
@@ -116,46 +154,4 @@ class Player {
     this.down = false
 
   }
-}
-
-
-// Animation code
-
-let spritesheet;
-let spritedata;
-
-let animation = [];
-
-let stomper;
-
-function preload()  {
-  spritedata = loadJSON('/assets/stomper.json');
-  spritesheet = loadImage('/assets/Stomper Movements 4 Front.png');
-}
-
-
-function setup() {
-  createCanvas(640, 480);
-  let frames = spritedata.frames;
-  for (let i = 0; i < frames.length; i++) {
-    let pos = frames[i].position;
-    let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h,) ;
-    animation.push(img);
-  }
-
-
-  stomper = new Sprite(animation, 0, 50, 1);
-
-}
-
-function draw() {
-  background(0);
-
-
-  stomper.show();
-  stomper.animate();
-
-
-  //image(animation[frameCount % animation.length], 0, 0);
-
 }
