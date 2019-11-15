@@ -3,11 +3,11 @@ let spritedata;
 
 let animation = [];
 
-let stomper;
+let soldier;
 
 function preload()  {
-  spritedata = loadJSON('/assets/stomper.json');
-  spritesheet = loadImage('/assets/Stomper Movements 4 Front.png');
+  spritedata = loadJSON('/assets/soldier.json');
+  spritesheet = loadImage('/assets/SoldierWalkFront.png');
 }
 
 
@@ -21,7 +21,7 @@ function setup() {
   }
 
 
-  stomper = new Sprite(animation, 0, 50, 1);
+  soldier = new Sprite(animation, 0, 50, 0.25);
 
 }
 
@@ -29,8 +29,8 @@ function draw() {
   background(0);
 
 
-  stomper.show();
-  stomper.animate();
+  soldier.show();
+  soldier.animate();
 
 
   //image(animation[frameCount % animation.length], 0, 0);
