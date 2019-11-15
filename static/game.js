@@ -30,14 +30,14 @@ function setup() {
   }
 
 
-  stomper = new Sprite(animation, 0, 50, 1);
+  player = new Sprite(animation, 0, 50, 1);
 
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
   socket.emit('new player');
-  player = new Player();
+  //player = new Player();
 }
 
 function draw() {
@@ -81,11 +81,14 @@ function draw() {
   image(imgt, 0, 10);
   image(imgt2, 100, 5);
   //player
-  image(player.img, player.x, player.y)
+  //image(player.img, player.x, player.y)
 
-  stomper.show();
+  player.show();
 
-  stomper.animate();
+  if() {
+    player.animate();
+  }
+
   if (player.left == true) {
     player.x = player.x - 10;
     player.img = player.imgs["left"];
