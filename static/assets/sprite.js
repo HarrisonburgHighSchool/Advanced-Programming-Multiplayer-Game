@@ -10,7 +10,8 @@ class Sprite {
 
 
   show() {
-    image(this.animation[this.index % this.len], this.x, this.y,);
+    let index = floor(this.index) % this.len;
+    image(this.animation[index], this.x, this.y);
 
 }
 
