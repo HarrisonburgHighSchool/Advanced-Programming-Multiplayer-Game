@@ -85,25 +85,28 @@ function draw() {
 
   player.show();
 
-  if() {
-    player.animate();
-  }
+
+
 
   if (player.left == true) {
     player.x = player.x - 10;
     player.img = player.imgs["left"];
+    player.animate();
   }
   if (player.right == true) {
     player.x = player.x + 10
     player.img = player.imgs["right"];
+    player.animate();
   }
   if (player.up == true) {
     player.y = player.y - 10
     player.img = player.imgs["up"];
+    player.animate();
   }
   if (player.down == true) {
     player.y = player.y + 10
     player.img = player.imgs["down"];
+    player.animate();
   }
 }
 
