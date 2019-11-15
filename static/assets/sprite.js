@@ -12,10 +12,11 @@ class Sprite {
   show() {
     image(this.animation[this.index % this.len], this.x, this.y,);
 
-}
+  }
 
 
  animate()  {
     this.index += this.speed;
+    
    }
 }
