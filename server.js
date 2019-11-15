@@ -16,9 +16,9 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
-setInterval(function() {
-  io.sockets.emit('message', 'hi!');
-}, 1000);
+// setInterval(function() {
+//   io.sockets.emit('message', 'hi!');
+// }, 1000);
 
 var players = {};
 var bullets = [];
