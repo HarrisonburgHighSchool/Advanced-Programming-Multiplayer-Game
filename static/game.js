@@ -6,8 +6,8 @@ let animation = [];
 let soldier;
 
 function preload()  {
-  spritedata = loadJSON('/assets/soldierWalk.json');
-  spritesheet = loadImage('/assets/SoldierWalkBack.png');
+  spritedata = loadJSON('/assets/Akan.json');
+  spritesheet = loadImage('/assets/Akan.png');
 }
 
 
