@@ -31,13 +31,13 @@ setInterval(function() {
     bullets[i].y = bullets[i].y + bullets[i].dy;
     //wall collision
     let collided = false;
-    if (bullets[i].x >= 800) {
+    if (bullets[i].x >= 1700) {
       collided = true;
     }
     if (bullets[i].x <= 0) {
       collided = true;
     }
-    if (bullets[i].y >= 600) {
+    if (bullets[i].y >= 900) {
       collided = true;
     }
     if (bullets[i].y <= 0) {
@@ -45,7 +45,7 @@ setInterval(function() {
     }
     if (collided) {
       bullets.splice(i,1);
-      console.log("cruck");
+      // console.log("cruck");
     }
   }
 }, 1000/60);
@@ -53,8 +53,8 @@ setInterval(function() {
 io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
-      x: 300,
-      y: 300,
+      x: 850,
+      y: 450,
       r: 10,
       id: socket.id,
       color: 'green',
@@ -75,12 +75,12 @@ io.on('connection', function(socket) {
       }
     }
     if (data.right) {
-      if (player.x + player.r <= 800) {
+      if (player.x + player.r <= 1700) {
         player.x += 5;
       }
     }
     if (data.down) {
-      if (player.y + player.r <= 600) {
+      if (player.y + player.r <= 900) {
         player.y += 5;
       }
     }
@@ -88,14 +88,14 @@ io.on('connection', function(socket) {
     if (player.x - player.r <= 0) {
       player.x = 0 + player.r;
     }
-    if (player.x + player.r >= 800) {
-      player.x = 800 - player.r;
+    if (player.x + player.r >= 1700) {
+      player.x = 1700 - player.r;
     }
     if (player.y - player.r <= 0) {
       player.y = 0 + player.r;
     }
-    if (player.y + player.r >= 600) {
-      player.y = 600 - player.r;
+    if (player.y + player.r >= 900) {
+      player.y = 900 - player.r;
     }
 
     //Kill player
@@ -122,22 +122,24 @@ io.on('connection', function(socket) {
       }
     }
     for (var i = 0; i < bullets.length; i++) {
-      var a = player.x - bullets[i].x
-      var b = player.y - bullets[i].y
-      var c = player.r*2
-      // if (math.distance([player.x, player.y], [p2.x, p2.y]) <= player.r) {
-      if (a*a + b*b <= c*c) {
-        collision = true;
-        player.hp = player.hp - 1;
-        bullets.splice(i,1);
-        console.log("bullet hit " + player.id);
+        var a = player.x - bullets[i].x
+        var b = player.y - bullets[i].y
+        var c = player.r*2
+        // if (math.distance([player.x, player.y], [p2.x, p2.y]) <= player.r) {
+        if (bullets[i].pl_id !== player.id) {
+          if (a*a + b*b <= c*c) {
+            collision = true;
+            player.hp = player.hp - 1;
+            bullets.splice(i,1);
+            // console.log("bullet hit " + player.id);
+          }
+        }
       }
-    }
     if (collision == true) {
       // player.x = Math.floor(Math.random()*801);
       // player.y = Math.floor(Math.random()*601);
       player.color = 'red';
-      console.log("collision between " + player.id + " and " + p2.id);
+      // console.log("collision between " + player.id + " and " + p2.id);
     } else {
       player.color = 'green';
     }
@@ -150,7 +152,7 @@ io.on('connection', function(socket) {
       bullets.push(new Bullet(player, data.mx, data.my));
     }
 
-    console.log(data);
+    // console.log(data);
 
   });
 
@@ -186,8 +188,8 @@ class Bullet {
       this.dx = Math.cos(this.orientation)*5;
     }
     // bullet needs to start not inside the players
-    this.x = this.x + (this.dx*5);
-    this.y = this.y + (this.dy*5);
+    this.x = this.x + (this.dx*2);
+    this.y = this.y + (this.dy*2);
   }
 }
 
@@ -202,7 +204,7 @@ setInterval(function() {
       if (player.id != p2.id && p2.id != NaN) {
         var a = player.x - p2.x;
         var b = player.y - p2.y;
-        var c = 500;
+        var c = 250;
         if (a*a + b*b <= c*c) {
           playersOnScreen.push(players[p2id]);
         }
@@ -220,17 +222,17 @@ setInterval(function() {
     var bulletsOnScreen = [];
     var player = players[id];
     for (var i = 0; i < bullets.length; i++) {
-      console.log("checking a bullet")
+      // console.log("checking a bullet")
       // var bullet = i;
       var a = player.x - bullets[i].x;
       var b = player.y - bullets[i].y;
-      var c = 500;
+      var c = 250;
       if (a*a + b*b <= c*c) {
-        console.log("bullet added to table")
+        // console.log("bullet added to table")
         bulletsOnScreen.push(bullets[i]);
-      } else {
-        console.log("bullet toooooooooooooooooooo farrrrrrr")
-      }
+      } //else {
+      //   console.log("bullet toooooooooooooooooooo farrrrrrr")
+      // }
     }
     io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
   }

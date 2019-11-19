@@ -1,7 +1,11 @@
+// Register Connection
+
 var socket = io();
 socket.on('message', function(data) {
   console.log(data);
 });
+
+//Variable Holders
 
 var movement = {
   up: false,
@@ -20,6 +24,7 @@ var mouse = {
   my: 0
 }
 
+//Attack Listener
 
 document.addEventListener('click', function(event) {
 
@@ -31,11 +36,7 @@ document.addEventListener('click', function(event) {
 
 });
 
-// document.addEventListener('mousereleased', function(event) {
-//
-//   mouse.left = false;
-//
-// });
+//Movement Down/Up Listeners
 
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
@@ -53,6 +54,7 @@ document.addEventListener('keydown', function(event) {
       break;
   }
 });
+
 document.addEventListener('keyup', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -70,29 +72,34 @@ document.addEventListener('keyup', function(event) {
   }
 });
 
+//Setup Function
+
 function setup() {
-  createCanvas(800, 600);
+  createCanvas(1700, 900);
   socket.emit('new player');
+  noCursor();
 }
 
-// This is basically the "draw" function
+// Renderer
+
 socket.on('state', function(player, bullets) {
   background(100);
   noFill();
   strokeWeight(3);
-  rect(0, 0, 800, 600);
+  rect(0, 0, 1700, 900);
   strokeWeight(1);
 
   noFill();
   fill(255,255,255)
-  ellipse(player.x, player.y, 1000); // Draw an ellipse
+  ellipse(player.x, player.y, 500); // Draw an ellipse
   fill(player.color)
   ellipse(player.x, player.y, 20); // Draw an ellipse
   text(player.hp, player.x - 30, player.y - 30);
 
-  line(mouseX, mouseY, player.x, player.y);
+  line((mouseX - 10), mouseY, (mouseX + 10), mouseY);
+  line(mouseX, (mouseY - 10), mouseX, (mouseY + 10))
 
-  console.log(bullets);
+  line(mouseX, mouseY, player.x, player.y);
 
   // for (var id in bullets) {
   //   var bullet = bullets[id];
@@ -107,6 +114,7 @@ socket.on('state', function(player, bullets) {
   // }
 
   // Send movement data to the server
+
   socket.emit('movement', movement);
 
 });
@@ -123,12 +131,12 @@ socket.on('nearbyPlayers', function(playersOnScreen) {
 });
 
 socket.on('nearbyBullets', function(bulletsOnScreen) {
-  console.log(bulletsOnScreen)
-  // For every bullet object sent by the server...
+  // console.log(bulletsOnScreen)
+  // For all bullets sent ~
   for (var i = 0; i < bulletsOnScreen.length; i++) {
     var bullet = bulletsOnScreen[i];
     fill(255, 0, 0)
-    rect(bullet.x, bullet.y, 10, 10); // Draw an ellipse
+    rect(bullet.x, bullet.y, 10, 10); // Draw Bullet
   }
 
 });
