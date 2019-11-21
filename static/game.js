@@ -11,27 +11,35 @@ socket.on('message', function(data) {
 let spritesheet;
 let spritedata;
 
-let animation = [];
+let down = [];
+let up = [];
 
 let soldier;
 
 function preload()  {
-  spritedata = loadJSON('/assets/Akan.json');
-  spritesheet = loadImage('/assets/Akan.png');
+  spritedata = loadJSON('/assets/soldierWalk.json');
+  front = loadImage('/assets/SoldierWalkFront.png');
+  back = loadImage('/assets/SoldierWalkBack.png');
 }
 
 function setup() {
-  createCanvas(1000, 1000);
+  createCanvas(900, 800);
   let frames = spritedata.frames;
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
-    let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h, );
-    animation.push(img);
+    let img = front.get(pos.x, pos.y, pos.w, pos.h, );
+    down.push(img);
+  }
+
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = back.get(pos.x, pos.y, pos.w, pos.h, );
+    up.push(img);
   }
 
 
-  soldier = new Sprite(animation, 0, 50, 0.25);
-  player = new Sprite(animation, 0, 50, 0.25);
+  soldier = new Player(down, up, 0, 50, 0.125);
+  player = new Player(down, up, 0, 50, 0.125);
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
@@ -61,8 +69,8 @@ function draw() {
     }
   }
   {
-    let plx = player.x + 96
-    let ply = player.y + 96
+    let plx = player.x + 70
+    let ply = player.y + 70
     let c = dist(mouseX, mouseY, plx, ply);
     let d = constrain(c, 0, 100);
     let x = -((d / c) * (plx - mouseX)) + plx
@@ -91,22 +99,22 @@ function draw() {
 
 
   if (player.left == true) {
-    player.x = player.x - 10;
+    player.x = player.x - 3;
     player.img = player.imgs["left"];
     player.animate();
   }
   if (player.right == true) {
-    player.x = player.x + 10
+    player.x = player.x + 3
     player.img = player.imgs["right"];
     player.animate();
   }
   if (player.up == true) {
-    player.y = player.y - 10
+    player.y = player.y - 3
     player.img = player.imgs["up"];
     player.animate();
   }
   if (player.down == true) {
-    player.y = player.y + 10
+    player.y = player.y + 3
     player.img = player.imgs["down"];
     player.animate();
   }
@@ -142,21 +150,56 @@ function keyReleased() {
   }
 }
 
+// class Player {
+//   constructor() {
+//     this.x = 200;
+//     this.y = 200;
+//     this.imgs = {
+//       "down": loadImage('assets/stomperD.png'),
+//       "right": loadImage('assets/stomperR.png'),
+//       "up": loadImage('assets/stomperU.png'),
+//       "left": loadImage('assets/stomperL.png')
+//     }
+//     this.img = this.imgs["down"];
+//     this.right = false;
+//     this.left = false;
+//     this.up = false;
+//     this.down = false
+//
+//   }
+// }
+
 class Player {
-  constructor() {
-    this.x = 200;
-    this.y = 200;
+  constructor(down, up, x, y, speed) {
+    this.x = x;
+    this.y = y;
+    this.animation = down;
+    this.len = this.animation.length;
+    this.speed = speed;
+    this.index = 0;
     this.imgs = {
-      "down": loadImage('assets/stomperD.png'),
-      "right": loadImage('assets/stomperR.png'),
-      "up": loadImage('assets/stomperU.png'),
-      "left": loadImage('assets/stomperL.png')
+      "down": down,
+      "right": down,
+      "up": up,
+      "left": up
     }
     this.img = this.imgs["down"];
     this.right = false;
     this.left = false;
     this.up = false;
     this.down = false
+  }
+
+
+  show() {
+    let index = floor(this.index) % this.len;
+    image(this.img[index], this.x, this.y);
 
   }
+
+
+ animate()  {
+    this.index += this.speed;
+
+   }
 }
