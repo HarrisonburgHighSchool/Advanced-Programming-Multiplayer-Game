@@ -38,6 +38,11 @@ var mouse = {
   my: 0
 }
 
+var pl = {
+  x: 0,
+  y: 0
+}
+
 
 document.addEventListener('click', function(event) {
 
@@ -135,8 +140,6 @@ function draw() {
     let x = -((d / c) * (plx - mouseX)) + plx
     let y = -((d / c) * (ply - mouseY)) + ply
     //   // For every player object sent by the server...
-
-    ellipse(x, y, 10)
   }
 
 
@@ -149,10 +152,13 @@ function draw() {
   //
   image(imgt, 0, 10);
   image(imgt2, 100, 5);
+  //
+  line(player.x + 63, player.y + 63, mouseX, mouseY);
+  ellipse(mouseX, mouseY, 10);
   //player
   //image(player.img, player.x, player.y)
 
-  player.show();
+
 
 
 
@@ -177,9 +183,15 @@ function draw() {
     player.img = player.imgs["down"];
     player.animate();
   }
+  player.x = pl.x;
+  player.y = pl.y
+  player.show();
 }
 
-// socket.on('state', function(player, bullets) {
+socket.on('state', function(serverPlayer, bullets) {
+
+  pl.x = serverPlayer.x;
+  pl.y = serverPlayer.y;
 //   background(100);
 //   noFill();
 //   strokeWeight(3);
@@ -210,10 +222,12 @@ function draw() {
 //   //   rect(bullet.x, bullet.y, 10, 10)
 //   // }
 //
-//   // Send movement data to the server//
-//   socket.emit('movement', movement);
+  // Send movement data to the server//
+
+
+  socket.emit('movement', movement);
 //
-// });
+});
 //
 // socket.on('nearbyPlayers', function(playersOnScreen) {
 //   // For every player object sent by the server...
