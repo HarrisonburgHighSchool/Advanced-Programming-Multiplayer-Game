@@ -1,5 +1,3 @@
-// Register Connection
-
 var socket = io();
 
 socket.on('message', function(data) {
@@ -40,7 +38,6 @@ var mouse = {
   my: 0
 }
 
-//Attack Listener
 
 document.addEventListener('click', function(event) {
 
@@ -52,7 +49,11 @@ document.addEventListener('click', function(event) {
 
 });
 
-//Movement Down/Up Listeners
+// document.addEventListener('mousereleased', function(event) {
+//
+//   mouse.left = false;
+//
+// });
 
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
@@ -70,7 +71,6 @@ document.addEventListener('keydown', function(event) {
       break;
   }
 });
-
 document.addEventListener('keyup', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -87,8 +87,6 @@ document.addEventListener('keyup', function(event) {
       break;
   }
 });
-
-//Setup Function
 
 function setup() {
   createCanvas(1000, 1000);
