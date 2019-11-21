@@ -1,5 +1,5 @@
 class Sprite {
-  constructor(animation, x, y, speed ) {
+  constructor(animation, x, y, speed) {
     this.x = x;
     this.y = y;
     this.animation = animation;
@@ -20,8 +20,9 @@ class Sprite {
   }
 
 
+
   show() {
-    image(this.animation[this.index % this.len], this.x, this.y,);
+  image(this.animation[this.index % this.len], this.x, this.y,);
 
   }
 

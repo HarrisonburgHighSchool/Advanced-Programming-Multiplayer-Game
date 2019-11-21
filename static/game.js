@@ -43,6 +43,16 @@ var pl = {
   y: 0
 }
 
+// let frames = spritedata.frames;
+// for (let i = 0; i < frames.length; i++) {
+//   let pos = frames[i].position;
+//   let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h, );
+//   animation.push(img);
+// }
+
+
+var player;
+
 
 document.addEventListener('click', function(event) {
 
@@ -105,8 +115,8 @@ function setup() {
     animation.push(img);
   }
 
+  player = new Sprite(animation, 500, 500, 0.25)
 
-  player = new Sprite(animation, 0, 50, 1);
 
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -118,7 +128,7 @@ function setup() {
 
 // Renderer
 function draw() {
-
+  background(255);
   //image(animation[frameCount % animation.length], 0, 0);
 
   {
@@ -152,7 +162,7 @@ function draw() {
   //
   image(imgt, 0, 10);
   image(imgt2, 100, 5);
-  //
+
   line(player.x + 63, player.y + 63, mouseX, mouseY);
   ellipse(mouseX, mouseY, 10);
   //player
@@ -163,35 +173,32 @@ function draw() {
 
 
 
-  if (player.left == true) {
-    player.x = player.x - 10;
-    player.img = player.imgs["left"];
-    player.animate();
-  }
-  if (player.right == true) {
-    player.x = player.x + 10
-    player.img = player.imgs["right"];
-    player.animate();
-  }
-  if (player.up == true) {
-    player.y = player.y - 10
-    player.img = player.imgs["up"];
-    player.animate();
-  }
-  if (player.down == true) {
-    player.y = player.y + 10
-    player.img = player.imgs["down"];
-    player.animate();
-  }
-  player.x = pl.x;
-  player.y = pl.y
+  // if (player.left == true) {
+  //   player.x = player.x - 10;
+  //   player.img = player.imgs["left"];
+  //   player.animate();
+  // }
+  // if (player.right == true) {
+  //   player.x = player.x + 10
+  //   player.img = player.imgs["right"];
+  //   player.animate();
+  // }
+  // if (player.up == true) {
+  //   player.y = player.y - 10
+  //   player.img = player.imgs["up"];
+  //   player.animate();
+  // }
+  // if (player.down == true) {
+  //   player.y = player.y + 10
+  //   player.img = player.imgs["down"];
+  //   player.animate();
+  // }
   player.show();
 }
 
 socket.on('state', function(serverPlayer, bullets) {
-
-  pl.x = serverPlayer.x;
-  pl.y = serverPlayer.y;
+  player.x = serverPlayer.x;
+  player.y = serverPlayer.y;
 //   background(100);
 //   noFill();
 //   strokeWeight(3);

@@ -217,25 +217,25 @@ io.on('connection', function(socket) {
 
 
   setInterval(function() {
-    io.sockets.emit('state', players, bullets);
-  //   for (var id in players) {
-  //     var playersOnScreen = [];
-  //     var player = players[id];
-  //     for (p2id in players) {
-  //       var p2 = players[p2id];
-  //       if (player.id != p2.id && p2.id != NaN) {
-  //         var a = player.x - p2.x;
-  //         var b = player.y - p2.y;
-  //         var c = 500;
-  //         if (a*a + b*b <= c*c) {
-  //           playersOnScreen.push(players[p2id]);
-  //         }
-  //       }
-  //     }
-  //     io.sockets.connected[id].emit('state', players[id], bullets);
-  //     io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
-  //   }
-  //
+    //io.sockets.emit('state', players, bullets);
+    for (var id in players) {
+      var playersOnScreen = [];
+      var player = players[id];
+      for (p2id in players) {
+        var p2 = players[p2id];
+        if (player.id != p2.id && p2.id != NaN) {
+          var a = player.x - p2.x;
+          var b = player.y - p2.y;
+          var c = 500;
+          if (a*a + b*b <= c*c) {
+            playersOnScreen.push(players[p2id]);
+          }
+        }
+      }
+      io.sockets.connected[id].emit('state', players[id], bullets);
+      //io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+    }
+
   }, 1000 / 60);
 
 //   setInterval(function() {
