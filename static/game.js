@@ -114,66 +114,6 @@ function setup() {
 
 
 // Renderer
-
-socket.on('state', function(player, bullets) {
-  background(100);
-  noFill();
-  strokeWeight(3);
-  rect(0, 0, 1700, 900);
-  strokeWeight(1);
-
-  noFill();
-  fill(255,255,255)
-  ellipse(player.x, player.y, 500); // Draw an ellipse
-  fill(player.color)
-  ellipse(player.x, player.y, 20); // Draw an ellipse
-  text(player.hp, player.x - 30, player.y - 30);
-
-  line((mouseX - 10), mouseY, (mouseX + 10), mouseY);
-  line(mouseX, (mouseY - 10), mouseX, (mouseY + 10))
-
-  line(mouseX, mouseY, player.x, player.y);
-
-  // for (var id in bullets) {
-  //   var bullet = bullets[id];
-  //   fill(211, 211, 211)
-  //   rect(bullet.x, bullet.y, 10, 10)
-  // }
-
-  // for (var i = 0; i < bullets.length; i++) {
-  //   var bullet = bullets[i];
-  //   fill(255, 0, 0)
-  //   rect(bullet.x, bullet.y, 10, 10)
-  // }
-
-  // Send movement data to the server
-
-  socket.emit('movement', movement);
-
-});
-
-socket.on('nearbyPlayers', function(playersOnScreen) {
-  // For every player object sent by the server...
-  for (var i = 0; i < playersOnScreen.length; i++) {
-    var player = playersOnScreen[i];
-    fill(player.color)
-    ellipse(player.x, player.y, 20); // Draw an ellipse
-    text(player.hp, player.x - 30, player.y - 30);
-  }
-
-});
-
-socket.on('nearbyBullets', function(bulletsOnScreen) {
-  // console.log(bulletsOnScreen)
-  // For all bullets sent ~
-  for (var i = 0; i < bulletsOnScreen.length; i++) {
-    var bullet = bulletsOnScreen[i];
-    fill(255, 0, 0)
-    rect(bullet.x, bullet.y, 10, 10); // Draw Bullet
-  }
-
-});
-
 function draw() {
 
   //image(animation[frameCount % animation.length], 0, 0);
@@ -241,22 +181,60 @@ function draw() {
   }
 }
 
-
-class Player {
-  constructor() {
-    this.x = 200;
-    this.y = 200;
-    this.imgs = {
-      "down": loadImage('assets/stomperD.png'),
-      "right": loadImage('assets/stomperR.png'),
-      "up": loadImage('assets/stomperU.png'),
-      "left": loadImage('assets/stomperL.png')
-    }
-    this.img = this.imgs["down"];
-    this.right = false;
-    this.left = false;
-    this.up = false;
-    this.down = false
-
-  }
-}
+// socket.on('state', function(player, bullets) {
+//   background(100);
+//   noFill();
+//   strokeWeight(3);
+//   rect(0, 0, 1700, 900);
+//   strokeWeight(1);
+//
+//   noFill();
+//   fill(255,255,255)
+//   ellipse(player.x, player.y, 500); // Draw an ellipse
+//   fill(player.color)
+//   ellipse(player.x, player.y, 20); // Draw an ellipse
+//   text(player.hp, player.x - 30, player.y - 30);
+//
+//   line((mouseX - 10), mouseY, (mouseX + 10), mouseY);
+//   line(mouseX, (mouseY - 10), mouseX, (mouseY + 10))
+//
+//   line(mouseX, mouseY, player.x, player.y);
+//
+//   // for (var id in bullets) {
+//   //   var bullet = bullets[id];
+//   //   fill(211, 211, 211)
+//   //   rect(bullet.x, bullet.y, 10, 10)
+//   // }
+//
+//   // for (var i = 0; i < bullets.length; i++) {
+//   //   var bullet = bullets[i];
+//   //   fill(255, 0, 0)
+//   //   rect(bullet.x, bullet.y, 10, 10)
+//   // }
+//
+//   // Send movement data to the server//
+//   socket.emit('movement', movement);
+//
+// });
+//
+// socket.on('nearbyPlayers', function(playersOnScreen) {
+//   // For every player object sent by the server...
+//   for (var i = 0; i < playersOnScreen.length; i++) {
+//     var player = playersOnScreen[i];
+//     fill(player.color)
+//     ellipse(player.x, player.y, 20); // Draw an ellipse
+//     text(player.hp, player.x - 30, player.y - 30);
+//   }
+//
+// });
+//
+// socket.on('nearbyBullets', function(bulletsOnScreen) {
+//   // console.log(bulletsOnScreen)
+//   // For all bullets sent ~
+//   for (var i = 0; i < bulletsOnScreen.length; i++) {
+//     var bullet = bulletsOnScreen[i];
+//     fill(255, 0, 0)
+//     rect(bullet.x, bullet.y, 10, 10); // Draw Bullet
+//   }
+//
+// });

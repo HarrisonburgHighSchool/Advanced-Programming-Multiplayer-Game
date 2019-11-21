@@ -53,12 +53,23 @@ setInterval(function() {
 io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
-      x: 850,
-      y: 450,
+      x: 200,
+      y: 200,
       r: 10,
       id: socket.id,
       color: 'green',
-      hp: 20
+      hp: 20,
+      imgs: {
+        "down": loadImage('assets/stomperD.png'),
+        "right": loadImage('assets/stomperR.png'),
+        "up": loadImage('assets/stomperU.png'),
+        "left": loadImage('assets/stomperL.png')
+      },
+      img: this.imgs["down"],
+      right: false,
+      left: false,
+      up: false,
+      down: false
     };
     console.log("New Player: " + socket.id)
   });
@@ -190,6 +201,25 @@ class Bullet {
     // bullet needs to start not inside the players
     this.x = this.x + (this.dx*2);
     this.y = this.y + (this.dy*2);
+  }
+}
+
+class Player { // currently not used
+  constructor() {
+    this.x = 200;
+    this.y = 200;
+    this.imgs = {
+      "down": loadImage('assets/stomperD.png'),
+      "right": loadImage('assets/stomperR.png'),
+      "up": loadImage('assets/stomperU.png'),
+      "left": loadImage('assets/stomperL.png')
+    }
+    this.img = this.imgs["down"];
+    this.right = false;
+    this.left = false;
+    this.up = false;
+    this.down = false
+
   }
 }
 
