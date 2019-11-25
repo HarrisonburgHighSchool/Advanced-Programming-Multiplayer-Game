@@ -37,9 +37,3 @@ code example
 ### Step ??: Display the Animation
 
 ----
-
-# Client
-
-Description
-
-## The Player Class
