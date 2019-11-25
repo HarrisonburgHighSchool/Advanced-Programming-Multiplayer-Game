@@ -12,6 +12,7 @@ let spritesheet;
 let spritedata;
 
 let animation = [];
+let players = [];
 
 let stomper;
 
@@ -194,6 +195,9 @@ function draw() {
   //   player.animate();
   // }
   player.show();
+  for(var id in players) {
+    players[id].show();
+  }
 }
 
 socket.on('state', function(serverPlayer, bullets) {
@@ -236,16 +240,23 @@ socket.on('state', function(serverPlayer, bullets) {
 //
 });
 //
-// socket.on('nearbyPlayers', function(playersOnScreen) {
-//   // For every player object sent by the server...
-//   for (var i = 0; i < playersOnScreen.length; i++) {
-//     var player = playersOnScreen[i];
-//     fill(player.color)
-//     ellipse(player.x, player.y, 20); // Draw an ellipse
-//     text(player.hp, player.x - 30, player.y - 30);
-//   }
-//
-// });
+socket.on('nearbyPlayers', function(playersOnScreen) {
+  players = [];
+  // For every player object sent by the server...
+  for (var i = 0; i < playersOnScreen.length; i++) {
+    var player = playersOnScreen[i];
+    player = new Sprite(animation, player.x, player.y, 0.25)
+    let count = 0;
+    for(var id in players) {
+      count += 1;
+    }
+    console.log("Total players: " + count)
+    // players.push(player);
+    players[player.id] = null;
+    players[player.id] = player;
+  }
+
+});
 //
 // socket.on('nearbyBullets', function(bulletsOnScreen) {
 //   // console.log(bulletsOnScreen)

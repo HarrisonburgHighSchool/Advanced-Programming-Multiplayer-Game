@@ -69,38 +69,37 @@ io.on('connection', function(socket) {
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
     if (data.left) {
-      console.log(player.x);
-      if (player.x != 239870) {
-        player.x -= 5;
+      if (player.x - 20 >= 0) {
+        player.x -= 10;
       }
     }
     if (data.up) {
-      if (player.y - player.r >= 0) {
-        player.y -= 5;
+      if (player.y - 20 >= 0) {
+        player.y -= 10;
       }
     }
     if (data.right) {
-      if (player.x + player.r <= 800) {
-        player.x += 5;
+      if (player.x + 20 <= 937) {
+        player.x += 10;
       }
     }
     if (data.down) {
-      if (player.y + player.r <= 600) {
-        player.y += 5;
+        if (player.y + 20 <= 937) {
+        player.y += 10;
       }
     }
 
-    if (player.x - player.r <= 0) {
-      player.x = 0 + player.r;
+    if (player.x - 20 <= 0) {
+      player.x = 0 + 20;
     }
-    if (player.x + player.r >= 800) {
-      player.x = 800 - player.r;
+    if (player.x + 20 >= 937) {
+      player.x = 937 - 20;
     }
-    if (player.y - player.r <= 0) {
-      player.y = 0 + player.r;
+    if (player.y - 20 <= 0) {
+      player.y = 0 + 20;
     }
-    if (player.y + player.r >= 600) {
-      player.y = 600 - player.r;
+    if (player.y + 20 >= 937) {
+      player.y = 937 - 20;
     }
 
     //Kill player
@@ -142,7 +141,6 @@ io.on('connection', function(socket) {
       // player.x = Math.floor(Math.random()*801);
       // player.y = Math.floor(Math.random()*601);
       player.color = 'red';
-      console.log("collision between " + player.id + " and " + p2.id);
     } else {
       player.color = 'green';
     }
@@ -233,7 +231,7 @@ io.on('connection', function(socket) {
         }
       }
       io.sockets.connected[id].emit('state', players[id], bullets);
-      //io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+      io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
     }
 
   }, 1000 / 60);
