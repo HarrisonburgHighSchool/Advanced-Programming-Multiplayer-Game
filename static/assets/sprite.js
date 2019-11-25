@@ -1,5 +1,5 @@
 class Sprite {
-  constructor(animation, x, y, speed) {
+  constructor(animation, id, x, y, speed) {
     this.x = x;
     this.y = y;
     this.animation = animation;

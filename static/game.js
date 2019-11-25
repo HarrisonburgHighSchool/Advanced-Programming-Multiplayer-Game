@@ -13,6 +13,7 @@ let spritedata;
 
 let animation = [];
 let players = [];
+let serverPlayers = [];
 
 let stomper;
 
@@ -116,7 +117,7 @@ function setup() {
     animation.push(img);
   }
 
-  player = new Sprite(animation, 500, 500, 0.25)
+  player = new Sprite(animation, "self", 500, 500, 0.25)
 
 
   imgg = loadImage('assets/Grass1.png');
@@ -169,7 +170,21 @@ function draw() {
   //player
   //image(player.img, player.x, player.y)
 
-
+  for(i = 0; i < serverPlayers.length; i++) {
+    let push = true;
+    for(id in players) {
+      if (players[id].id == serverPlayers[i].id) {
+        push = false;
+      }
+    }
+    if(push) {
+      console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
+      players[serverPlayers[i].id] = new Sprite(animation, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+    } else {
+      players[id].x = serverPlayers[i].x;
+      players[id].y = serverPlayers[i].y;
+    }
+  }
 
 
 
@@ -241,20 +256,22 @@ socket.on('state', function(serverPlayer, bullets) {
 });
 //
 socket.on('nearbyPlayers', function(playersOnScreen) {
-  players = [];
-  // For every player object sent by the server...
-  for (var i = 0; i < playersOnScreen.length; i++) {
-    var player = playersOnScreen[i];
-    player = new Sprite(animation, player.x, player.y, 0.25)
-    let count = 0;
-    for(var id in players) {
-      count += 1;
-    }
-    console.log("Total players: " + count)
-    // players.push(player);
-    players[player.id] = null;
-    players[player.id] = player;
-  }
+  // players = [];
+  // // For every player object sent by the server...
+  // for (var i = 0; i < playersOnScreen.length; i++) {
+  //   var player = playersOnScreen[i];
+  //   player = new Sprite(animation, player.x, player.y, 0.25)
+  //   let count = 0;
+  //   for(var id in players) {
+  //     count += 1;
+  //   }
+  //   console.log("Total players: " + count)
+  //   // players.push(player);
+  //   players[player.id] = null;
+  //   players[player.id] = player;
+  // }
+
+  serverPlayers = playersOnScreen
 
 });
 //
@@ -268,3 +285,15 @@ socket.on('nearbyPlayers', function(playersOnScreen) {
 //   }
 //
 // });
+
+class Enemy {
+  constructor(id, x, y) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+  }
+
+  show() {
+    rect(this.x, this.y, 20, 20);
+  }
+}
