@@ -35,3 +35,11 @@ code example
 ### Step ??: Create Player Object
 
 ### Step ??: Display the Animation
+
+----
+
+# Client
+
+Description
+
+## The Player Class
