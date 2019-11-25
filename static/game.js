@@ -68,6 +68,13 @@ function draw() {
       }
     }
   }
+
+  image(imgr, 322, 5);
+
+  image(imgt, 0, 10);
+  image(imgt2, 200, 5);
+
+
   {
     let plx = player.x + 70
     let ply = player.y + 70
@@ -81,17 +88,6 @@ function draw() {
   }
 
 
-  image(imgr, 0, 5);
-  image(imgr, 322, 5);
-  image(imgr, 350, 200);
-  //
-  image(imgr, 200, 300);
-  image(imgr, 80, 300);
-  //
-  image(imgt, 0, 10);
-  image(imgt2, 100, 5);
-  //player
-  //image(player.img, player.x, player.y)
 
   player.show();
 
