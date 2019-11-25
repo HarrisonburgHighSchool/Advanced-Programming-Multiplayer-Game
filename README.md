@@ -37,3 +37,11 @@ code example
 ### Step ??: Display the Animation
 
 ----
+
+# Client
+
+  The Client team is responsible for player movement, we draw the assets to the screens, and we drew the crosshair.  
+
+## The Player Class
+
+The player class is responsible for organizing and makes it easier to draw separate player.
