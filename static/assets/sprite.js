@@ -1,6 +1,6 @@
 class Sprite {
   constructor(down, up, id, x, y, speed) {
-
+    this.id = id;
     this.x = x;
     this.y = y;
     this.animation = down;

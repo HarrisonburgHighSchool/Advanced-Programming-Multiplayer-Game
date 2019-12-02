@@ -84,15 +84,19 @@ document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
     case 65: // A
       movement.left = true;
+      player.left = true;
       break;
     case 87: // W
       movement.up = true;
+      player.up = true;
       break;
     case 68: // D
       movement.right = true;
+      player.right = true;
       break;
     case 83: // S
       movement.down = true;
+      player.down = true;
       break;
   }
 });
@@ -100,15 +104,19 @@ document.addEventListener('keyup', function(event) {
   switch (event.keyCode) {
     case 65: // A
       movement.left = false;
+      player.left = false;
       break;
     case 87: // W
       movement.up = false;
+      player.up = false;
       break;
     case 68: // D
       movement.right = false;
+      player.right = false;
       break;
     case 83: // S
       movement.down = false;
+      player.down = false;
       break;
   }
 });
@@ -139,7 +147,6 @@ function setup() {
 
 
   // loadimg assets / naming assets
-  soldier = new Player(down, up, 0, 50, 0.125);
   player = new Sprite(down, up, 'self', 0, 50, 0.125);
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -209,7 +216,7 @@ function draw() {
     }
     if(playerPush) {
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
-      players[serverPlayers[i].id] = new Sprite(animation, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
     } else {
       players[id].x = serverPlayers[i].x;
       players[id].y = serverPlayers[i].y;
@@ -306,33 +313,33 @@ function draw() {
 //   }
 // }
 
-class Player {
-  constructor(down, up, x, y, speed) {
-    this.x = x;
-    this.y = y;
-    this.animation = down;
-    this.len = this.animation.length;
-    this.speed = speed;
-    this.index = 0;
-    this.imgs = {
-      "down": down,
-      "right": down,
-      "up": up,
-      "left": up
-    }
-    this.img = this.imgs["down"];
-    this.right = false;
-    this.left = false;
-    this.up = false;
-    this.down = false
-  }
-
-
-  show() {
-    let index = floor(this.index) % this.len;
-    image(this.img[index], this.x, this.y);
-  }
-}
+// class Player {
+//   constructor(down, up, x, y, speed) {
+//     this.x = x;
+//     this.y = y;
+//     this.animation = down;
+//     this.len = this.animation.length;
+//     this.speed = speed;
+//     this.index = 0;
+//     this.imgs = {
+//       "down": down,
+//       "right": down,
+//       "up": up,
+//       "left": up
+//     }
+//     this.img = this.imgs["down"];
+//     this.right = false;
+//     this.left = false;
+//     this.up = false;
+//     this.down = false
+//   }
+//
+//
+//   show() {
+//     let index = floor(this.index) % this.len;
+//     image(this.img[index], this.x, this.y);
+//   }
+// }
 
 socket.on('state', function(serverPlayer, bullets) {
   player.x = serverPlayer.x;
@@ -414,11 +421,5 @@ class Enemy {
 
   show() {
     rect(this.x, this.y, 20, 20);
-  }
-
-
-  animate() {
-    this.index += this.speed;
-
   }
 }
