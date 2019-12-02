@@ -39,9 +39,10 @@ code example
 ----
 
 # Client
-
-  The Client team is responsible for player movement, we draw the assets to the screens, and we drew the crosshair.  
+  The Client team is responsible for:
+  - player movement
+  - drawing the assets to the screens
+  - drawing the crosshair.  
 
 ## The Player Class
-
-The player class is responsible for organizing and makes it easier to draw separate player.
+  The Player Class makes it easier to draw multiple, separate players. The Payer Class is also responsible for organizing the different directions the player faces.
