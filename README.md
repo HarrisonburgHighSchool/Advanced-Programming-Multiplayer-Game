@@ -111,7 +111,7 @@ Here's an example of a JSON file:
 
 ```javascript
 code example
-```
+
 {
   "frames": [
     {
@@ -179,6 +179,8 @@ code example
     }
   ]
 }
+```
+
 
 ### Step ??: Create Animation data
 
