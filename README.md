@@ -190,6 +190,7 @@ code example
 ### Step ??: Create Player Object
 ```javascript
 
+
 ```
 
 ### Step ??: Display the Animation
