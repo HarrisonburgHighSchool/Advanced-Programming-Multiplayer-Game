@@ -24,7 +24,7 @@
 
  Loop
 
-* Art & Animations
+Art & Animations
 
 ---
 
