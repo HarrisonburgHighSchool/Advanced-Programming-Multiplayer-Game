@@ -57,7 +57,9 @@ Loop
 
 ## How to Set Up an Animation
 
-Description of animations, and what you need to start
+Description of animations, and what you need to start:
+
+Layer by layer, we made as a sprite sheet for letting able to load the image of sequence into the code.
 
 ### Step 1:
 
