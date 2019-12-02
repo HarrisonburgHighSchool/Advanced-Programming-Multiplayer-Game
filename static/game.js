@@ -134,8 +134,8 @@ function setup() {
 
 
 
-  soldier = new Player(down, up, 'self', 0, 50, 0.125);
-  player = new Player(down, up, 'self', 0, 50, 0.125);
+  soldier = new Player(down, up, 0, 50, 0.125);
+  player = new Sprite(down, up, 'self', 0, 50, 0.125);
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
@@ -210,21 +210,22 @@ function draw() {
       players[id].y = serverPlayers[i].y;
     }
   }
-  for(i = 0; i < serverBullets.length; i++) {
-    let bulletPush = true;
-    for(id in players) {
-      if (bullets[id].id == serverBullets[i].id) {
-        bulletPush = false;
-      }
-    }
-    if(bulletPush) {
-      console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
-      bullets[serverBullets[i].id] = new Sprite(animation, serverBullets[i].id, serverBullets[i].x, serverBullets[i].y);
-    } else {
-      bullets[id].x = serverBullets[i].x;
-      bullets[id].y = serverBullets[i].y;
-    }
-  }
+  // for(i = 0; i < serverBullets.length; i++) {
+  //   let bulletPush = true;
+  //   for(id in players) {
+  //     if (bullets[id].id == serverBullets[i].id) {
+  //       bulletPush = false;
+  //     }
+  //   }
+  //   if(bulletPush) {
+  //     console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
+  //     bullets[serverBullets[i].id] = new Sprite(animation, serverBullets[i].id, serverBullets[i].x, serverBullets[i].y);
+  //   } else {
+  //     bullets[id].x = serverBullets[i].x;
+  //     bullets[id].y = serverBullets[i].y;
+  //   }
+  // }
+
 
 
 
@@ -248,7 +249,7 @@ function draw() {
     player.y = player.y + 3
     player.img = player.imgs["down"];
     player.animate();
-
+  }
   // if (player.left == true) {
   //   player.x = player.x - 10;
   //   player.img = player.imgs["left"];
@@ -275,9 +276,9 @@ function draw() {
 
   }
 
-  for(var id in bullets) {
-    bullets[id].show();
-  }
+  // for(var id in bullets) {
+  //   bullets[id].show();
+  // }
 }
 
 
