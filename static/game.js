@@ -14,6 +14,8 @@ let spritedata;
 let animation = [];
 let players = [];
 let serverPlayers = [];
+let bullets = [];
+let serverBullets = [];
 
 let stomper;
 
@@ -171,13 +173,13 @@ function draw() {
   //image(player.img, player.x, player.y)
 
   for(i = 0; i < serverPlayers.length; i++) {
-    let push = true;
+    let playerPush = true;
     for(id in players) {
       if (players[id].id == serverPlayers[i].id) {
-        push = false;
+        playerPush = false;
       }
     }
-    if(push) {
+    if(playerPush) {
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
       players[serverPlayers[i].id] = new Sprite(animation, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
     } else {
@@ -185,7 +187,21 @@ function draw() {
       players[id].y = serverPlayers[i].y;
     }
   }
-
+  for(i = 0; i < serverBullets.length; i++) {
+    let bulletPush = true;
+    for(id in players) {
+      if (bullets[id].id == serverBullets[i].id) {
+        bulletPush = false;
+      }
+    }
+    if(bulletPush) {
+      console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
+      bullets[serverBullets[i].id] = new Sprite(animation, serverBullets[i].id, serverBullets[i].x, serverBullets[i].y);
+    } else {
+      bullets[id].x = serverBullets[i].x;
+      bullets[id].y = serverBullets[i].y;
+    }
+  }
 
 
 
@@ -213,7 +229,13 @@ function draw() {
   for(var id in players) {
     players[id].show();
   }
+
+  for(var id in bullets) {
+    bullets[id].show();
+  }
 }
+
+
 
 socket.on('state', function(serverPlayer, bullets) {
   player.x = serverPlayer.x;

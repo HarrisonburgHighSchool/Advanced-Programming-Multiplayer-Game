@@ -24,31 +24,31 @@ var players = {};
 var bullets = [];
 
 // updates bullets
-// setInterval(function() {
-//   for (var i = 0; i < bullets.length; i++) {
-//     //movement
-//     bullets[i].x = bullets[i].x + bullets[i].dx;
-//     bullets[i].y = bullets[i].y + bullets[i].dy;
-//     //wall collision
-//     let collided = false;
-//     if (bullets[i].x >= 800) {
-//       collided = true;
-//     }
-//     if (bullets[i].x <= 0) {
-//       collided = true;
-//     }
-//     if (bullets[i].y >= 600) {
-//       collided = true;
-//     }
-//     if (bullets[i].y <= 0) {
-//       collided = true;
-//     }
-//     if (collided) {
-//       bullets.splice(i,1);
-//       console.log("cruck");
-//     }
-//   }
-// }, 1000/60);
+setInterval(function() {
+  for (var i = 0; i < bullets.length; i++) {
+    //movement
+    bullets[i].x = bullets[i].x + bullets[i].dx;
+    bullets[i].y = bullets[i].y + bullets[i].dy;
+    //wall collision
+    let collided = false;
+    if (bullets[i].x >= 1000) {
+      collided = true;
+    }
+    if (bullets[i].x <= 0) {
+      collided = true;
+    }
+    if (bullets[i].y >= 1000) {
+      collided = true;
+    }
+    if (bullets[i].y <= 0) {
+      collided = true;
+    }
+    if (collided) {
+      bullets.splice(i,1);
+      console.log("cruck");
+    }
+  }
+}, 1000/60);
 
 io.on('connection', function(socket) {
   socket.on('new player', function() {
@@ -69,12 +69,13 @@ io.on('connection', function(socket) {
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
     if (data.left) {
-      if (player.x - 20 >= 0) {
+      if (player.x - 20 >= 0 - 63) {
         player.x -= 10;
+        console.log(player.x);
       }
     }
     if (data.up) {
-      if (player.y - 20 >= 0) {
+      if (player.y - 20 >= 0 - 63) {
         player.y -= 10;
       }
     }
@@ -125,18 +126,18 @@ io.on('connection', function(socket) {
         }
       }
     }
-    // for (var i = 0; i < bullets.length; i++) {
-    //   var a = player.x - bullets[i].x
-    //   var b = player.y - bullets[i].y
-    //   var c = player.r*2
-    //   // if (math.distance([player.x, player.y], [p2.x, p2.y]) <= player.r) {
-    //   if (a*a + b*b <= c*c) {
-    //     collision = true;
-    //     player.hp = player.hp - 1;
-    //     bullets.splice(i,1);
-    //     console.log("bullet hit " + player.id);
-    //   }
-    // }
+    for (var i = 0; i < bullets.length; i++) {
+      var a = player.x - bullets[i].x
+      var b = player.y - bullets[i].y
+      var c = player.r*2
+      // if (math.distance([player.x, player.y], [p2.x, p2.y]) <= player.r) {
+      if (a*a + b*b <= c*c) {
+        collision = true;
+        player.hp = player.hp - 1;
+        bullets.splice(i,1);
+        console.log("bullet hit " + player.id);
+      }
+    }
     if (collision == true) {
       // player.x = Math.floor(Math.random()*801);
       // player.y = Math.floor(Math.random()*601);
@@ -147,15 +148,15 @@ io.on('connection', function(socket) {
   });
 
 
-  // socket.on('mouseclick', function(data) {
-  //   var player = players[socket.id] || {};
-  //   if (data.left == true) {
-  //     bullets.push(new Bullet(player, data.mx, data.my));
-  //   }
-  //
-  //   console.log(data);
-  //
-  // });
+  socket.on('mouseclick', function(data) {
+    var player = players[socket.id] || {};
+    if (data.left == true) {
+      bullets.push(new Bullet(player, data.mx, data.my));
+    }
+
+    console.log(data);
+
+  });
 
 
 
@@ -171,28 +172,28 @@ io.on('connection', function(socket) {
 //         delete players[socket.id]
 //       }
 //   });0
-// });
+});
 
-// class Bullet {
-//  constructor(player, mx, my) {
-//     this.pl_id = player.id;
-//     this.x = player.x-5;
-//     this.y = player.y-5;
-//     this.tempx = mx - player.x;
-//     this.tempy = my - player.y;
-//     this.orientation = Math.atan(this.tempy/this.tempx);
-//     if (player.x > mx) {
-//       this.dy = -Math.sin(this.orientation)*5;
-//       this.dx = -Math.cos(this.orientation)*5;
-//     } else {
-//       this.dy = Math.sin(this.orientation)*5;
-//       this.dx = Math.cos(this.orientation)*5;
-//     }
-//     // bullet needs to start not inside the players
-//     this.x = this.x + (this.dx*5);
-//     this.y = this.y + (this.dy*5);
-//   }
-// }
+class Bullet {
+ constructor(player, mx, my) {
+    this.pl_id = player.id;
+    this.x = player.x-5;
+    this.y = player.y-5;
+    this.tempx = mx - player.x;
+    this.tempy = my - player.y;
+    this.orientation = Math.atan(this.tempy/this.tempx);
+    if (player.x > mx) {
+      this.dy = -Math.sin(this.orientation)*5;
+      this.dx = -Math.cos(this.orientation)*5;
+    } else {
+      this.dy = Math.sin(this.orientation)*5;
+      this.dx = Math.cos(this.orientation)*5;
+    }
+    // bullet needs to start not inside the players
+    this.x = this.x + (this.dx*5);
+    this.y = this.y + (this.dy*5);
+  }
+}
 
 // class Player { // currently not used
 //   constructor() {
@@ -224,7 +225,7 @@ io.on('connection', function(socket) {
         if (player.id != p2.id && p2.id != NaN) {
           var a = player.x - p2.x;
           var b = player.y - p2.y;
-          var c = 500;
+          var c = 900000;
           if (a*a + b*b <= c*c) {
             playersOnScreen.push(players[p2id]);
           }
@@ -232,29 +233,43 @@ io.on('connection', function(socket) {
       }
       io.sockets.connected[id].emit('state', players[id], bullets);
       io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+      var bulletsOnScreen = [];
+      var player = players[id];
+      for (var i = 0; i < bullets.length; i++) {
+        // console.log("checking a bullet")
+        // var bullet = i;
+        var a = player.x - bullets[i].x;
+        var b = player.y - bullets[i].y;
+        var c = 900000;
+        if (a*a + b*b <= c*c) {
+          // console.log("bullet added to table")
+          bulletsOnScreen.push(bullets[i]);
+        } else {
+          // console.log("bullet toooooooooooooooooooo farrrrrrr")
+        }
+      }
+      io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
     }
-
   }, 1000 / 60);
 
-//   setInterval(function() {
-//     // io.sockets.emit('state', players, bullets);
-//     for (var id in players) {
-//       var bulletsOnScreen = [];
-//       var player = players[id];
-//       for (var i = 0; i < bullets.length; i++) {
-//         console.log("checking a bullet")
-//         // var bullet = i;
-//         var a = player.x - bullets[i].x;
-//         var b = player.y - bullets[i].y;
-//         var c = 500;
-//         if (a*a + b*b <= c*c) {
-//           console.log("bullet added to table")
-//           bulletsOnScreen.push(bullets[i]);
-//         } else {
-//           console.log("bullet toooooooooooooooooooo farrrrrrr")
-//         }
-//       }
-//       io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
-//     }
-//
-}, 1000 / 60);
+  // setInterval(function() {
+  //   // io.sockets.emit('state', players, bullets);
+  //   for (var id in players) {
+  //     var bulletsOnScreen = [];
+  //     var player = players[id];
+  //     for (var i = 0; i < bullets.length; i++) {
+  //       console.log("checking a bullet")
+  //       // var bullet = i;
+  //       var a = player.x - bullets[i].x;
+  //       var b = player.y - bullets[i].y;
+  //       var c = 900000;
+  //       if (a*a + b*b <= c*c) {
+  //         console.log("bullet added to table")
+  //         bulletsOnScreen.push(bullets[i]);
+  //       } else {
+  //         console.log("bullet toooooooooooooooooooo farrrrrrr")
+  //       }
+  //     }
+  //     io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
+  //   }
+  // }, 1000 / 60);
