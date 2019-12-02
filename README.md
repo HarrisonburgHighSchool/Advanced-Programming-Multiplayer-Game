@@ -4,8 +4,8 @@
 ## Table of Contents
 
 1. Sending and receiving
-2. 
-3. 
+2.
+3.
 4.
 
 
