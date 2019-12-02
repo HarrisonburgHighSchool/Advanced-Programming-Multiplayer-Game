@@ -184,7 +184,37 @@ code example
 
 ### Step ??: Create Animation data
 ```javascript
+function preload()  {
+  spritedata = loadJSON('/assets/soldierWalk.json');
+  front = loadImage('/assets/SoldierWalkFront.png');
+  back = loadImage('/assets/SoldierWalkBack.png');
+}
 
+function setup() {
+  createCanvas(900, 800);
+  let frames = spritedata.frames;
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = front.get(pos.x, pos.y, pos.w, pos.h, );
+    down.push(img);
+  }
+
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = back.get(pos.x, pos.y, pos.w, pos.h, );
+    up.push(img);
+  }
+
+
+  soldier = new Player(down, up, 0, 50, 0.125);
+  player = new Player(down, up, 0, 50, 0.125);
+  imgg = loadImage('assets/Grass1.png');
+  imgr = loadImage('assets/Rock1.gif');
+  imgt = loadImage('assets/tree1.png');
+  imgt2 = loadImage('assets/tree2.png');
+  socket.emit('new player');
+  //player = new Player();
+}
 ```
 
 ### Step ??: Create Player Object
