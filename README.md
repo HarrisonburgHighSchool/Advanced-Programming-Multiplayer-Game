@@ -69,7 +69,7 @@ Start, Timer Start
 Collision with other enemies
 * Each weapon with different amounts of damages affects the opponents (Poison, Fire, Electrified)
 * If an opponent's health point goes down first, The killers achieves a kill, but no count for score.
-* Same goes for your health point goes down first, you are counted as 1 death and respawn to an occupied territory or your origin spawn point.
+* Same goes for your health point goes down first, you are counted as 1 death and spawning to an occupied territory or your origin spawn point.
 
 Taking over Territories
 * The amount of time in those areas you (Only your team) secured, achieves the worth points.
