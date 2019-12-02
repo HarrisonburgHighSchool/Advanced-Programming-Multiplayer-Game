@@ -11,17 +11,22 @@ socket.on('message', function(data) {
 let spritesheet;
 let spritedata;
 
+
+let down = [];
+let up = [];
+
 let animation = [];
 let players = [];
 let serverPlayers = [];
 let bullets = [];
-let serverBullets = [];
 
-let stomper;
 
-function preload() {
-  spritedata = loadJSON('/assets/stomper.json');
-  spritesheet = loadImage('/assets/Stomper Movements 4 Front.png');
+let soldier;
+
+function preload()  {
+  spritedata = loadJSON('/assets/soldierWalk.json');
+  front = loadImage('/assets/SoldierWalkFront.png');
+  back = loadImage('/assets/SoldierWalkBack.png');
 }
 
 
@@ -108,6 +113,7 @@ document.addEventListener('keyup', function(event) {
 });
 
 function setup() {
+
   createCanvas(1000, 1000);
 
   noCursor();
@@ -115,19 +121,28 @@ function setup() {
   let frames = spritedata.frames;
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
-    let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h, );
-    animation.push(img);
+    let img = front.get(pos.x, pos.y, pos.w, pos.h, );
+    down.push(img);
   }
 
-  player = new Sprite(animation, "self", 500, 500, 0.25)
+
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = back.get(pos.x, pos.y, pos.w, pos.h, );
+    up.push(img);
+  }
 
 
+
+  soldier = new Player(down, up, 'self', 0, 50, 0.125);
+  player = new Player(down, up, 'self', 0, 50, 0.125);
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
   socket.emit('new player');
 }
+
 
 
 // Renderer
@@ -146,15 +161,23 @@ function draw() {
       }
     }
   }
+
+  image(imgr, 322, 5);
+
+  image(imgt, 0, 10);
+  image(imgt2, 200, 5);
+
+
   {
-    let plx = player.x + 96
-    let ply = player.y + 96
+    let plx = player.x + 70
+    let ply = player.y + 70
     let c = dist(mouseX, mouseY, plx, ply);
     let d = constrain(c, 0, 100);
     let x = -((d / c) * (plx - mouseX)) + plx
     let y = -((d / c) * (ply - mouseY)) + ply
     //   // For every player object sent by the server...
   }
+
 
 
   image(imgr, 0, 5);
@@ -205,6 +228,27 @@ function draw() {
 
 
 
+
+  if (player.left == true) {
+    player.x = player.x - 3;
+    player.img = player.imgs["left"];
+    player.animate();
+  }
+  if (player.right == true) {
+    player.x = player.x + 3
+    player.img = player.imgs["right"];
+    player.animate();
+  }
+  if (player.up == true) {
+    player.y = player.y - 3
+    player.img = player.imgs["up"];
+    player.animate();
+  }
+  if (player.down == true) {
+    player.y = player.y + 3
+    player.img = player.imgs["down"];
+    player.animate();
+
   // if (player.left == true) {
   //   player.x = player.x - 10;
   //   player.img = player.imgs["left"];
@@ -228,6 +272,7 @@ function draw() {
   player.show();
   for(var id in players) {
     players[id].show();
+
   }
 
   for(var id in bullets) {
@@ -236,6 +281,52 @@ function draw() {
 }
 
 
+// class Player {
+//   constructor() {
+//     this.x = 200;
+//     this.y = 200;
+//     this.imgs = {
+//       "down": loadImage('assets/stomperD.png'),
+//       "right": loadImage('assets/stomperR.png'),
+//       "up": loadImage('assets/stomperU.png'),
+//       "left": loadImage('assets/stomperL.png')
+//     }
+//     this.img = this.imgs["down"];
+//     this.right = false;
+//     this.left = false;
+//     this.up = false;
+//     this.down = false
+//
+//   }
+// }
+
+class Player {
+  constructor(down, up, x, y, speed) {
+    this.x = x;
+    this.y = y;
+    this.animation = down;
+    this.len = this.animation.length;
+    this.speed = speed;
+    this.index = 0;
+    this.imgs = {
+      "down": down,
+      "right": down,
+      "up": up,
+      "left": up
+    }
+    this.img = this.imgs["down"];
+    this.right = false;
+    this.left = false;
+    this.up = false;
+    this.down = false
+  }
+
+
+  show() {
+    let index = floor(this.index) % this.len;
+    image(this.img[index], this.x, this.y);
+  }
+}
 
 socket.on('state', function(serverPlayer, bullets) {
   player.x = serverPlayer.x;
@@ -318,4 +409,10 @@ class Enemy {
   show() {
     rect(this.x, this.y, 20, 20);
   }
+
+
+ animate()  {
+    this.index += this.speed;
+
+   }
 }

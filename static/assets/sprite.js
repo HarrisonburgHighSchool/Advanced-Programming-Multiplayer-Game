@@ -1,16 +1,17 @@
 class Sprite {
-  constructor(animation, id, x, y, speed) {
+  constructor(down, up, id, x, y, speed) {
+
     this.x = x;
     this.y = y;
-    this.animation = animation;
+    this.animation = down;
     this.len = this.animation.length;
     this.speed = speed;
     this.index = 0;
     this.imgs = {
-      "down": loadImage('assets/stomperD.png'),
-      "right": loadImage('assets/stomperR.png'),
-      "up": loadImage('assets/stomperU.png'),
-      "left": loadImage('assets/stomperL.png')
+      "down": down,
+      "right": down,
+      "up": up,
+      "left": up
     }
     this.img = this.imgs["down"];
     this.right = false;
@@ -22,7 +23,9 @@ class Sprite {
 
 
   show() {
-  image(this.animation[this.index % this.len], this.x, this.y,);
+    let index = floor(this.index) % this.len;
+    image(this.img[index], this.x, this.y);
+
 
   }
 

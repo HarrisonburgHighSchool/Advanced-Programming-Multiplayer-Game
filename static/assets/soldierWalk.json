@@ -1,0 +1,40 @@
+{
+  "frames": [
+    {
+      "name": "stomper-01",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      }
+    },
+    {
+      "name": "stomper-02",
+      "position": {
+        "x": 128,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      }
+    },
+    {
+      "name": "stomper-03",
+      "position": {
+        "x": 0,
+        "y": 128,
+        "w": 128,
+        "h": 128
+      }
+    },
+    {
+      "name": "stomper-04",
+      "position": {
+        "x": 128,
+        "y": 128,
+        "w": 128,
+        "h": 128
+      }
+    }
+  ]
+}
