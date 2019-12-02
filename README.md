@@ -6,7 +6,9 @@
  Contact with Online
  Instructions
  Spawning Points
- Collision Taking over Territories, Time up, Calculate the results and territory taken by each team, Show Result and Victors. Continue and Repeat the Game.
+ Collision
+ Territories and Results
+ Loop
 
 * Art & Animations
 
