@@ -10,6 +10,20 @@
  Territories and Results
  Loop
 
+ Selection
+
+ Contact with Online
+
+ Instructions
+
+ Spawning Points
+
+ Collision
+
+ Territories and Results
+
+ Loop
+
 * Art & Animations
 
 ---
