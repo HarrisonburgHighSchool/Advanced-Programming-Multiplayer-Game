@@ -183,7 +183,16 @@ code example
 
 
 ### Step ??: Create Animation data
+```javascript
+
+```
 
 ### Step ??: Create Player Object
+```javascript
+
+```
 
 ### Step ??: Display the Animation
+```javascript
+
+```
