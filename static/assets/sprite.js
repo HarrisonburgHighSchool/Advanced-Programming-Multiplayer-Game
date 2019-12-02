@@ -1,4 +1,4 @@
-class Sprite {
++class Sprite {
   constructor(down, up, x, y, speed) {
     this.x = x;
     this.y = y;

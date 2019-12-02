@@ -84,7 +84,13 @@ code example
 ```
 
 ### Step ??: Create Animation data
-
+step 1. make a name for the animation, the name of the animation file should be the Title
+step 2. position it by setting up the x and y axis
+step 3. set up the width and height
+step 4. for every frame there is in the animation repeat step 1, 2, and 3
 ### Step ??: Create Player Object
 
+
 ### Step ??: Display the Animation
+step 1. merge the coding from the animation code and the gaming code
+step 2. vibe
