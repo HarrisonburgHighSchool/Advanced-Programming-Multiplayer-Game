@@ -16,13 +16,15 @@ let up = [];
 
 let soldier;
 
-function preload()  {
+function preload() {
+  // load solider
   spritedata = loadJSON('/assets/soldierWalk.json');
   front = loadImage('/assets/SoldierWalkFront.png');
   back = loadImage('/assets/SoldierWalkBack.png');
 }
 
 function setup() {
+  // animation configuration
   createCanvas(900, 800);
   let frames = spritedata.frames;
   for (let i = 0; i < frames.length; i++) {
@@ -37,7 +39,7 @@ function setup() {
     up.push(img);
   }
 
-
+  // loadimg assets / naming assets
   soldier = new Player(down, up, 0, 50, 0.125);
   player = new Player(down, up, 0, 50, 0.125);
   imgg = loadImage('assets/Grass1.png');
@@ -194,8 +196,8 @@ class Player {
   }
 
 
- animate()  {
+  animate() {
     this.index += this.speed;
 
-   }
+  }
 }
