@@ -1,5 +1,6 @@
-+class Sprite {
-  constructor(down, up, x, y, speed) {
+class Sprite {
+  constructor(down, up, id, x, y, speed) {
+
     this.x = x;
     this.y = y;
     this.animation = down;
@@ -20,9 +21,11 @@
   }
 
 
+
   show() {
     let index = floor(this.index) % this.len;
     image(this.img[index], this.x, this.y);
+
 
   }
 
