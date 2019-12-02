@@ -23,7 +23,8 @@ let bullets = [];
 
 let soldier;
 
-function preload()  {
+function preload() {
+  // load solider
   spritedata = loadJSON('/assets/soldierWalk.json');
   front = loadImage('/assets/SoldierWalkFront.png');
   back = loadImage('/assets/SoldierWalkBack.png');
@@ -114,6 +115,10 @@ document.addEventListener('keyup', function(event) {
 
 function setup() {
 
+  // animation configuration
+  createCanvas(900, 800);
+
+
   createCanvas(1000, 1000);
 
   noCursor();
@@ -133,7 +138,7 @@ function setup() {
   }
 
 
-
+  // loadimg assets / naming assets
   soldier = new Player(down, up, 0, 50, 0.125);
   player = new Sprite(down, up, 'self', 0, 50, 0.125);
   imgg = loadImage('assets/Grass1.png');
@@ -412,8 +417,8 @@ class Enemy {
   }
 
 
- animate()  {
+  animate() {
     this.index += this.speed;
 
-   }
+  }
 }
