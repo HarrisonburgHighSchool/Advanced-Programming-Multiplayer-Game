@@ -101,16 +101,9 @@ Layer by layer, we made as a sprite sheet for letting able to load the image of 
 
 Open the javascript
 
-### Step 2: Make JSON File
+### Step 2: Load the JSON
 
-Here's an example of a JSON file:
-
-```javascript
-
-```
-
-### Step 2.5: Load the JSON
-
+First, you will need to make the frames and crop out each areas in the spritesheet in a reliable size.
 ```javascript
 code example
 
