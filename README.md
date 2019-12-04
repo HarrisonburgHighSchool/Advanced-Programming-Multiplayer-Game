@@ -97,13 +97,14 @@ Description of animations, and what you need to start:
 
 Layer by layer, we made as a sprite sheet for letting able to load the image of sequence into the code.
 
-### Step 1:
-
-Open the javascript
+### Step 1: Open the javascript
+We will be using the coding system called the JSON file.
 
 ### Step 2: Load the JSON
 
 First, you will need to make the frames and crop out each areas in the spritesheet in a reliable size.
+To show each drawings in the spritesheet individually, you need to first identify each position and how much area should you be showing the frames. Each drawings in the spritesheet should be in a same location.
+
 ```javascript
 code example
 
@@ -178,6 +179,8 @@ code example
 
 
 ### Step 3: Create Animation data
+In order to let it move the frames in sequence time to time, we need the function to move the image to be visible and let the next layer be visible.
+
 ```javascript
 function preload()  {
   spritedata = loadJSON('/assets/soldierWalk.json');
