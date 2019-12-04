@@ -16,14 +16,11 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
-// setInterval(function() {
-//   io.sockets.emit('message', 'hi!');
-// }, 1000);
 
-var players = {};
-var bullets = [];
+var players = {}; // Object-like (index by id), stores players
+var bullets = []; // List like, stores projectiles
 
-// updates bullets
+// updates bullets, runs 60 times per second
 setInterval(function() {
   for (var i = 0; i < bullets.length; i++) {
     //movement
@@ -50,8 +47,12 @@ setInterval(function() {
   }
 }, 1000/60);
 
+// When the server recieves a message
 io.on('connection', function(socket) {
+  
+  // New player message
   socket.on('new player', function() {
+    // Add a new player to the player table at it's id
     players[socket.id] = {
       x: 500,
       y: 500,
@@ -66,6 +67,8 @@ io.on('connection', function(socket) {
     };
     console.log("New Player: " + socket.id)
   });
+  
+  // Movement message from client
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
     if (data.left) {
@@ -147,7 +150,7 @@ io.on('connection', function(socket) {
     }
   });
 
-
+  // Mouseclick message from client
   socket.on('mouseclick', function(data) {
     var player = players[socket.id] || {};
     if (data.left == true) {
@@ -159,7 +162,7 @@ io.on('connection', function(socket) {
   });
 
 
-
+  // Disconnect from client
   socket.on('disconnect', function() {
     io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
@@ -174,6 +177,8 @@ io.on('connection', function(socket) {
 //   });0
 });
 
+
+// Bullet class
 class Bullet {
  constructor(player, mx, my) {
     this.pl_id = player.id;
@@ -195,62 +200,43 @@ class Bullet {
   }
 }
 
-// class Player { // currently not used
-//   constructor() {
-//     this.x = 200;
-//     this.y = 200;
-//     this.imgs = {
-//       "down": loadImage('assets/stomperD.png'),
-//       "right": loadImage('assets/stomperR.png'),
-//       "up": loadImage('assets/stomperU.png'),
-//       "left": loadImage('assets/stomperL.png')
-//     }
-//     this.img = this.imgs["down"];
-//     this.right = false;
-//     this.left = false;
-//     this.up = false;
-//     this.down = false
-//
-//   }
-// }
-
-
-  setInterval(function() {
-    //io.sockets.emit('state', players, bullets);
-    for (var id in players) {
-      var playersOnScreen = [];
-      var player = players[id];
-      for (p2id in players) {
-        var p2 = players[p2id];
-        if (player.id != p2.id && p2.id != NaN) {
-          var a = player.x - p2.x;
-          var b = player.y - p2.y;
-          var c = 900000;
-          if (a*a + b*b <= c*c) {
-            playersOnScreen.push(players[p2id]);
-          }
-        }
-      }
-      io.sockets.connected[id].emit('state', players[id], bullets);
-      io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
-      var bulletsOnScreen = [];
-      var player = players[id];
-      for (var i = 0; i < bullets.length; i++) {
-        // console.log("checking a bullet")
-        // var bullet = i;
-        var a = player.x - bullets[i].x;
-        var b = player.y - bullets[i].y;
+// Gameplay loop
+setInterval(function() {
+  //io.sockets.emit('state', players, bullets);
+  for (var id in players) {
+    var playersOnScreen = [];
+    var player = players[id];
+    for (p2id in players) {
+      var p2 = players[p2id];
+      if (player.id != p2.id && p2.id != NaN) {
+        var a = player.x - p2.x;
+        var b = player.y - p2.y;
         var c = 900000;
         if (a*a + b*b <= c*c) {
-          // console.log("bullet added to table")
-          bulletsOnScreen.push(bullets[i]);
-        } else {
-          // console.log("bullet toooooooooooooooooooo farrrrrrr")
+          playersOnScreen.push(players[p2id]);
         }
       }
-      io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
     }
-  }, 1000 / 60);
+    io.sockets.connected[id].emit('state', players[id], bullets);
+    io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+    var bulletsOnScreen = [];
+    var player = players[id];
+    for (var i = 0; i < bullets.length; i++) {
+      // console.log("checking a bullet")
+      // var bullet = i;
+      var a = player.x - bullets[i].x;
+      var b = player.y - bullets[i].y;
+      var c = 900000;
+      if (a*a + b*b <= c*c) {
+        // console.log("bullet added to table")
+        bulletsOnScreen.push(bullets[i]);
+      } else {
+        // console.log("bullet toooooooooooooooooooo farrrrrrr")
+      }
+    }
+    io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
+  }
+}, 1000 / 60);
 
   // setInterval(function() {
   //   // io.sockets.emit('state', players, bullets);
