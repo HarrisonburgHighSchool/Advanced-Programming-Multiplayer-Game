@@ -99,7 +99,9 @@ Layer by layer, we made as a sprite sheet for letting able to load the image of 
 
 ### Step 1:
 
-### Step ??: Make JSON File
+Open the javascript
+
+### Step 2: Make JSON File
 
 Here's an example of a JSON file:
 
@@ -107,7 +109,7 @@ Here's an example of a JSON file:
 
 ```
 
-### Step ??: Load the JSON
+### Step 2.5: Load the JSON
 
 ```javascript
 code example
@@ -182,12 +184,43 @@ code example
 ```
 
 
-### Step ??: Create Animation data
+### Step 3: Create Animation data
 ```javascript
+function preload()  {
+  spritedata = loadJSON('/assets/soldierWalk.json');
+  front = loadImage('/assets/SoldierWalkFront.png');
+  back = loadImage('/assets/SoldierWalkBack.png');
+}
+
+function setup() {
+  createCanvas(900, 800);
+  let frames = spritedata.frames;
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = front.get(pos.x, pos.y, pos.w, pos.h, );
+    down.push(img);
+  }
+
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = back.get(pos.x, pos.y, pos.w, pos.h, );
+    up.push(img);
+  }
+
+
+  soldier = new Player(down, up, 0, 50, 0.125);
+  player = new Player(down, up, 0, 50, 0.125);
+  imgg = loadImage('assets/Grass1.png');
+  imgr = loadImage('assets/Rock1.gif');
+  imgt = loadImage('assets/tree1.png');
+  imgt2 = loadImage('assets/tree2.png');
+  socket.emit('new player');
+  //player = new Player();
+}
 
 ```
 
-### Step ??: Create Player Object
+### Step 4: Create Player Object
 ```javascript
 class Sprite {
   constructor(down, up, x, y, speed) {
@@ -227,8 +260,49 @@ class Sprite {
 ```
 
 
-### Step ??: Display the Animation
+### Step 5: Display the Animation
+```javascript
+function draw() {
 
+
+  soldier.show();
+  soldier.animate();
+
+
+  //image(animation[frameCount % animation.length], 0, 0);
+
+  {
+    for (x = 0; x < 6; x++) {
+      for (y = 0; y < 6; y++) {
+        image(
+          imgg,
+          192 * x,
+          192 * y
+        );
+      }
+    }
+  }
+
+  image(imgr, 322, 5);
+
+  image(imgt, 0, 10);
+  image(imgt2, 200, 5);
+
+
+  {
+    let plx = player.x + 70
+    let ply = player.y + 70
+    let c = dist(mouseX, mouseY, plx, ply);
+    let d = constrain(c, 0, 100);
+    let x = -((d / c) * (plx - mouseX)) + plx
+    let y = -((d / c) * (ply - mouseY)) + ply
+    //   // For every player object sent by the server...
+
+    ellipse(x, y, 10)
+  }
+
+
+```
 
 ----
 
