@@ -1,16 +1,15 @@
 class Sprite {
   constructor(down, up, id, x, y, speed) {
-    this.id = id;
-    this.x = x;
+    this.id = id; // ID from the server
+    this.x = x;   
     this.y = y;
-    this.animation = down;
     this.len = this.animation.length;
-    this.speed = speed;
-    this.index = 0;
+    this.speed = speed;     // Animation speed
+    this.index = 0;         // Animation counter
     this.imgs = {
-      "down": down,
+      "down": down,         // Down animation
       "right": down,
-      "up": up,
+      "up": up,             // Up animation
       "left": up
     }
     this.img = this.imgs["down"];
@@ -21,17 +20,14 @@ class Sprite {
   }
 
 
-
+  // Draw the sprite
   show() {
     let index = floor(this.index) % this.len;
     image(this.img[index], this.x, this.y);
-
-
   }
 
-
- animate()  {
+  // Update the player animation
+  animate()  {
     this.index += this.speed;
-
-   }
+  }
 }
