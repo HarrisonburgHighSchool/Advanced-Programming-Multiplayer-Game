@@ -1,9 +1,9 @@
 class Sprite {
   constructor(down, up, id, x, y, speed) {
     this.id = id; // ID from the server
-    this.x = x;   
+    this.x = x;
     this.y = y;
-    this.len = this.animation.length;
+    this.len = up.length;
     this.speed = speed;     // Animation speed
     this.index = 0;         // Animation counter
     this.imgs = {

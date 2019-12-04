@@ -17,7 +17,7 @@ let bullets = [];       // Store projectiles
 
 var player; // The player object will go here, eventually
 
-// An object to keep track of what 
+// An object to keep track of what
 // direction the player is moving
 var movement = {
   up: false,
@@ -115,7 +115,7 @@ function preload() {
 function setup() {
   createCanvas(900, 800); // create the window
   noCursor();             // don't show the cursor
-  
+
   // Slice up front spritesheet
   let frames = spritedata.frames;
   for (let i = 0; i < frames.length; i++) {
@@ -133,15 +133,15 @@ function setup() {
 
 
   // loading assets / naming assets
-  
+
   //Player (down animation, up animation, id, x, y, speed)
   player = new Sprite(down, up, 'self', 0, 50, 0.125);
-  
+
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
-  
+
   // Tell the server that a new player is loaded
   socket.emit('new player');
 }
@@ -151,8 +151,8 @@ function setup() {
 // Renderer
 function draw() {
   background(255);
-  
-  
+
+
   { // Draw the map
     for (x = 0; x < 6; x++) {
       for (y = 0; y < 6; y++) {
@@ -170,7 +170,7 @@ function draw() {
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
 
-  
+
   // Draw crosshair
   {
     let plx = player.x + 70
@@ -179,8 +179,10 @@ function draw() {
     let d = constrain(c, 0, 100);
     let x = -((d / c) * (plx - mouseX)) + plx
     let y = -((d / c) * (ply - mouseY)) + ply
+    line(player.x + 63, player.y + 63, x, y);
+    ellipse(x, y, 10);
   }
-  
+
   // What are these for?
   image(imgr, 0, 5);
   image(imgr, 322, 5);
@@ -191,11 +193,11 @@ function draw() {
 
   image(imgt, 0, 10);
   image(imgt2, 100, 5);
-  
+
   // Crosshair placeholder
-  line(player.x + 63, player.y + 63, mouseX, mouseY);
-  ellipse(mouseX, mouseY, 10);
-  
+
+
+
   // Check player direction, set animation image
   if (player.left == true) {
     player.x = player.x - 3;
@@ -217,19 +219,19 @@ function draw() {
     player.img = player.imgs["down"];
     player.animate();
   }
-  
+
   // Draw the player
   player.show();
-  
+
   // Draw the enemies
   for(var id in players) {
     players[id].show();
   }
-  
+
   // Add new players sent by the server, and update existing ones
   for(i = 0; i < serverPlayers.length; i++) {
     let playerPush = true; // assume the player is new
-    
+
     // Check to see if a player with the same id is already
     // in the players table
     for(id in players) {
@@ -237,7 +239,7 @@ function draw() {
         playerPush = false; // if so, the player isn't new
       }
     }
-    
+
     // If the player is new...
     if(playerPush) {
       // Create a new Sprite object in the players table to match the new player
@@ -250,12 +252,12 @@ function draw() {
       players[id].y = serverPlayers[i].y;
     }
   }
-  
+
   // --------------------------------------------------
   // Need code to delete objects from the players table
   // --------------------------------------------------
-  
-  
+
+
   // for(i = 0; i < serverBullets.length; i++) {
   //   let bulletPush = true;
   //   for(id in players) {
@@ -274,7 +276,7 @@ function draw() {
   // for(var id in bullets) {
   //   bullets[id].show();
   // }
-  
+
 } // end the draw() function
 
 
