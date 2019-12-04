@@ -1,36 +1,24 @@
 var socket = io();
 
+// Log messages from server to the console
 socket.on('message', function(data) {
   console.log(data);
 });
 
-// let plx= 200;
-// let ply = 200;
 
+let spritesheet;        // temporary spritesheet storage, before slicing
+let spritedata;         // spritesheet JSON data
+let down = [];          // temporary down animation storage
+let up = [];            // temporary up animation storage
 
-let spritesheet;
-let spritedata;
+let players = [];       // Store the enemy players
+let serverPlayers = []; // Temporary storage for players from the server
+let bullets = [];       // Store projectiles
 
+var player; // The player object will go here, eventually
 
-let down = [];
-let up = [];
-
-let animation = [];
-let players = [];
-let serverPlayers = [];
-let bullets = [];
-
-
-let soldier;
-
-function preload() {
-  // load solider
-  spritedata = loadJSON('/assets/soldierWalk.json');
-  front = loadImage('/assets/SoldierWalkFront.png');
-  back = loadImage('/assets/SoldierWalkBack.png');
-}
-
-
+// An object to keep track of what 
+// direction the player is moving
 var movement = {
   up: false,
   down: false,
@@ -42,6 +30,7 @@ var attack = {
   bullet: false,
 }
 
+// A table to keep track of mouse data
 var mouse = {
   left: false,
   mx: 0,
@@ -53,19 +42,9 @@ var pl = {
   y: 0
 }
 
-// let frames = spritedata.frames;
-// for (let i = 0; i < frames.length; i++) {
-//   let pos = frames[i].position;
-//   let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h, );
-//   animation.push(img);
-// }
-
-
-var player;
-
-
+// Listens to activity on the page, triggers when
+// mouse is clicked
 document.addEventListener('click', function(event) {
-
   mouse.left = true;
   mouse.mx = mouseX;
   mouse.my = mouseY;
@@ -75,16 +54,16 @@ document.addEventListener('click', function(event) {
 });
 
 // document.addEventListener('mousereleased', function(event) {
-//
 //   mouse.left = false;
-//
 // });
 
+// Listens for keypresses on the DOM,
+// updates relevant data structures
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
     case 65: // A
       movement.left = true;
-      player.left = true;
+      player.left = true; // this seems redundant
       break;
     case 87: // W
       movement.up = true;
@@ -100,6 +79,9 @@ document.addEventListener('keydown', function(event) {
       break;
   }
 });
+
+// Listens for key releases on the DOM,
+// updates relevant data structures
 document.addEventListener('keyup', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -121,16 +103,20 @@ document.addEventListener('keyup', function(event) {
   }
 });
 
+function preload() {
+  // Load animation assets
+  spritedata = loadJSON('/assets/soldierWalk.json'); // Frame information
+  front = loadImage('/assets/SoldierWalkFront.png'); // Forward walk spritesheet
+  back = loadImage('/assets/SoldierWalkBack.png');   // Backward walk spritesheet
+}
+
+// P5js function, runs once
+// after preload()
 function setup() {
-
-  // animation configuration
-  createCanvas(900, 800);
-
-
-  createCanvas(1000, 1000);
-
-  noCursor();
-
+  createCanvas(900, 800); // create the window
+  noCursor();             // don't show the cursor
+  
+  // Slice up front spritesheet
   let frames = spritedata.frames;
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
@@ -138,7 +124,7 @@ function setup() {
     down.push(img);
   }
 
-
+  // Slice up back spritesheet
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
     let img = back.get(pos.x, pos.y, pos.w, pos.h, );
@@ -146,12 +132,17 @@ function setup() {
   }
 
 
-  // loadimg assets / naming assets
+  // loading assets / naming assets
+  
+  //Player (down animation, up animation, id, x, y, speed)
   player = new Sprite(down, up, 'self', 0, 50, 0.125);
+  
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
+  
+  // Tell the server that a new player is loaded
   socket.emit('new player');
 }
 
@@ -160,9 +151,9 @@ function setup() {
 // Renderer
 function draw() {
   background(255);
-  //image(animation[frameCount % animation.length], 0, 0);
-
-  {
+  
+  
+  { // Draw the map
     for (x = 0; x < 6; x++) {
       for (y = 0; y < 6; y++) {
         image(
@@ -174,12 +165,13 @@ function draw() {
     }
   }
 
+  // Draw the environment stuff
   image(imgr, 322, 5);
-
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
 
-
+  
+  // Draw crosshair
   {
     let plx = player.x + 70
     let ply = player.y + 70
@@ -187,61 +179,24 @@ function draw() {
     let d = constrain(c, 0, 100);
     let x = -((d / c) * (plx - mouseX)) + plx
     let y = -((d / c) * (ply - mouseY)) + ply
-    //   // For every player object sent by the server...
   }
-
-
-
+  
+  // What are these for?
   image(imgr, 0, 5);
   image(imgr, 322, 5);
   image(imgr, 350, 200);
-  //
+
   image(imgr, 200, 300);
   image(imgr, 80, 300);
-  //
+
   image(imgt, 0, 10);
   image(imgt2, 100, 5);
-
+  
+  // Crosshair placeholder
   line(player.x + 63, player.y + 63, mouseX, mouseY);
   ellipse(mouseX, mouseY, 10);
-  //player
-  //image(player.img, player.x, player.y)
-
-  for(i = 0; i < serverPlayers.length; i++) {
-    let playerPush = true;
-    for(id in players) {
-      if (players[id].id == serverPlayers[i].id) {
-        playerPush = false;
-      }
-    }
-    if(playerPush) {
-      console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
-      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
-    } else {
-      players[id].x = serverPlayers[i].x;
-      players[id].y = serverPlayers[i].y;
-    }
-  }
-  // for(i = 0; i < serverBullets.length; i++) {
-  //   let bulletPush = true;
-  //   for(id in players) {
-  //     if (bullets[id].id == serverBullets[i].id) {
-  //       bulletPush = false;
-  //     }
-  //   }
-  //   if(bulletPush) {
-  //     console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
-  //     bullets[serverBullets[i].id] = new Sprite(animation, serverBullets[i].id, serverBullets[i].x, serverBullets[i].y);
-  //   } else {
-  //     bullets[id].x = serverBullets[i].x;
-  //     bullets[id].y = serverBullets[i].y;
-  //   }
-  // }
-
-
-
-
-
+  
+  // Check player direction, set animation image
   if (player.left == true) {
     player.x = player.x - 3;
     player.img = player.imgs["left"];
@@ -262,36 +217,65 @@ function draw() {
     player.img = player.imgs["down"];
     player.animate();
   }
-  // if (player.left == true) {
-  //   player.x = player.x - 10;
-  //   player.img = player.imgs["left"];
-  //   player.animate();
-  // }
-  // if (player.right == true) {
-  //   player.x = player.x + 10
-  //   player.img = player.imgs["right"];
-  //   player.animate();
-  // }
-  // if (player.up == true) {
-  //   player.y = player.y - 10
-  //   player.img = player.imgs["up"];
-  //   player.animate();
-  // }
-  // if (player.down == true) {
-  //   player.y = player.y + 10
-  //   player.img = player.imgs["down"];
-  //   player.animate();
-  // }
+  
+  // Draw the player
   player.show();
+  
+  // Draw the enemies
   for(var id in players) {
     players[id].show();
-
   }
-
+  
+  // Add new players sent by the server, and update existing ones
+  for(i = 0; i < serverPlayers.length; i++) {
+    let playerPush = true; // assume the player is new
+    
+    // Check to see if a player with the same id is already
+    // in the players table
+    for(id in players) {
+      if (players[id].id == serverPlayers[i].id) {
+        playerPush = false; // if so, the player isn't new
+      }
+    }
+    
+    // If the player is new...
+    if(playerPush) {
+      // Create a new Sprite object in the players table to match the new player
+      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+      console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
+    } else {
+      // If the player isn't new,
+      // Just update it's position
+      players[id].x = serverPlayers[i].x;
+      players[id].y = serverPlayers[i].y;
+    }
+  }
+  
+  // --------------------------------------------------
+  // Need code to delete objects from the players table
+  // --------------------------------------------------
+  
+  
+  // for(i = 0; i < serverBullets.length; i++) {
+  //   let bulletPush = true;
+  //   for(id in players) {
+  //     if (bullets[id].id == serverBullets[i].id) {
+  //       bulletPush = false;
+  //     }
+  //   }
+  //   if(bulletPush) {
+  //     console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
+  //     bullets[serverBullets[i].id] = new Sprite(animation, serverBullets[i].id, serverBullets[i].x, serverBullets[i].y);
+  //   } else {
+  //     bullets[id].x = serverBullets[i].x;
+  //     bullets[id].y = serverBullets[i].y;
+  //   }
+  // }
   // for(var id in bullets) {
   //   bullets[id].show();
   // }
-}
+  
+} // end the draw() function
 
 
 // class Player {
@@ -341,66 +325,17 @@ function draw() {
 //   }
 // }
 
-socket.on('state', function(serverPlayer, bullets) {
-  player.x = serverPlayer.x;
-  player.y = serverPlayer.y;
-//   background(100);
-//   noFill();
-//   strokeWeight(3);
-//   rect(0, 0, 1700, 900);
-//   strokeWeight(1);
-//
-//   noFill();
-//   fill(255,255,255)
-//   ellipse(player.x, player.y, 500); // Draw an ellipse
-//   fill(player.color)
-//   ellipse(player.x, player.y, 20); // Draw an ellipse
-//   text(player.hp, player.x - 30, player.y - 30);
-//
-//   line((mouseX - 10), mouseY, (mouseX + 10), mouseY);
-//   line(mouseX, (mouseY - 10), mouseX, (mouseY + 10))
-//
-//   line(mouseX, mouseY, player.x, player.y);
-//
-//   // for (var id in bullets) {
-//   //   var bullet = bullets[id];
-//   //   fill(211, 211, 211)
-//   //   rect(bullet.x, bullet.y, 10, 10)
-//   // }
-//
-//   // for (var i = 0; i < bullets.length; i++) {
-//   //   var bullet = bullets[i];
-//   //   fill(255, 0, 0)
-//   //   rect(bullet.x, bullet.y, 10, 10)
-//   // }
-//
-  // Send movement data to the server//
-
-
+socket.on('state', function(me, bullets) {
+  player.x = me.x;
+  player.y = me.y;
   socket.emit('movement', movement);
-//
 });
-//
+
+// Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
-  // players = [];
-  // // For every player object sent by the server...
-  // for (var i = 0; i < playersOnScreen.length; i++) {
-  //   var player = playersOnScreen[i];
-  //   player = new Sprite(animation, player.x, player.y, 0.25)
-  //   let count = 0;
-  //   for(var id in players) {
-  //     count += 1;
-  //   }
-  //   console.log("Total players: " + count)
-  //   // players.push(player);
-  //   players[player.id] = null;
-  //   players[player.id] = player;
-  // }
-
   serverPlayers = playersOnScreen
-
 });
-//
+
 // socket.on('nearbyBullets', function(bulletsOnScreen) {
 //   // console.log(bulletsOnScreen)
 //   // For all bullets sent ~
