@@ -203,17 +203,6 @@ function setup() {
     up.push(img);
   }
 
-
-  soldier = new Player(down, up, 0, 50, 0.125);
-  player = new Player(down, up, 0, 50, 0.125);
-  imgg = loadImage('assets/Grass1.png');
-  imgr = loadImage('assets/Rock1.gif');
-  imgt = loadImage('assets/tree1.png');
-  imgt2 = loadImage('assets/tree2.png');
-  socket.emit('new player');
-  //player = new Player();
-}
-
 ```
 
 ### Step 4: Display the Animation
@@ -316,7 +305,7 @@ class Sprite {
   | Name | Type    | Description |
   | ---- | ------- | ----------- |
   | `x`  | integer | Sets the horizontal position of the player |
-  | `y`  | integer | Sets the vertical position of the player   | 
+  | `y`  | integer | Sets the vertical position of the player   |
 
 ## Emitting to the Server
 
@@ -442,7 +431,7 @@ Information is sent using `socket.emit` and received with `socket.on`.
   | 'disconnect | when client leaves | deletes the player object |
   | 'state' | server sends data that's been updated, like player data and bullet data | client uses this data to update its own and to draw the screen |
   | 'nearbyPlayers' | server calculates which players are in seeing distance and sends them in a table | client uses this to draw the nearby players |
-  
+
  | setIntervals |
  | ------------ |
  | At the start of server.js, a setInterval is used to update the bullets' positions and collisions |
@@ -454,6 +443,3 @@ Information is sent using `socket.emit` and received with `socket.on`.
  | ---- | ---- | ------ |
  | Player | used by server, isn't actually a proper class, just a table. Stores coords, health, id | Stored in the players table, called by id |
  | Bullet | used by server, is a proper class, stores coords, direction of movement, and id of player that created it | Stored in bullets table, called by table position |
-
-
-
