@@ -102,8 +102,8 @@ We will be using the coding system called the JSON file.
 
 ### Step 2: Load the JSON
 
-First, you will need to make the frames and crop out each areas in the spritesheet in a reliable size.
-To show each drawings in the spritesheet individually, you need to first identify each position and how much area should you be showing the frames. Each drawings in the spritesheet should be in a same location.
+First, we will need to make the frames and crop out each areas in the spritesheet in a reliable size.
+To show each drawings in the spritesheet individually, we need to first identify each position and how much area shall we be showing the frames. Each drawings in the spritesheet should be in a same location.
 
 ```javascript
 code example
@@ -216,49 +216,7 @@ function setup() {
 
 ```
 
-### Step 4: Create Player Object
-Merging with the client side, we collide with our animation data to control the animated assets by keyboard to create a player.
-Remember, we need the animated data in so a player will be able to run as living while controlling.
-```javascript
-class Sprite {
-  constructor(down, up, x, y, speed) {
-    this.x = x;
-    this.y = y;
-    this.animation = down;
-    this.len = this.animation.length;
-    this.speed = speed;
-    this.index = 0;
-    this.imgs = {
-      "down": down,
-      "right": down,
-      "up": up,
-      "left": up
-    }
-    this.img = this.imgs["down"];
-    this.right = false;
-    this.left = false;
-    this.up = false;
-    this.down = false
-  }
-
-
-  show() {
-    let index = floor(this.index) % this.len;
-    image(this.img[index], this.x, this.y);
-
-  }
-
-
- animate()  {
-    this.index += this.speed;
-
-   }
-}
-
-```
-
-
-### Step 5: Display the Animation
+### Step 4: Display the Animation
 We will finally draw the images in order to show the animated asset on sight.
 ```javascript
 function draw() {
@@ -302,7 +260,46 @@ function draw() {
 
 
 ```
+### Step 5: Create Player Object
+Merging with the client side, we collide with our animation data to control the animated assets by keyboard to create a player.
+Remember, we need the animated data in so a player will be able to run as living while controlling.
+```javascript
+class Sprite {
+  constructor(down, up, x, y, speed) {
+    this.x = x;
+    this.y = y;
+    this.animation = down;
+    this.len = this.animation.length;
+    this.speed = speed;
+    this.index = 0;
+    this.imgs = {
+      "down": down,
+      "right": down,
+      "up": up,
+      "left": up
+    }
+    this.img = this.imgs["down"];
+    this.right = false;
+    this.left = false;
+    this.up = false;
+    this.down = false
+  }
 
+
+  show() {
+    let index = floor(this.index) % this.len;
+    image(this.img[index], this.x, this.y);
+
+  }
+
+
+ animate()  {
+    this.index += this.speed;
+
+   }
+}
+
+```
 ----
 
 # Client
