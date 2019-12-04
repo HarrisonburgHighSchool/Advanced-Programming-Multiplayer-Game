@@ -179,7 +179,7 @@ code example
 
 
 ### Step 3: Create Animation data
-In order to let it move the frames in sequence time to time, we need the function to move the image to be visible and let the next layer be visible.
+In order to let it move the frames in sequence time to time, we need the function to move the image to be visible and let the next layer be visible. We will load the data of assets from the spritesheet and locate the frames into one. We will then add the data for controlling the speed and movements to it.
 
 ```javascript
 function preload()  {
@@ -217,6 +217,8 @@ function setup() {
 ```
 
 ### Step 4: Create Player Object
+Merging with the client side, we collide with our animation data to control the animated assets by keyboard to create a player.
+Remember, we need the animated data in so a player will be able to run as living while controlling.
 ```javascript
 class Sprite {
   constructor(down, up, x, y, speed) {
@@ -257,6 +259,7 @@ class Sprite {
 
 
 ### Step 5: Display the Animation
+We will finally draw the images in order to show the animated asset on sight.
 ```javascript
 function draw() {
 
