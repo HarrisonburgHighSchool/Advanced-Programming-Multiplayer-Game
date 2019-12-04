@@ -302,13 +302,14 @@ function draw() {
 
 ```
 
+# Server
+
 ## Table of Contents
 
 1. Sending and receiving
 2. How the client and server works
-3. Client side socket stuff
-4. Server side socket stuff
-5. Data structures
+3. socket.emits, socket.ons, and other functions
+4. Our classes
 
 
 ## Sending and receiving
@@ -334,6 +335,8 @@ All the players in the game are stored in the `players` table.
 
 `io.sockets.connected[id].emit`: Sends the specified data with a specified name. Here, it is sending the table `playersOnScreen` with the name `nearbyPlayers`. The data will be received by the server.
 
+
+
 ```javascript
 socket.on('state', function(serverPlayer, bullets) {
   player.x = serverPlayer.x;
@@ -343,6 +346,8 @@ socket.on('state', function(serverPlayer, bullets) {
 ```
 
 `socket.on`: This function listens for a message with a specific name, then runs a function with the message's data. Here, it is listening for the data `serverPlayer` and `bullets` being sent under the name `state`.
+
+`socket.emit`: Used more in our code than the other emit from above. Instead of sending to a specific id like the other emit function, this broadcasts it.
 
 
 
@@ -357,14 +362,28 @@ The client side draws the game on the player's screen. The client sends data to 
 Information is sent using `socket.emit` and received with `socket.on`.
 
 
-## Client side emits and ons
+## socket.emits, socket.ons, and other functions
 
+  | Name | When emitted | When received |
+  | ---- | ------------ | ------------- |
+  | 'new player' | by client after connected and client side player initialized | server creates new Player object identified by socket id |
+  | 'movement' | client sends server the user's keypresses | functions as the player's "update" function; handles movement, collisions, health, etc. |
+  | 'mouseclick' | client sends server the user's mouse input | on left click, server creates a Bullet object |
+  | 'disconnect | when client leaves | deletes the player object |
+  | 'state' | server sends data that's been updated, like player data and bullet data | client uses this data to update its own and to draw the screen |
+  | 'nearbyPlayers' | server calculates which players are in seeing distance and sends them in a table | client uses this to draw the nearby players |
+  
+ | setIntervals |
+ | ------------ |
+ | At the start of server.js, a setInterval is used to update the bullets' positions and collisions |
+ | At the end of server.js, a setInterval is used to calculate the data that is sent to each client |
 
+## Our classes
 
-
-## Server side emits and ons
-
-
+ | Name | Info | Stored |
+ | ---- | ---- | ------ |
+ | Player | used by server, isn't actually a proper class, just a table. Stores coords, health, id | Stored in the players table, called by id |
+ | Bullet | used by server, is a proper class, stores coords, direction of movement, and id of player that created it | Stored in bullets table, called by table position |
 
 
 
