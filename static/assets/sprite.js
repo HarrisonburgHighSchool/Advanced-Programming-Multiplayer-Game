@@ -23,7 +23,9 @@ class Sprite {
   // Draw the sprite
   show() {
     let index = floor(this.index) % this.len;
-    image(this.img[index], this.x, this.y);
+    // center the image
+    // THIS HAS TO CHANGE WHEN THE SPRITE GETS RESIZED
+    image(this.img[index], this.x - 64, this.y - 64);
   }
 
   // Update the player animation

@@ -177,13 +177,13 @@ function draw() {
     }
 
     {
-      let plx = player.x + 70
-      let ply = player.y + 70
+      let plx = player.x
+      let ply = player.y
       let c = dist(mouseX, mouseY, plx, ply);
       let d = constrain(c, 0, 100);
       let x = -((d / c) * (plx - mouseX)) + plx
       let y = -((d / c) * (ply - mouseY)) + ply
-      line(player.x + 63, player.y + 63, x, y);
+      line(player.x, player.y, x, y);
       ellipse(x, y, 10);
     }
   pop();
