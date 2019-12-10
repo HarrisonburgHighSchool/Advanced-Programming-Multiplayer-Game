@@ -186,6 +186,7 @@ function draw() {
       line(player.x, player.y, x, y);
       ellipse(x, y, 10);
     }
+    circle(250, 250, 50);
   pop();
 
   // Draw crosshair
