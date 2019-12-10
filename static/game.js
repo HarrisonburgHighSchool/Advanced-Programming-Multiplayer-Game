@@ -13,6 +13,7 @@ let up = [];            // temporary up animation storage
 let players = [];       // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];       // Store projectiles
+let waypoints = [];
 
 var player; // The player object will go here, eventually
 
@@ -175,6 +176,11 @@ function draw() {
     for(var id in players) {
       players[id].show();
     }
+    for(var id in waypoints) { /////////////////////////////////////
+      w = waypoints[id];
+      fill(w.c);
+      circle(w.x, w.y, w.r);
+    }
 
     {
       let plx = player.x + 70
@@ -188,7 +194,6 @@ function draw() {
     }
   pop();
 
-  // Draw crosshair
 
 
   // What are these for?
@@ -335,7 +340,9 @@ socket.on('state', function(me, bullets) {
   player.y = me.y;
   socket.emit('movement', movement);
 });
-
+socket.on('waypoints', function(wp){
+  waypoints = wp;
+});
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
   serverPlayers = playersOnScreen
