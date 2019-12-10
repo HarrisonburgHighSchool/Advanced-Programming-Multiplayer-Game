@@ -113,7 +113,7 @@ function preload() {
 // after preload()
 function setup() {
   createCanvas(900, 800); // create the window
-  noCursor();             // don't show the cursor
+  // noCursor();             // don't show the cursor
 
   // Slice up front spritesheet
   let frames = spritedata.frames;
@@ -135,7 +135,7 @@ function setup() {
 
   //Player (down animation, up animation, id, x, y, speed)
   player = new Sprite(down, up, 'self', 0, 50, 0.125);
-
+  life = loadImage('assets/Heart.png')
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
@@ -151,7 +151,7 @@ function setup() {
 function draw() {
   background(255);
   push();
-  translate(200 -player.x, 200 -player.y);
+  translate(200 - player.x, 200 - player.y);
     { // Draw the map
       for (x = 0; x < 20; x++) {
         for (y = 0; y < 20; y++) {
@@ -164,7 +164,7 @@ function draw() {
       }
     }
 
-    // Draw the environment stuff
+    // Draw the assets stuff
     image(imgr, 322, 5);
     image(imgt, 0, 10);
     image(imgt2, 200, 5);
@@ -176,18 +176,36 @@ function draw() {
       players[id].show();
     }
 
-    {
-      let plx = player.x + 70
-      let ply = player.y + 70
-      let c = dist(mouseX, mouseY, plx, ply);
-      let d = constrain(c, 0, 100);
-      let x = -((d / c) * (plx - mouseX)) + plx
-      let y = -((d / c) * (ply - mouseY)) + ply
-      line(player.x + 63, player.y + 63, x, y);
-      ellipse(x, y, 10);
-    }
+
   pop();
 
+  {
+    let plx = 270
+    let ply = 270
+    let mx = mouseX
+    let my = mouseY
+    let c = dist(mx, my,plx, ply);
+    let d = constrain(c, 0, 100);
+    let x = -((d / c) * (plx - mx)) + (plx)
+    let y = -((d / c) * (ply - my)) + (ply)
+    line(270, 270, x, y);
+    ellipse(x, y, 10);
+  }
+
+
+
+  rect(700, .1, 250, 70)
+  image(life, 700, .1)
+  image(life, 765, .1)
+  image(life, 835, .1)
+
+  rect(350, 700, 70, 70)
+  rect(450, 700, 70, 70)
+  rect(550, 700, 70, 70)
+
+  text(mouseX + ", " + mouseY, 10, 10);
+
+  ellipse(100, 100, 200, 200)
   // Draw crosshair
 
 
