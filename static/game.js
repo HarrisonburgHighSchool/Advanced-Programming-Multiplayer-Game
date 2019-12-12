@@ -1,5 +1,4 @@
 var socket = io();
-
 // Log messages from server to the console
 socket.on('message', function(data) {
   console.log(data);
@@ -10,6 +9,8 @@ let spritesheet;        // temporary spritesheet storage, before slicing
 let spritedata;         // spritesheet JSON data
 let down = [];          // temporary down animation storage
 let up = [];            // temporary up animation storage
+let left = [];          // temporary left animation storage
+let right = [];         // temporary right animation storage
 
 let players = [];       // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
@@ -153,7 +154,7 @@ function setup() {
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, 'self', 0, 50, 0.125);
+  player = new Sprite(down, up, left, right, 'self', 0, 50, 0.125);
 
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -169,48 +170,57 @@ function setup() {
 // Renderer
 function draw() {
   background(255);
-
-
-  { // Draw the map
-    for (x = 0; x < 6; x++) {
-      for (y = 0; y < 6; y++) {
-        image(
-          imgg,
-          192 * x,
-          192 * y
-        );
+  push();
+  translate(200 -player.x, 200 -player.y);
+    { // Draw the map
+      for (x = 0; x < 20; x++) {
+        for (y = 0; y < 20; y++) {
+          image(
+            imgg,
+            192 * x,
+            192 * y
+          );
+        }
       }
     }
-  }
 
-  // Draw the environment stuff
-  image(imgr, 322, 5);
-  image(imgt, 0, 10);
-  image(imgt2, 200, 5);
+    // Draw the environment stuff
+    image(imgr, 322, 5);
+    image(imgt, 0, 10);
+    image(imgt2, 200, 5);
 
+    player.show();
+
+    // Draw the enemies
+    for(var id in players) {
+      players[id].show();
+    }
+
+    {
+      let plx = player.x
+      let ply = player.y
+      let c = dist(mouseX, mouseY, plx, ply);
+      let d = constrain(c, 0, 100);
+      let x = -((d / c) * (plx - mouseX)) + plx
+      let y = -((d / c) * (ply - mouseY)) + ply
+      line(player.x, player.y, x, y);
+      ellipse(x, y, 10);
+    }
+  pop();
 
   // Draw crosshair
-  {
-    let plx = player.x + 70
-    let ply = player.y + 70
-    let c = dist(mouseX, mouseY, plx, ply);
-    let d = constrain(c, 0, 100);
-    let x = -((d / c) * (plx - mouseX)) + plx
-    let y = -((d / c) * (ply - mouseY)) + ply
-    line(player.x + 63, player.y + 63, x, y);
-    ellipse(x, y, 10);
-  }
+
 
   // What are these for?
-  image(imgr, 0, 5);
-  image(imgr, 322, 5);
-  image(imgr, 350, 200);
-
-  image(imgr, 200, 300);
-  image(imgr, 80, 300);
-
-  image(imgt, 0, 10);
-  image(imgt2, 100, 5);
+  // image(imgr, 0, 5);
+  // image(imgr, 322, 5);
+  // image(imgr, 350, 200);
+  //
+  // image(imgr, 200, 300);
+  // image(imgr, 80, 300);
+  //
+  // image(imgt, 0, 10);
+  // image(imgt2, 100, 5);
 
   // Crosshair placeholder
 
@@ -218,33 +228,28 @@ function draw() {
 
   // Check player direction, set animation image
   if (player.left == true) {
-    player.x = player.x - 3;
+    //player.x = player.x - 3;
     player.img = player.imgs["left"];
     player.animate();
   }
   if (player.right == true) {
-    player.x = player.x + 3
+    //player.x = player.x + 3
     player.img = player.imgs["right"];
     player.animate();
   }
   if (player.up == true) {
-    player.y = player.y - 3
+    //player.y = player.y - 3
     player.img = player.imgs["up"];
     player.animate();
   }
   if (player.down == true) {
-    player.y = player.y + 3
+    //player.y = player.y + 3
     player.img = player.imgs["down"];
     player.animate();
   }
 
   // Draw the player
-  player.show();
 
-  // Draw the enemies
-  for(var id in players) {
-    players[id].show();
-  }
 
   // Add new players sent by the server, and update existing ones
   for(i = 0; i < serverPlayers.length; i++) {
@@ -261,7 +266,7 @@ function draw() {
     // If the player is new...
     if(playerPush) {
       // Create a new Sprite object in the players table to match the new player
-      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+      players[serverPlayers[i].id] = new Sprite(up, down, left, right, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
     } else {
       // If the player isn't new,

@@ -1,5 +1,5 @@
 class Sprite {
-  constructor(down, up, id, x, y, speed) {
+  constructor(down, up, left, right, id, x, y, speed) {
     this.id = id; // ID from the server
     this.x = x;
     this.y = y;
@@ -8,9 +8,9 @@ class Sprite {
     this.index = 0;         // Animation counter
     this.imgs = {
       "down": down,         // Down animation
-      "right": down,
+      "right": right,
       "up": up,             // Up animation
-      "left": up
+      "left": left
     }
     this.img = this.imgs["down"];
     this.right = false;
@@ -23,7 +23,9 @@ class Sprite {
   // Draw the sprite
   show() {
     let index = floor(this.index) % this.len;
-    image(this.img[index], this.x, this.y);
+    // center the image
+    // THIS HAS TO CHANGE WHEN THE SPRITE GETS RESIZED
+    image(this.img[index], this.x - 64, this.y - 64);
   }
 
   // Update the player animation
