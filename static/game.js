@@ -16,6 +16,11 @@ let bullets = [];       // Store projectiles
 
 var player; // The player object will go here, eventually
 
+var cross = {
+  x: 0,
+  y: 0
+}
+
 // An object to keep track of what
 // direction the player is moving
 var movement = {
@@ -111,8 +116,41 @@ function preload() {
 
 // P5js function, runs once
 // after preload()
+
+// Pointer lock stuff ----------------------------------------------------------
+var canvas;
+function lockChangeAlert() {
+  if (document.pointerLockElement === canvas ||
+      document.mozPointerLockElement === canvas) {
+    console.log('The pointer lock status is now locked');
+    document.addEventListener("mousemove", updatePosition, false);
+  } else {
+    console.log('The pointer lock status is now unlocked');
+    document.removeEventListener("mousemove", updatePosition, false);
+  }
+}
+function updatePosition(e) {
+  cross.x += e.movementX;
+  cross.y += e.movementY;
+}
+document.addEventListener('pointerlockchange', lockChangeAlert, false);
+document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
+
+// -----------------------------------------------------------------------------
+
 function setup() {
   createCanvas(900, 800); // create the window
+
+  // Pointer lock stuff
+  canvas = document.querySelector('canvas');
+  canvas.onclick = function() {
+    canvas.requestPointerLock();
+  };
+  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+  document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+// ----------
+
+
   noCursor();             // don't show the cursor
 
   // Slice up front spritesheet
@@ -174,17 +212,39 @@ function draw() {
     // Draw the enemies
     for(var id in players) {
       players[id].show();
+      if (players[id].left == true) {
+        //player.x = player.x - 3;
+        players[id].img = players[id].imgs["left"];
+        players[id].animate();
+      }
+      if (players[id].right == true) {
+        //player.x = player.x + 3
+        players[id].img = players[id].imgs["right"];
+        players[id].animate();
+      }
+      if (players[id].up == true) {
+        //player.y = player.y - 3
+        players[id].img = players[id].imgs["up"];
+        players[id].animate();
+      }
+      if (players[id].down == true) {
+        //player.y = player.y + 3
+        players[id].img = players[id].imgs["down"];
+        players[id].animate();
+      }
     }
 
     {
       let plx = player.x
       let ply = player.y
-      let c = dist(mouseX, mouseY, plx, ply);
+      let c = dist(cross.x, cross.y, plx, ply);
       let d = constrain(c, 0, 100);
-      let x = -((d / c) * (plx - mouseX)) + plx
-      let y = -((d / c) * (ply - mouseY)) + ply
+      let x = -((d / c) * (plx - cross.x)) + plx
+      let y = -((d / c) * (ply - cross.y)) + ply
       line(player.x, player.y, x, y);
       ellipse(x, y, 10);
+      cross.x = x;
+      cross.y = y;
     }
     circle(250, 250, 50);
   pop();
@@ -253,7 +313,9 @@ function draw() {
       // If the player isn't new,
       // Just update it's position
       players[id].x = serverPlayers[i].x;
+      players[id].up = serverPlayers[i].up;
       players[id].y = serverPlayers[i].y;
+      players[id].down = serverPlayers[i].down;
     }
   }
 
@@ -332,6 +394,10 @@ function draw() {
 // }
 
 socket.on('state', function(me, bullets) {
+  let dx = me.x - player.x;
+  let dy = me.y - player.y;
+  cross.x += dx;
+  cross.y += dy;
   player.x = me.x;
   player.y = me.y;
   socket.emit('movement', movement);
@@ -339,7 +405,7 @@ socket.on('state', function(me, bullets) {
 
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
-  serverPlayers = playersOnScreen
+  serverPlayers = playersOnScreen;
 });
 
 // socket.on('nearbyBullets', function(bulletsOnScreen) {
