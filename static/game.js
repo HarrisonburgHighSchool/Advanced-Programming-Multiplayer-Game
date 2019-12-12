@@ -10,6 +10,8 @@ let spritesheet;        // temporary spritesheet storage, before slicing
 let spritedata;         // spritesheet JSON data
 let down = [];          // temporary down animation storage
 let up = [];            // temporary up animation storage
+let left = [];          // temporary left animation storage
+let right = [];         // temporary right animation storage
 
 let players = [];       // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
@@ -153,7 +155,7 @@ function setup() {
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, 'self', 0, 50, 0.125);
+  player = new Sprite(down, up, left, right, 'self', 0, 50, 0.125);
 
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -261,7 +263,7 @@ function draw() {
     // If the player is new...
     if(playerPush) {
       // Create a new Sprite object in the players table to match the new player
-      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+      players[serverPlayers[i].id] = new Sprite(up, down, left, right, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
     } else {
       // If the player isn't new,
