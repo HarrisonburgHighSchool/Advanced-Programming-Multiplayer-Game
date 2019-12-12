@@ -12,13 +12,8 @@ app.use(express.static('static'));// Routing
 server.listen(5000, function() {
   console.log('Starting server on port 5000');
 });
-// Add the WebSocket handlers
-io.on('connection', function(socket) {
-});
 
-// setInterval(function() {
-//   io.sockets.emit('message', 'hi!');
-// }, 1000);
+//------------------------------------------------------------------------------
 
 var players = {};
 var bullets = [];
