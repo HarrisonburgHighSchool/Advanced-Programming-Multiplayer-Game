@@ -12,7 +12,8 @@ let up = [];            // temporary up animation storage
 
 let players = [];       // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
-let bullets = [];       // Store projectiles
+let bullets = [];
+let serverBullets = [];     // Store projectiles
 let waypoints = [];
 
 var player; // The player object will go here, eventually
@@ -182,6 +183,10 @@ function draw() {
       circle(w.x, w.y, w.r);
     }
 
+    for (var i = 0; i < bullets.length; i++) {
+      fill("black");
+      circle(bullets[i].x, bullets[i].y,5);
+    }
 
   pop();
 
@@ -280,6 +285,30 @@ function draw() {
     }
   }
 
+  // for(i = 0; i < serverBullets.length; i++) {
+  //   let bulletPush = true; // assume the player is new
+  //
+  //   // Check to see if a player with the same id is already
+  //   // in the players table
+  //   for (var j = 0; j < bullets.length; i++) {
+  //     if (bullets[j] == serverBullets[i]) {
+  //       bulletPush = false; // if so, the player isn't new
+  //     }
+  //   }
+  //
+  //   // If the player is new...
+  //   if(bulletPush) {
+  //     // Create a new Sprite object in the players table to match the new player
+  //     bullets[i] = serverBullets[i]
+  //     console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
+  //   } else {
+  //     // If the player isn't new,
+  //     // Just update it's position
+  //     bullets[i].x = serverBullets[i].x;
+  //     bullets[i].y = serverBullets[i].y;
+  //   }
+  // }
+
   // --------------------------------------------------
   // Need code to delete objects from the players table
   // --------------------------------------------------
@@ -367,16 +396,10 @@ socket.on('nearbyPlayers', function(playersOnScreen) {
   serverPlayers = playersOnScreen
 });
 
-// socket.on('nearbyBullets', function(bulletsOnScreen) {
-//   // console.log(bulletsOnScreen)
-//   // For all bullets sent ~
-//   for (var i = 0; i < bulletsOnScreen.length; i++) {
-//     var bullet = bulletsOnScreen[i];
-//     fill(255, 0, 0)
-//     rect(bullet.x, bullet.y, 10, 10); // Draw Bullet
-//   }
-//
-// });
+socket.on('nearbyBullets', function(bulletsOnScreen) {
+  // serverBullets = bulletsOnScreen
+  bullets = bulletsOnScreen;
+});
 
 class Enemy {
   constructor(id, x, y) {
