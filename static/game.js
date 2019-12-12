@@ -116,10 +116,10 @@ function preload() {
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   left = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
   right = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
-  frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
-  frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
-  backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
-  backleft = loadImage('/assets/Akan Movements 22.png');  // BackwardLeft walk spritesheet
+  //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
+  //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
+  //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
+  //backleft = loadImage('/assets/Akan Movements 22.png');  // BackwardLeft walk spritesheet
 }
 
 // P5js function, runs once
