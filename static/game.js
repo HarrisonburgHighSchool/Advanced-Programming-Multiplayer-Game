@@ -187,8 +187,6 @@ function draw() {
     circle(bullets[i].x, bullets[i].y, 5);
   }
 
-  pop();
-
   {
     let plx = 450
     let ply = 400
@@ -201,8 +199,11 @@ function draw() {
     line(plx, ply, x, y);
     ellipse(x, y, 10);
   }
+  circle(250, 250, 50);
+  
+  pop();
 
-  ellipse(100, 100, 200, 200)
+  ellipse(100, 100, 200, 200) //waypoint
 
   rect(700, .1, 250, 70)
   image(life, 700, .1)
