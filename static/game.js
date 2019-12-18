@@ -5,15 +5,15 @@ socket.on('message', function(data) {
 });
 
 
-let spritesheet;        // temporary spritesheet storage, before slicing
-let spritedata;         // spritesheet JSON data
-let down = [];          // temporary down animation storage
-let up = [];            // temporary up animation storage
+let spritesheet; // temporary spritesheet storage, before slicing
+let spritedata; // spritesheet JSON data
+let down = []; // temporary down animation storage
+let up = []; // temporary up animation storage
 
-let players = [];       // Store the enemy players
+let players = []; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];
-let serverBullets = [];     // Store projectiles
+let serverBullets = []; // Store projectiles
 let waypoints = [];
 
 var player; // The player object will go here, eventually
@@ -108,7 +108,7 @@ function preload() {
   // Load animation assets
   spritedata = loadJSON('/assets/soldierWalk.json'); // Frame information
   front = loadImage('/assets/SoldierWalkFront.png'); // Forward walk spritesheet
-  back = loadImage('/assets/SoldierWalkBack.png');   // Backward walk spritesheet
+  back = loadImage('/assets/SoldierWalkBack.png'); // Backward walk spritesheet
 }
 
 // P5js function, runs once
@@ -136,7 +136,7 @@ function setup() {
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, 'self', 0, 50, 0.125);
+  player = new Sprite(down, up, 'self', 0, 50, 0.125, -64, -64);
   life = loadImage('assets/Heart.png')
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -153,57 +153,56 @@ function setup() {
 function draw() {
   background(255);
   push();
-  translate(200 - player.x, 200 - player.y);
-    { // Draw the map
-      for (x = 0; x < 20; x++) {
-        for (y = 0; y < 20; y++) {
-          image(
-            imgg,
-            192 * x,
-            192 * y
-          );
-        }
+  translate(450 - player.x, 400 - player.y); { // Draw the map
+    for (x = 0; x < 20; x++) {
+      for (y = 0; y < 20; y++) {
+        image(
+          imgg,
+          192 * x,
+          192 * y
+        );
       }
     }
+  }
 
-    // Draw the assets stuff
-    image(imgr, 322, 5);
-    image(imgt, 0, 10);
-    image(imgt2, 200, 5);
+  // Draw the assets stuff
+  image(imgr, 322, 5);
+  image(imgt, 0, 10);
+  image(imgt2, 200, 5);
 
-    player.show();
+  player.show();
 
-    // Draw the enemies
-    for(var id in players) {
-      players[id].show();
-    }
-    for(var id in waypoints) { /////////////////////////////////////
-      w = waypoints[id];
-      fill(w.c);
-      circle(w.x, w.y, w.r);
-    }
+  // Draw the enemies
+  for (var id in players) {
+    players[id].show();
+  }
+  for (var id in waypoints) { /////////////////////////////////////
+    w = waypoints[id];
+    fill(w.c);
+    circle(w.x, w.y, w.r);
+  }
 
-    for (var i = 0; i < bullets.length; i++) {
-      fill("black");
-      circle(bullets[i].x, bullets[i].y,5);
-    }
+  for (var i = 0; i < bullets.length; i++) {
+    fill("black");
+    circle(bullets[i].x, bullets[i].y, 5);
+  }
 
   pop();
 
   {
-    let plx = 270
-    let ply = 270
+    let plx = 450
+    let ply = 400
     let mx = mouseX
     let my = mouseY
-    let c = dist(mx, my,plx, ply);
+    let c = dist(mx, my, plx, ply);
     let d = constrain(c, 0, 100);
     let x = -((d / c) * (plx - mx)) + (plx)
     let y = -((d / c) * (ply - my)) + (ply)
-    line(270, 270, x, y);
+    line(plx, ply, x, y);
     ellipse(x, y, 10);
   }
 
-
+  ellipse(100, 100, 200, 200)
 
   rect(700, .1, 250, 70)
   image(life, 700, .1)
@@ -216,7 +215,7 @@ function draw() {
 
   text(mouseX + ", " + mouseY, 10, 10);
 
-  ellipse(100, 100, 200, 200)
+
   // Draw crosshair
 
 
@@ -261,19 +260,19 @@ function draw() {
 
 
   // Add new players sent by the server, and update existing ones
-  for(i = 0; i < serverPlayers.length; i++) {
+  for (i = 0; i < serverPlayers.length; i++) {
     let playerPush = true; // assume the player is new
 
     // Check to see if a player with the same id is already
     // in the players table
-    for(id in players) {
+    for (id in players) {
       if (players[id].id == serverPlayers[i].id) {
         playerPush = false; // if so, the player isn't new
       }
     }
 
     // If the player is new...
-    if(playerPush) {
+    if (playerPush) {
       // Create a new Sprite object in the players table to match the new player
       players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
@@ -388,7 +387,7 @@ socket.on('state', function(me, bullets) {
   player.y = me.y;
   socket.emit('movement', movement);
 });
-socket.on('waypoints', function(wp){
+socket.on('waypoints', function(wp) {
   waypoints = wp;
 });
 // Server sends table full of nearby players

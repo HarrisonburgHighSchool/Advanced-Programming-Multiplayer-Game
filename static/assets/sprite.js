@@ -1,8 +1,10 @@
 class Sprite {
-  constructor(down, up, id, x, y, speed) {
+  constructor(down, up, id, x, y, speed, offsetx, offsety) {
     this.id = id; // ID from the server
     this.x = x;
     this.y = y;
+    this.ox = offsetx;
+    this.oy = offsety;
     this.len = up.length;
     this.speed = speed;     // Animation speed
     this.index = 0;         // Animation counter
@@ -23,7 +25,7 @@ class Sprite {
   // Draw the sprite
   show() {
     let index = floor(this.index) % this.len;
-    image(this.img[index], this.x, this.y);
+    image(this.img[index], this.x + this.ox, this.y + this.oy);
   }
 
   // Update the player animation
