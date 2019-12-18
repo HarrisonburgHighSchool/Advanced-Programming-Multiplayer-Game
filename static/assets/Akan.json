@@ -1,6 +1,6 @@
 "frames": [
   {
-    "name": "Akan-01",
+    "name": "stomper-01",
     "position": {
       "x": 0,
       "y": 0,
@@ -9,7 +9,7 @@
     }
   },
   {
-    "name": "Akan-02",
+    "name": "stomper-02",
     "position": {
       "x": 384,
       "y": 0,
@@ -18,7 +18,7 @@
     }
   },
   {
-    "name": "Akan-03",
+    "name": "stomper-03",
     "position": {
       "x": 768,
       "y": 0,
@@ -27,7 +27,7 @@
     }
   },
   {
-    "name": "Akan-04",
+    "name": "stomper-04",
     "position": {
       "x": 0,
       "y": 384,
@@ -36,7 +36,7 @@
     }
   },
   {
-    "name": "Akan-05",
+    "name": "stomper-05",
     "position": {
       "x": 384,
       "y": 384,
@@ -45,7 +45,7 @@
     }
   },
   {
-    "name": "Akan-06",
+    "name": "stomper-06",
     "position": {
       "x": 768,
       "y": 384,
@@ -54,7 +54,7 @@
     }
    },
    {
-    "name": "Akan-07",
+    "name": "stomper-07",
     "position": {
       "x": 0,
       "y": 768,
@@ -63,7 +63,7 @@
     }
   },
   {
-    "name": "Akan-08",
+    "name": "stomper-08",
     "position": {
       "x": 384,
       "y": 768,
