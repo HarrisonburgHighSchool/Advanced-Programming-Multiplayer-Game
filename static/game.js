@@ -114,8 +114,8 @@ function preload() {
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
-  left = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
-  right = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
+  hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
+  migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
@@ -178,13 +178,13 @@ function setup() {
 
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
-    let img = left.get(pos.x, pos.y, pos.w, pos.h, );
+    let img = hidari.get(pos.x, pos.y, pos.w, pos.h, );
     left.push(img);
   }
 
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
-    let img = right.get(pos.x, pos.y, pos.w, pos.h, );
+    let img = migi.get(pos.x, pos.y, pos.w, pos.h, );
     right.push(img);
   }
 
