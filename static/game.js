@@ -108,9 +108,9 @@ function preload() {
   // Load animation assets
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
   front = loadImage('/assets/Akan Movements 5.png'); // Forward walk spritesheet
-  back = loadImage('/assets/Akan Movements 5.png'); // Backward walk spritesheet
-  hidari
-  migi
+  back = loadImage('/assets/Akan Movements 6.png'); // Backward walk spritesheet
+  hidari = loadImage('/assets/Akan Movements 7')
+  migi = loadImage('/assets/Akan Movements 8')
 }
 
 // P5js function, runs once
@@ -134,11 +134,25 @@ function setup() {
     up.push(img);
   }
 
+  let frames = spritedata.frames;
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = hidari.get(pos.x, pos.y, pos.w, pos.h, );
+    left.push(img);
+  }
+
+  // Slice up back spritesheet
+  for (let i = 0; i < frames.length; i++) {
+    let pos = frames[i].position;
+    let img = migi.get(pos.x, pos.y, pos.w, pos.h, );
+    right.push(img);
+  }
+
 
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, 'self', 0, 50, 0.125, -64, -64);
+  player = new Sprite(down, up, right, left, 'self', 0, 50, 0.125, -64, -64);
   life = loadImage('assets/Heart.png')
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
