@@ -106,9 +106,11 @@ document.addEventListener('keyup', function(event) {
 
 function preload() {
   // Load animation assets
-  spritedata = loadJSON('/assets/soldierWalk.json'); // Frame information
-  front = loadImage('/assets/SoldierWalkFront.png'); // Forward walk spritesheet
-  back = loadImage('/assets/SoldierWalkBack.png'); // Backward walk spritesheet
+  spritedata = loadJSON('/assets/Akan.json'); // Frame information
+  front = loadImage('/assets/Akan Movements 5.png'); // Forward walk spritesheet
+  back = loadImage('/assets/Akan Movements 5.png'); // Backward walk spritesheet
+  hidari
+  migi
 }
 
 // P5js function, runs once
@@ -201,6 +203,9 @@ function draw() {
     line(plx, ply, x, y);
     ellipse(x, y, 10);
   }
+  //circle(250, 250, 50);
+
+  //pop();
 
   ellipse(100, 100, 200, 200)
 
