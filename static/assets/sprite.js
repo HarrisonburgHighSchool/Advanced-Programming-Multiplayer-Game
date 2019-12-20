@@ -3,6 +3,8 @@ class Sprite {
     this.id = id; // ID from the server
     this.x = x;
     this.y = y;
+    //this.ox = offsetx;
+    //this.oy = offsety;
     this.len = up.length;
     this.speed = speed;     // Animation speed
     this.index = 0;         // Animation counter
@@ -23,9 +25,10 @@ class Sprite {
   // Draw the sprite
   show() {
     let index = floor(this.index) % this.len;
-    // center the image
-    // THIS HAS TO CHANGE WHEN THE SPRITE GETS RESIZED
-    image(this.img[index], this.x - 64, this.y - 64);
+    //console.log(this)
+    //image(this.imgs["down"][1], this.x + this.ox, this.y + this.oy);
+    ellipse(this.x, this.y, 25);
+    image(this.img[index], this.x -64, this.y - 64);
   }
 
   // Update the player animation
