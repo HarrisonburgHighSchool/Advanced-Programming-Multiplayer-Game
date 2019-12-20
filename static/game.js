@@ -134,7 +134,7 @@ function setup() {
     up.push(img);
   }
 
-  let frames = spritedata.frames;
+  frames = spritedata.frames;
   for (let i = 0; i < frames.length; i++) {
     let pos = frames[i].position;
     let img = hidari.get(pos.x, pos.y, pos.w, pos.h, );
@@ -293,7 +293,7 @@ function draw() {
     // If the player is new...
     if (playerPush) {
       // Create a new Sprite object in the players table to match the new player
-      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+      players[serverPlayers[i].id] = new Sprite(up, down, right, left, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
     } else {
       // If the player isn't new,
