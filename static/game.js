@@ -85,9 +85,6 @@ function draw() {
 
   player.show();
 
-  if() {
-    player.animate();
-  }
 
   if (player.left == true) {
     player.x = player.x - 10;
