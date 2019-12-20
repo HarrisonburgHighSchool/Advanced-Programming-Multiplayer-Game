@@ -109,7 +109,8 @@ function preload() {
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
   front = loadImage('/assets/Akan Movements 5.png'); // Forward walk spritesheet
   back = loadImage('/assets/Akan Movements 5.png'); // Backward walk spritesheet
-  
+  hidari
+  migi
 }
 
 // P5js function, runs once
