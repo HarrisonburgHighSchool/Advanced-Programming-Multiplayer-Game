@@ -50,7 +50,11 @@ document.addEventListener('click', function(event) {
   mouse.mx = mouseX;
   mouse.my = mouseY;
   socket.emit('mouseclick', mouse);
-  console.log('click');
+  let count = 0;
+  for(id in players) {
+    count += 1;
+  }
+  console.log(count);
 
 });
 
@@ -106,11 +110,11 @@ document.addEventListener('keyup', function(event) {
 
 function preload() {
   // Load animation assets
-  spritedata = loadJSON('/assets/Akan.json'); // Frame information
-  front = loadImage('/assets/Akan Movements 5.png'); // Forward walk spritesheet
-  back = loadImage('/assets/Akan Movements 6.png'); // Backward walk spritesheet
-  hidari = loadImage('/assets/Akan Movements 7')
-  migi = loadImage('/assets/Akan Movements 8')
+  spritedata = loadJSON('/assets/soldierWalk.json'); // Frame information
+  front = loadImage('/assets/SoldierWalkFront.png'); // Forward walk spritesheet
+  back = loadImage('/assets/SoldierWalkBack.png'); // Backward walk spritesheet
+  //hidari = loadImage('/assets/Akan Movements 7')
+  //migi = loadImage('/assets/Akan Movements 8')
 }
 
 // P5js function, runs once
@@ -134,25 +138,26 @@ function setup() {
     up.push(img);
   }
 
-  frames = spritedata.frames;
-  for (let i = 0; i < frames.length; i++) {
-    let pos = frames[i].position;
-    let img = hidari.get(pos.x, pos.y, pos.w, pos.h, );
-    left.push(img);
-  }
-
-  // Slice up back spritesheet
-  for (let i = 0; i < frames.length; i++) {
-    let pos = frames[i].position;
-    let img = migi.get(pos.x, pos.y, pos.w, pos.h, );
-    right.push(img);
-  }
+  // frames = spritedata.frames;
+  // for (let i = 0; i < frames.length; i++) {
+  //   let pos = frames[i].position;
+  //   let img = hidari.get(pos.x, pos.y, pos.w, pos.h, );
+  //   left.push(img);
+  // }
+  //
+  // // Slice up back spritesheet
+  // for (let i = 0; i < frames.length; i++) {
+  //   let pos = frames[i].position;
+  //   let img = migi.get(pos.x, pos.y, pos.w, pos.h, );
+  //   right.push(img);
+  // }
 
 
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, right, left, 'self', 0, 50, 0.125, -64, -64);
+  player = new Sprite(down, up, 'self', 0, 50, 0.125, -64, -64);
+  player.hp = 10
   life = loadImage('assets/Heart.png')
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -190,7 +195,9 @@ function draw() {
 
   // Draw the enemies
   for (var id in players) {
+    //players[id].animate();
     players[id].show();
+    //ellipse(players[id].x, players[id].y, 25);
   }
   for (var id in waypoints) { /////////////////////////////////////
     w = waypoints[id];
@@ -221,16 +228,19 @@ function draw() {
 
   //pop();
 
-  ellipse(100, 100, 200, 200)
+  // ellipse(100, 100, 200, 200)
 
-  rect(700, .1, 250, 70)
-  image(life, 700, .1)
-  image(life, 765, .1)
-  image(life, 835, .1)
+  // rect(700, .1, 250, 70)
+  // image(life, 700, .1)
+  // image(life, 765, .1)
+  // image(life, 835, .1)
+  fill("red");
+  rect(700, .1, 250 * (player.hp/10), 70)
+  fill("white");
 
-  rect(350, 700, 70, 70)
-  rect(450, 700, 70, 70)
-  rect(550, 700, 70, 70)
+  // rect(350, 700, 70, 70)
+  // rect(450, 700, 70, 70)
+  // rect(550, 700, 70, 70)
 
   text(mouseX + ", " + mouseY, 10, 10);
 
@@ -293,7 +303,7 @@ function draw() {
     // If the player is new...
     if (playerPush) {
       // Create a new Sprite object in the players table to match the new player
-      players[serverPlayers[i].id] = new Sprite(up, down, right, left, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
+      players[serverPlayers[i].id] = new Sprite(up, down, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
     } else {
       // If the player isn't new,
@@ -404,6 +414,7 @@ function draw() {
 socket.on('state', function(me, bullets) {
   player.x = me.x;
   player.y = me.y;
+  player.hp = me.hp
   socket.emit('movement', movement);
 });
 socket.on('waypoints', function(wp) {

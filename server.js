@@ -230,6 +230,8 @@ class Player {
     } else {
       this.y = 500;
     }
+    this.hp = 10
+    this.r = 10
   }
 }
 

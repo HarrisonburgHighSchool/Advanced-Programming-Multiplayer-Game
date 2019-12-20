@@ -25,7 +25,10 @@ class Sprite {
   // Draw the sprite
   show() {
     let index = floor(this.index) % this.len;
-    image(this.img[index], this.x + this.ox, this.y + this.oy);
+    //console.log(this)
+    //image(this.imgs["down"][1], this.x + this.ox, this.y + this.oy);
+    ellipse(this.x, this.y, 25);
+    image(this.img[index], this.x -64, this.y - 64);
   }
 
   // Update the player animation
