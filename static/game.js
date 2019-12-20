@@ -12,9 +12,11 @@ let up = [];            // temporary up animation storage
 let left = [];          // temporary left animation storage
 let right = [];         // temporary right animation storage
 
-let players = [];       // Store the enemy players
+let players = {}; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
-let bullets = [];       // Store projectiles
+let bullets = [];
+let serverBullets = []; // Store projectiles
+let waypoints = [];
 
 var player; // The player object will go here, eventually
 
@@ -55,7 +57,11 @@ document.addEventListener('click', function(event) {
   mouse.mx = mouseX;
   mouse.my = mouseY;
   socket.emit('mouseclick', mouse);
-  console.log('click');
+  let count = 0;
+  for(id in players) {
+    count += 1;
+  }
+  console.log(count);
 
 });
 
@@ -128,14 +134,14 @@ function preload() {
 // Pointer lock stuff ----------------------------------------------------------
 var canvas;
 function lockChangeAlert() {
-  if (document.pointerLockElement === canvas ||
-      document.mozPointerLockElement === canvas) {
-    console.log('The pointer lock status is now locked');
-    document.addEventListener("mousemove", updatePosition, false);
-  } else {
-    console.log('The pointer lock status is now unlocked');
-    document.removeEventListener("mousemove", updatePosition, false);
-  }
+  // if (document.pointerLockElement === canvas ||
+  //     document.mozPointerLockElement === canvas) {
+  //   console.log('The pointer lock status is now locked');
+  //   document.addEventListener("mousemove", updatePosition, false);
+  // } else {
+  //   console.log('The pointer lock status is now unlocked');
+  //   document.removeEventListener("mousemove", updatePosition, false);
+  // }
 }
 function updatePosition(e) {
   cross.x += e.movementX;
@@ -152,10 +158,10 @@ function setup() {
   // Pointer lock stuff
   canvas = document.querySelector('canvas');
   canvas.onclick = function() {
-    canvas.requestPointerLock();
+    //canvas.requestPointerLock();
   };
-  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
-  document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+  //canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+  //document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 // ----------
 
 
@@ -209,25 +215,24 @@ function setup() {
 function draw() {
   background(255);
   push();
-  translate(200 -player.x, 200 -player.y);
-    { // Draw the map
-      for (x = 0; x < 20; x++) {
-        for (y = 0; y < 20; y++) {
-          image(
-            imgg,
-            192 * x,
-            192 * y
-          );
-        }
+  translate(450 - player.x, 400 - player.y); { // Draw the map
+    for (x = 0; x < 20; x++) {
+      for (y = 0; y < 20; y++) {
+        image(
+          imgg,
+          192 * x,
+          192 * y
+        );
       }
     }
+  }
 
-    // Draw the environment stuff
-    image(imgr, 322, 5);
-    image(imgt, 0, 10);
-    image(imgt2, 200, 5);
+  // Draw the assets stuff
+  image(imgr, 322, 5);
+  image(imgt, 0, 10);
+  image(imgt2, 200, 5);
 
-    player.show();
+  player.show();
 
     // Draw the enemies
     for(var id in players) {
@@ -254,20 +259,65 @@ function draw() {
       }
     }
 
-    {
-      let plx = player.x
-      let ply = player.y
-      let c = dist(cross.x, cross.y, plx, ply);
-      let d = constrain(c, 0, 100);
-      let x = -((d / c) * (plx - cross.x)) + plx
-      let y = -((d / c) * (ply - cross.y)) + ply
-      line(player.x, player.y, x, y);
-      ellipse(x, y, 10);
-      cross.x = x;
-      cross.y = y;
-    }
+    // {
+    //   let plx = player.x
+    //   let ply = player.y
+    //   let c = dist(cross.x, cross.y, plx, ply);
+    //   let d = constrain(c, 0, 100);
+    //   let x = -((d / c) * (plx - cross.x)) + plx
+    //   let y = -((d / c) * (ply - cross.y)) + ply
+    //   line(player.x, player.y, x, y);
+    //   ellipse(x, y, 10);
+    //   cross.x = x;
+    //   cross.y = y;
+    // }
     circle(250, 250, 50);
+  // Draw the enemies
+  for (var id in waypoints) { /////////////////////////////////////
+    w = waypoints[id];
+    fill(w.c);
+    circle(w.x, w.y, w.r);
+  }
+
+  for (var i = 0; i < bullets.length; i++) {
+    fill("black");
+    circle(bullets[i].x, bullets[i].y, 5);
+  }
+
   pop();
+
+  {
+    let plx = 450
+    let ply = 400
+    let mx = mouseX
+    let my = mouseY
+    let c = dist(mx, my, plx, ply);
+    let d = constrain(c, 0, 100);
+    let x = -((d / c) * (plx - mx)) + (plx)
+    let y = -((d / c) * (ply - my)) + (ply)
+    line(plx, ply, x, y);
+    ellipse(x, y, 10);
+  }
+  //circle(250, 250, 50);
+
+  //pop();
+
+  // ellipse(100, 100, 200, 200)
+
+  // rect(700, .1, 250, 70)
+  // image(life, 700, .1)
+  // image(life, 765, .1)
+  // image(life, 835, .1)
+  fill("red");
+  rect(700, .1, 250 * (player.hp/10), 70)
+  fill("white");
+
+  // rect(350, 700, 70, 70)
+  // rect(450, 700, 70, 70)
+  // rect(550, 700, 70, 70)
+
+  text(mouseX + ", " + mouseY, 10, 10);
+
 
   // Draw crosshair
 
@@ -313,19 +363,19 @@ function draw() {
 
 
   // Add new players sent by the server, and update existing ones
-  for(i = 0; i < serverPlayers.length; i++) {
+  for (i = 0; i < serverPlayers.length; i++) {
     let playerPush = true; // assume the player is new
 
     // Check to see if a player with the same id is already
     // in the players table
-    for(id in players) {
+    for (id in players) {
       if (players[id].id == serverPlayers[i].id) {
         playerPush = false; // if so, the player isn't new
       }
     }
 
     // If the player is new...
-    if(playerPush) {
+    if (playerPush) {
       // Create a new Sprite object in the players table to match the new player
       players[serverPlayers[i].id] = new Sprite(up, down, left, right, serverPlayers[i].id, serverPlayers[i].x, serverPlayers[i].y);
       console.log("New Player at X: " + serverPlayers[i].x + ", " + serverPlayers[i].y);
@@ -338,6 +388,30 @@ function draw() {
       players[id].down = serverPlayers[i].down;
     }
   }
+
+  // for(i = 0; i < serverBullets.length; i++) {
+  //   let bulletPush = true; // assume the player is new
+  //
+  //   // Check to see if a player with the same id is already
+  //   // in the players table
+  //   for (var j = 0; j < bullets.length; i++) {
+  //     if (bullets[j] == serverBullets[i]) {
+  //       bulletPush = false; // if so, the player isn't new
+  //     }
+  //   }
+  //
+  //   // If the player is new...
+  //   if(bulletPush) {
+  //     // Create a new Sprite object in the players table to match the new player
+  //     bullets[i] = serverBullets[i]
+  //     console.log("New Bullet at X: " + serverBullets[i].x + ", " + serverBullets[i].y);
+  //   } else {
+  //     // If the player isn't new,
+  //     // Just update it's position
+  //     bullets[i].x = serverBullets[i].x;
+  //     bullets[i].y = serverBullets[i].y;
+  //   }
+  // }
 
   // --------------------------------------------------
   // Need code to delete objects from the players table
@@ -420,24 +494,21 @@ socket.on('state', function(me, bullets) {
   cross.y += dy;
   player.x = me.x;
   player.y = me.y;
+  player.hp = me.hp
   socket.emit('movement', movement);
 });
-
+socket.on('waypoints', function(wp) {
+  waypoints = wp;
+});
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
   serverPlayers = playersOnScreen;
 });
 
-// socket.on('nearbyBullets', function(bulletsOnScreen) {
-//   // console.log(bulletsOnScreen)
-//   // For all bullets sent ~
-//   for (var i = 0; i < bulletsOnScreen.length; i++) {
-//     var bullet = bulletsOnScreen[i];
-//     fill(255, 0, 0)
-//     rect(bullet.x, bullet.y, 10, 10); // Draw Bullet
-//   }
-//
-// });
+socket.on('nearbyBullets', function(bulletsOnScreen) {
+  // serverBullets = bulletsOnScreen
+  bullets = bulletsOnScreen;
+});
 
 class Enemy {
   constructor(id, x, y) {
