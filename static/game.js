@@ -10,7 +10,7 @@ let spritedata; // spritesheet JSON data
 let down = []; // temporary down animation storage
 let up = []; // temporary up animation storage
 
-let players = []; // Store the enemy players
+let players = {}; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];
 let serverBullets = []; // Store projectiles
@@ -187,6 +187,8 @@ function draw() {
     circle(bullets[i].x, bullets[i].y, 5);
   }
 
+  pop();
+
   {
     let plx = 450
     let ply = 400
@@ -199,11 +201,8 @@ function draw() {
     line(plx, ply, x, y);
     ellipse(x, y, 10);
   }
-  circle(250, 250, 50);
-  
-  pop();
 
-  ellipse(100, 100, 200, 200) //waypoint
+  ellipse(100, 100, 200, 200)
 
   rect(700, .1, 250, 70)
   image(life, 700, .1)
