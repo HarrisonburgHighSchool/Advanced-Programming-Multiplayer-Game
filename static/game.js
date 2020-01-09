@@ -271,7 +271,7 @@ function draw() {
     //   cross.x = x;
     //   cross.y = y;
     // }
-    circle(400, 250, 50);
+    circle(1, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
     w = waypoints[id];
