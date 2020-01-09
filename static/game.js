@@ -271,7 +271,7 @@ function draw() {
     //   cross.x = x;
     //   cross.y = y;
     // }
-    circle(250, 250, 100);
+    circle(250, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
     w = waypoints[id];
@@ -518,6 +518,6 @@ class Enemy {
   }
 
   show() {
-    rect(this.x, this.y, 20, 20);
+    rect(this.x, this.y, 100, 20);
   }
 }
