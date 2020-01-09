@@ -27,7 +27,7 @@ class Sprite {
     let index = floor(this.index) % this.len;
     //console.log(this)
     //image(this.imgs["down"][1], this.x + this.ox, this.y + this.oy);
-    ellipse(this.x, this.y, 25);
+    ellipse(this.x, this.y, 5);
     image(this.img[index], this.x -16, this.y - 16);
   }
 
