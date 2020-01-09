@@ -198,7 +198,7 @@ function setup() {
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, left, right, 'self', 0, 100, 0.125);
+  player = new Sprite(down, up, left, right, 'self', 0, 50, 0.125);
 
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
@@ -271,7 +271,7 @@ function draw() {
     //   cross.x = x;
     //   cross.y = y;
     // }
-    circle(250, 250, 50);
+    circle(32, 32, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
     w = waypoints[id];
