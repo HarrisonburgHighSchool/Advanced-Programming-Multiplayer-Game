@@ -287,7 +287,7 @@ function draw() {
   pop();
 
   {
-    let plx = 32
+    let plx = 450
     let ply = 400
     let mx = mouseX
     let my = mouseY
