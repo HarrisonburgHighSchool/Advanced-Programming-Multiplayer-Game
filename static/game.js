@@ -220,7 +220,7 @@ function draw() {
       for (y = 0; y < 20; y++) {
         image(
           imgg,
-          192 * x,
+          32 * x,
           192 * y
         );
       }
