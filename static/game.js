@@ -198,7 +198,7 @@ function setup() {
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
-  player = new Sprite(down, up, left, right, 'self', 0, 64, 0.125);
+  player = new Sprite(down, up, left, right, 'self', 0, 100, 0.125);
 
   imgg = loadImage('assets/Grass1.png');
   imgr = loadImage('assets/Rock1.gif');
