@@ -204,6 +204,7 @@ function setup() {
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
+  Enemy = loadImage('assets/Akan Movements 13.png')
 
   // Tell the server that a new player is loaded
   socket.emit('new player');
@@ -271,6 +272,7 @@ function draw() {
     //   cross.x = x;
     //   cross.y = y;
     // }
+    Enemy = circle()
     circle(250, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
