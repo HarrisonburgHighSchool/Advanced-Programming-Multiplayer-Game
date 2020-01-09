@@ -228,7 +228,7 @@ function draw() {
   }
 
   // Draw the assets stuff
-  image(imgr, 322, 5);
+  image(imgr, 32, 5);
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
 
