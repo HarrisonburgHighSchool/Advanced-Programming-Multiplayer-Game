@@ -518,6 +518,6 @@ class Enemy {
   }
 
   show() {
-    rect(this.x, this.y, 100, 20);
+    rect(this.x, this.y, 20, 20);
   }
 }
