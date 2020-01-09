@@ -296,7 +296,7 @@ function draw() {
     let x = -((d / c) * (plx - mx)) + (plx)
     let y = -((d / c) * (ply - my)) + (ply)
     line(plx, ply, x, y);
-    ellipse(x, y, 20);
+    ellipse(x, y, 1);
   }
   //circle(250, 250, 50);
 
