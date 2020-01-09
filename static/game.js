@@ -11,7 +11,7 @@ let down = [];          // temporary down animation storage
 let up = [];            // temporary up animation storage
 let left = [];          // temporary left animation storage
 let right = [];         // temporary right animation storage
-
+       //
 let players = {}; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];
@@ -283,6 +283,7 @@ function draw() {
     fill("black");
     circle(bullets[i].x, bullets[i].y, 5);
   }
+  // text( player.hp, plx+10, ply+20)
 
   pop();
 
@@ -297,6 +298,7 @@ function draw() {
     let y = -((d / c) * (ply - my)) + (ply)
     line(plx, ply, x, y);
     ellipse(x, y, 10);
+    text()
   }
   //circle(250, 250, 50);
 
@@ -494,7 +496,7 @@ socket.on('state', function(me, bullets) {
   cross.y += dy;
   player.x = me.x;
   player.y = me.y;
-  player.hp = me.hp
+  player.hp = me.hp;
   socket.emit('movement', movement);
 });
 socket.on('waypoints', function(wp) {

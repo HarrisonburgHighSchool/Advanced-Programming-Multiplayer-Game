@@ -18,7 +18,8 @@ class Sprite {
     this.right = false;
     this.left = false;
     this.up = false;
-    this.down = false
+    this.down = false;
+    this.hp = 100;
   }
 
 
