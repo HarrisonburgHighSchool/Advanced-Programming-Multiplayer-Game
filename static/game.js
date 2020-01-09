@@ -228,8 +228,8 @@ function draw() {
   }
 
   // Draw the assets stuff
-  image(imgr, 32, 5);
-  image(imgt, 0, 10);
+  image(imgr, 322, 5);
+  image(imgt, 100, 10);
   image(imgt2, 200, 5);
 
   player.show();
