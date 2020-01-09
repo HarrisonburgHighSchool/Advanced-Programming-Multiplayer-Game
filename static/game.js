@@ -283,7 +283,7 @@ function draw() {
     fill("black");
     circle(bullets[i].x, bullets[i].y, 5);
   }
-  // text( player.hp, plx+10, ply+20)
+
 
   pop();
 
@@ -317,9 +317,14 @@ function draw() {
   // rect(350, 700, 70, 70)
   // rect(450, 700, 70, 70)
   // rect(550, 700, 70, 70)
+{
+  textSize(32);
+  text( player.hp, 10, 20);
+  // fill("red");
+  // rect(10,10,70,50);
 
-  text(mouseX + ", " + mouseY, 10, 10);
-
+  // text(mouseX + ", " + mouseY, 10, 10);
+}
 
   // Draw crosshair
 
