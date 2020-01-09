@@ -221,7 +221,7 @@ function draw() {
         image(
           imgg,
           32 * x,
-          192 * y
+          32 * y
         );
       }
     }
