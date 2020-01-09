@@ -46,7 +46,7 @@ var mouse = {
 }
 
 var pl = {
-  x: 0,
+  x: 100,
   y: 0
 }
 
@@ -220,8 +220,8 @@ function draw() {
       for (y = 0; y < 20; y++) {
         image(
           imgg,
-          192 * x,
-          192 * y
+          32 * x,
+          32 * y
         );
       }
     }
@@ -296,7 +296,7 @@ function draw() {
     let x = -((d / c) * (plx - mx)) + (plx)
     let y = -((d / c) * (ply - my)) + (ply)
     line(plx, ply, x, y);
-    ellipse(x, y, 10);
+    ellipse(x, y, 5);
   }
   //circle(250, 250, 50);
 
