@@ -505,7 +505,7 @@ socket.on('state', function(me, bullets) {
   socket.emit('movement', movement);
 });
 socket.on('waypoints', function(wp) {
-  awp = wp;
+  waypoints = wp;
 });
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
