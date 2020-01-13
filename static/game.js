@@ -235,7 +235,7 @@ function draw() {
   image(imgr, 322, 5);
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
-  image(awp, 250, 250);
+  image(awp, 225, 225);
 
   player.show();
 
