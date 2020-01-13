@@ -6,8 +6,7 @@ socket.on('message', function(data) {
 
 
 let spritesheet;        // temporary spritesheet storage, before slicing
-let spritedata;
-let spritedata2;       // spritesheet JSON data
+let spritedata;         // spritesheet JSON data
 let down = [];          // temporary down animation storage
 let up = [];            // temporary up animation storage
 let left = [];          // temporary left animation storage
@@ -118,13 +117,11 @@ document.addEventListener('keyup', function(event) {
 
 function preload() {
   // Load animation assets
-  spritedata = loadJSON('/assets/Akan.json');
-  spritedata2 = loadJSON('/assets/WP.json'); // Frame information
+  spritedata = loadJSON('/assets/Akan.json'); // Frame information
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
   migi = loadImage('/assets/Akan Movements 18.png');
-  awp = loadImage('assets/Way Point Neutral.png');
   // // Right walk spritesheet
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
@@ -196,11 +193,6 @@ function setup() {
     let pos = frames[i].position;
     let img = migi.get(pos.x, pos.y, pos.w, pos.h, );
     right.push(img);
-
-  let frames = spritedata2.frames;
-  for (let i = 0; i < frames.length; i++) {
-    let pos = frames[i].position;
-    let img = awp.get(pos.x, pos.y, pos.w, pos.h, );
   }
 
 
@@ -214,6 +206,7 @@ function setup() {
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
   Enemy = loadImage('assets/Akan Movements 13.png')
+  awp = loadImage('assets/Way Point Neutral.png')
 
 
   // Tell the server that a new player is loaded
@@ -242,6 +235,7 @@ function draw() {
   image(imgr, 322, 5);
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
+  image(awp, 0, 0);
 
   player.show();
 
@@ -268,7 +262,6 @@ function draw() {
         players[id].img = players[id].imgs["down"];
         players[id].animate();
       }
-        spritedata2[id].animate();
     }
 
     // {
