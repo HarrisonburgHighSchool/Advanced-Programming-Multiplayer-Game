@@ -121,7 +121,8 @@ function preload() {
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
-  migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
+  migi = loadImage('/assets/Akan Movements 18.png');
+  waypoints = loadImage('/assets/Way Point Neutral.png') // Right walk spritesheet
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
@@ -276,9 +277,9 @@ function draw() {
     circle(250, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
-    w = waypoints[id];
+    waypoints = waypoints[id];
     fill(b.c);
-    circle(w.x, w.y, w.r);
+    circle(waypoints.x, waypoints.y, waypoints.r);
   }
 
   for (var i = 0; i < bullets.length; i++) {
