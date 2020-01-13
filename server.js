@@ -8,13 +8,20 @@ var server = http.Server(app);
 var io = socketIO(server);app.set('port', 5000);
 app.use(express.static('static'));
 
+var room;
+var start;
+
 // Routing
+var nextteamselect;
 var waypoints = [];
 server.listen(5000, function() {
   console.log('Starting server on port 5000');
   waypoints[0] = new Waypoint(250,250,0)
   waypoints[1] = new Waypoint(500,500,1)
   waypoints[2] = new Waypoint(750,750,2)
+  room = 0;
+  start = false;
+  nextteamselect = 0
 });
 
 // Add the WebSocket handlers
@@ -26,6 +33,8 @@ var players = {};
 var bullets = [];
 
 // updates bullets
+
+
 
 setInterval(function() {
 
@@ -70,6 +79,11 @@ io.on('connection', function(socket) {
     players[socket.id] = new Player(socket.id);
 
     console.log("New Player: " + socket.id)
+
+    room = room + 1;
+    if (room >= 8) {
+      start = true
+    }
 
   });
 
@@ -186,64 +200,6 @@ io.on('connection', function(socket) {
 
 }); //player updates
 
-class Bullet {
- constructor(player, mx, my) {
-    mx = mx + player.x+7 - 450 //mouse x + player x - half of screen width
-    my = my + player.y+9.5 - 400 //gives us mouse relative to player
-    this.pl_id = player.id;
-    this.x = player.x+7-5;
-    this.y = player.y+9.5-5;
-    this.tempx = mx - player.x;
-    this.tempy = my - player.y;
-    this.orientation = Math.atan(this.tempy/this.tempx);
-
-    if (player.x > mx) {
-      this.dy = -Math.sin(this.orientation)*15;
-      this.dx = -Math.cos(this.orientation)*15;
-    } else {
-      this.dy = Math.sin(this.orientation)*15;
-      this.dx = Math.cos(this.orientation)*15;
-    }
-    // bullet needs to start not inside the players
-    this.x = this.x + (this.dx*2);
-    this.y = this.y + (this.dy*2);
-  }
-}
-
-class Player {
-  constructor(id) {
-    this.x = 450;
-    this.y = 400;
-    this.right = false;
-    this.left = false;
-    this.up = false;
-    this.down = false;
-    this.id = id;
-    this.teamid = Math.floor(Math.random() * Math.floor(2));
-    if (this.teamid == 0) {
-      this.x = 100;
-    } else {
-      this.x = 500;
-    }
-    if (this.teamid == 0) {
-      this.y = 100;
-    } else {
-      this.y = 500;
-    }
-    this.hp = 10
-    this.r = 10
-  }
-}
-
-class Waypoint {
-  constructor(x,y,t) {
-    this.x = x
-    this.y = y
-    this.r = 25
-    this.team = t
-    this.points = 50
-  }
-}
 
 
 
@@ -304,7 +260,9 @@ function sendWaypoints(waypoints) {
     }
     points.push(point);
   }
-  io.sockets.emit('waypoint', points)
+  if (start == true) {
+    io.sockets.emit('waypoint', points)
+  }
 }
 
 // setInterval(function() {
@@ -331,9 +289,10 @@ setInterval(function() {
         }
       }
     }
-
-    io.sockets.connected[id].emit('state', players[id], bullets);
-    io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+    if (start == true) {
+      io.sockets.connected[id].emit('state', players[id], bullets);
+      io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+    }
     var bulletsOnScreen = [];
     var player = players[id];
     for (var i = 0; i < bullets.length; i++) {
@@ -346,7 +305,9 @@ setInterval(function() {
         bulletsOnScreen.push(bullets[i]);
       }
     }
-    io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
+    if (start) {
+      io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
+    }
   }
 }, 1000 / 60);
 
@@ -371,3 +332,69 @@ setInterval(function() {
 //     io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
 //   }
 // }, 1000 / 60);
+
+
+class Bullet {
+ constructor(player, mx, my) {
+    mx = mx + player.x+7 - 450 //mouse x + player x - half of screen width
+    my = my + player.y+9.5 - 400 //gives us mouse relative to player
+    this.pl_id = player.id;
+    this.x = player.x+7-5;
+    this.y = player.y+9.5-5;
+    this.tempx = mx - player.x;
+    this.tempy = my - player.y;
+    this.orientation = Math.atan(this.tempy/this.tempx);
+
+    if (player.x > mx) {
+      this.dy = -Math.sin(this.orientation)*15;
+      this.dx = -Math.cos(this.orientation)*15;
+    } else {
+      this.dy = Math.sin(this.orientation)*15;
+      this.dx = Math.cos(this.orientation)*15;
+    }
+    // bullet needs to start not inside the players
+    this.x = this.x + (this.dx*2);
+    this.y = this.y + (this.dy*2);
+  }
+}
+
+class Player {
+  constructor(id) {
+    this.x = 450;
+    this.y = 400;
+    this.right = false;
+    this.left = false;
+    this.up = false;
+    this.down = false;
+    this.id = id;
+    this.teamid = nextteamselect
+    if (this.teamid == 0) {
+      nextteamselect = 1
+    }
+    if (this.teamid == 1) {
+      nextteamselect = 0
+    }
+    if (this.teamid == 0) {
+      this.x = 100;
+    } else {
+      this.x = 500;
+    }
+    if (this.teamid == 0) {
+      this.y = 100;
+    } else {
+      this.y = 500;
+    }
+    this.hp = 10
+    this.r = 10
+  }
+}
+
+class Waypoint {
+  constructor(x,y,t) {
+    this.x = x
+    this.y = y
+    this.r = 25
+    this.team = t
+    this.points = 50
+  }
+}
