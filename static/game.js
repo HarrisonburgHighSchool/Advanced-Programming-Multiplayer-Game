@@ -206,6 +206,8 @@ function setup() {
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
   Enemy = loadImage('assets/Akan Movements 13.png')
+  awp = loadImage('assets/Way Point Neutral.png')
+
 
   // Tell the server that a new player is loaded
   socket.emit('new player');
@@ -233,6 +235,7 @@ function draw() {
   image(imgr, 322, 5);
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
+  image(awp, waypoints);
 
   player.show();
 
