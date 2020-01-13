@@ -217,9 +217,9 @@ function setup() {
 
 // Renderer
 function draw() {
-  background(500);
+  background(255);
   push();
-  translate(450 - player.x, 400 - player.y); { // Draw the map
+  translate(250 - player.x, 200 - player.y); { // Draw the map
     for (x = 0; x < 20; x++) {
       for (y = 0; y < 20; y++) {
         image(
