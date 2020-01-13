@@ -46,7 +46,7 @@ var mouse = {
 }
 
 var pl = {
-  x: 0,
+  x: 100,
   y: 0
 }
 
