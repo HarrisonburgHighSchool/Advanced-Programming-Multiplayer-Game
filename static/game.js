@@ -206,7 +206,7 @@ function setup() {
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
   Enemy = loadImage('assets/Akan Movements 13.png')
-  awp = loadImage('assets/Way Point Neutral.png')
+  awp = loadImage('assets/Way Point.png')
 
 
   // Tell the server that a new player is loaded
