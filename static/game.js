@@ -122,7 +122,7 @@ function preload() {
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
   migi = loadImage('/assets/Akan Movements 18.png');
-  waypoints = loadImage('/assets/Way Point Neutral.png') // Right walk spritesheet
+  // // Right walk spritesheet
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
