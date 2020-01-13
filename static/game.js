@@ -281,7 +281,7 @@ function draw() {
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
     waypoints = awp[id];
-    fill(b.c);
+    fill(q.c);
     circle(w.x, w.y, w.r);
   }
 
