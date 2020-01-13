@@ -279,7 +279,7 @@ function draw() {
   for (var id in waypoints) { /////////////////////////////////////
     waypoints = waypoints[id];
     fill(b.c);
-    circle(waypoints.x, waypoints.y, waypoints.r);
+    circle(.x, w.y, w.r);
   }
 
   for (var i = 0; i < bullets.length; i++) {
