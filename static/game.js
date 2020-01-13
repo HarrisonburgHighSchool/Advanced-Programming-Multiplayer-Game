@@ -18,6 +18,9 @@ let bullets = [];
 let serverBullets = []; // Store projectiles
 let waypoints = [];
 
+let isStarted;
+let roomCount;
+
 var player; // The player object will go here, eventually
 
 var cross = {
@@ -81,10 +84,12 @@ document.addEventListener('keydown', function(event) {
       movement.up = true;
       player.up = true;
       break;
-    case 68: // D
+    case 68: //
       movement.right = true;
       player.right = true;
-      break;
+      break;() => {
+
+      }
     case 83: // S
       movement.down = true;
       player.down = true;
@@ -486,6 +491,13 @@ function draw() {
 //     image(this.img[index], this.x, this.y);
 //   }
 // }
+
+socket.on('isStart', function(s, r) {
+  isStarted = s;
+  roomCount = r;
+  // console.log(isStarted);
+  // console.log(roomCount);
+});
 
 socket.on('state', function(me, bullets) {
   let dx = me.x - player.x;

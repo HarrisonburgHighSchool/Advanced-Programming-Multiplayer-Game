@@ -76,14 +76,30 @@ io.on('connection', function(socket) {
 
   socket.on('new player', function() {
 
-    players[socket.id] = new Player(socket.id);
-
-    console.log("New Player: " + socket.id)
-
-    room = room + 1;
-    if (room >= 8) {
-      start = true
+    if (start == false) {
+      players[socket.id] = new Player(socket.id);
+      console.log("New Player: " + socket.id)
+      room = room + 1;
+      io.sockets.emit("not started")
+    } else if (start == true){
+      io.sockets.emit("already playing", room); //client side needs a screen to come up for this
+      let i = 0;
+      for (var id in players) {
+        i = i + 1;
+      }
+      console.log("already started", i);
     }
+
+
+    if (room >= 2 && start == false) {
+      start = true
+      console.log("game started!!!!!")
+      for (var id in players) {
+        players[id].state = "playing"
+      }
+    }
+
+
 
   });
 
@@ -134,6 +150,7 @@ io.on('connection', function(socket) {
     //Kill player
     if(player.hp <= 0) {
       delete players[socket.id];
+      io.sockets.emit("game over")
     }
 
     var collision = false;
@@ -187,6 +204,14 @@ io.on('connection', function(socket) {
     io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
     io.sockets.emit('message', 'disconnect recieved');
+
+    let i = 0;
+    for (var id in players) {
+      i = i + 1;
+    }
+    if (i == 0) {
+      reset();
+    }
 
   });
 
@@ -270,6 +295,7 @@ function sendWaypoints(waypoints) {
 // }, 1000/60);
 
 setInterval(function() {
+  io.sockets.emit("isStart", start, room)
 
   for (var id in players) {
 
@@ -333,6 +359,17 @@ setInterval(function() {
 //   }
 // }, 1000 / 60);
 
+function reset() {
+  players = {}
+  bullets = []
+  waypoints[0] = new Waypoint(250,250,0)
+  waypoints[1] = new Waypoint(500,500,1)
+  waypoints[2] = new Waypoint(750,750,2)
+  room = 0;
+  start = false;
+  nextteamselect = 0
+}
+
 
 class Bullet {
  constructor(player, mx, my) {
@@ -386,6 +423,7 @@ class Player {
     }
     this.hp = 10
     this.r = 10
+    this.state = "waiting"
   }
 }
 
@@ -395,6 +433,6 @@ class Waypoint {
     this.y = y
     this.r = 25
     this.team = t
-    this.points = 50
+    this.points = 0
   }
 }
