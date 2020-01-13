@@ -287,7 +287,7 @@ function draw() {
   }
 
   for (var i = 0; i < bullets.length; i++) {
-    fill("lightblue");
+    fill("blue");
     circle(bullets[i].x, bullets[i].y, 5);
   }
 
