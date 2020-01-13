@@ -268,6 +268,7 @@ function draw() {
         players[id].img = players[id].imgs["down"];
         players[id].animate();
       }
+        spritedata2[id].animate();
     }
 
     // {
