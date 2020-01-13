@@ -280,7 +280,7 @@ function draw() {
     circle(250, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
-    waypoints = waypoints[id];
+    waypoints = awp[id];
     fill(b.c);
     circle(w.x, w.y, w.r);
   }
@@ -503,8 +503,8 @@ socket.on('state', function(me, bullets) {
   player.hp = me.hp
   socket.emit('movement', movement);
 });
-socket.on('waypoints', function(wp) {
-  waypoints = wp;
+socket.on('awp', function(wp) {
+  awp = wp;
 });
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
