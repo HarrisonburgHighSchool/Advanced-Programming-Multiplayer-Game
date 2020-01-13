@@ -234,9 +234,8 @@ class Player {
     this.r = 10
   }
 }
-
 class Waypoint {
-  constructor(x,y,t) {
+  constructor(x, y, t) {
     this.x = x
     this.y = y
     this.r = 25
@@ -244,7 +243,6 @@ class Waypoint {
     this.points = 50
   }
 }
-
 
 
 setInterval(function(){
@@ -264,6 +262,7 @@ setInterval(function(){
             // console.log("score +1");
             if (waypoints[i].points <= 99) {
               waypoints[i].points += 1
+              send = true
               console.log(waypoints[i].points);
               if (waypoints[i].points >= 56) {
                 waypoints[i].team = 0
@@ -275,6 +274,7 @@ setInterval(function(){
             // console.log("score -1");
             if (waypoints[i].points >= 1) {
               waypoints[i].points -= 1
+              send = true
               console.log(waypoints[i].points);
               if (waypoints[i].points <= 44) {
                 waypoints[i].team = 1
