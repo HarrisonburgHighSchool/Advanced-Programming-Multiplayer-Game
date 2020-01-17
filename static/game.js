@@ -282,8 +282,8 @@ function draw() {
     waypoints = waypoints[id];
     //awp = circle()
     fill(w.c);
-    circle(w.x, w.y, w.r);
-    // image(awp, 250, 250)
+    //circle(w.x, w.y, w.r);
+    image(awp, 250, 250);
   }
 
   for (var i = 0; i < bullets.length; i++) {
