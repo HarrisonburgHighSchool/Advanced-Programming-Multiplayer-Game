@@ -30,6 +30,7 @@ io.on('connection', function(socket) {
 });
 
 var players = {};
+var waitingplayers = {};
 var bullets = [];
 
 // updates bullets
@@ -76,28 +77,24 @@ io.on('connection', function(socket) {
 
   socket.on('new player', function() {
 
-    if (start == false) {
-      players[socket.id] = new Player(socket.id);
-      console.log("New Player: " + socket.id)
-      room = room + 1;
-      io.sockets.emit("not started")
-    } else if (start == true){
-      io.sockets.emit("already playing", room); //client side needs a screen to come up for this
-      let i = 0;
-      for (var id in players) {
-        i = i + 1;
-      }
-      console.log("already started", i);
-    }
+    // if (start == false) {
+    //   // players[socket.id] = new Player(socket.id);
+    //   waitingplayers[socket.id] = new Player(socket.id);
+    //   console.log("New Player: " + socket.id)
+    //   room = room + 1;
+    //   io.sockets.emit("not started")
+    // } else if (start == true){
+    //   waitingplayers[socket.id] = new Player(socket.id);
+    //   io.sockets.emit("already playing", room); //client side needs a screen to come up for this
+    //   let i = 0;
+    //   for (var id in players) {
+    //     i = i + 1;
+    //   }
+    //   console.log("already started", i);
+    // }
 
-
-    if (room >= 2 && start == false) {
-      start = true
-      console.log("game started!!!!!")
-      for (var id in players) {
-        players[id].state = "playing"
-      }
-    }
+    waitingplayers[socket.id] = new Player(socket.id);
+    room = room + 1
 
 
 
@@ -149,6 +146,7 @@ io.on('connection', function(socket) {
 
     //Kill player
     if(player.hp <= 0) {
+      waitingplayers[socket.id] = players[socket.id];
       delete players[socket.id];
       io.sockets.emit("game over")
     }
@@ -203,15 +201,10 @@ io.on('connection', function(socket) {
 
     io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
+    delete waitingplayers[socket.id];
     io.sockets.emit('message', 'disconnect recieved');
+    room = room - 1
 
-    let i = 0;
-    for (var id in players) {
-      i = i + 1;
-    }
-    if (i == 0) {
-      reset();
-    }
 
   });
 
@@ -226,9 +219,50 @@ io.on('connection', function(socket) {
 }); //player updates
 
 
+setInterval(function(){
+  if (room >= 2 && start == false) {
+    start = true
+    console.log("game started!!!!!")
+    players = waitingplayers;
+    waitingplayers = {};
+    for (var id in players) {
 
+    }
+  }
+
+  //restting after game end
+  let reseti = 0;
+  let winnerid;
+  for (var id in players) {
+    reseti = reseti + 1;
+    winnerid = id;
+  }
+  if (start == true) {
+    if (reseti == 0 || reseti == 1) {
+      console.log("resetting with " + reseti + " in players table")
+      waitingplayers[winnerid] = players[winnerid];
+      delete players[winnerid];
+
+      bullets = []
+      waypoints[0] = new Waypoint(250,250,0)
+      waypoints[1] = new Waypoint(500,500,1)
+      waypoints[2] = new Waypoint(750,750,2)
+      start = false;
+      nextteamselect = 0
+      let i = 0;
+      for (var id in waitingplayers) {
+        i = i + 1;
+      }
+      room = i;
+      console.log("restarted with ", + room + "players now waiting")
+    }
+  }
+//next time - set it so players reeset to different spots and their x and y and stuff resets
+//maybe just create new players!
+}, 1000/10)
 
 setInterval(function(){
+
   for (pl in players) {
     // console.log(waypoints.length);
     for (var i = 0; i < waypoints.length; i++) {
@@ -360,14 +394,7 @@ setInterval(function() {
 // }, 1000 / 60);
 
 function reset() {
-  players = {}
-  bullets = []
-  waypoints[0] = new Waypoint(250,250,0)
-  waypoints[1] = new Waypoint(500,500,1)
-  waypoints[2] = new Waypoint(750,750,2)
-  room = 0;
-  start = false;
-  nextteamselect = 0
+
 }
 
 
