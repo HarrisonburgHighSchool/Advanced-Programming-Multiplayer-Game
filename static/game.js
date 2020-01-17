@@ -282,7 +282,7 @@ function draw() {
   for (var id in waypoints) { /////////////////////////////////////
     waypoints = waypoints[id];
     awp = circle()
-    //fill(w.c);
+    fill(w.c);
     circle(w.x, w.y, w.r);
   }
 
