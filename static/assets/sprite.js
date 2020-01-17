@@ -1,33 +1,49 @@
 class Sprite {
-  constructor(animation, x, y, speed ) {
+  constructor(down, up, left, right, id, x, y, speed) {
+    this.id = id; // ID from the server
     this.x = x;
     this.y = y;
-    this.animation = animation;
-    this.len = this.animation.length;
-    this.speed = speed;
-    this.index = 0;
+    //this.ox = offsetx;
+    //this.oy = offsety;
+    this.len = up.length;
+    this.speed = speed; // Animation speed
+    this.index = 0; // Animation counter
     this.imgs = {
-      "down": loadImage('assets/stomperD.png'),
-      "right": loadImage('assets/stomperR.png'),
-      "up": loadImage('assets/stomperU.png'),
-      "left": loadImage('assets/stomperL.png')
+      "down": down, // Down animation
+      "right": right,
+      "up": up, // Up animation
+      "left": left
     }
     this.img = this.imgs["down"];
     this.right = false;
     this.left = false;
     this.up = false;
-    this.down = false
+    this.down = false;
+    this.hp = 100;
   }
 
 
+  // Draw the sprite
   show() {
-    image(this.animation[this.index % this.len], this.x, this.y,);
-
+    let index = floor(this.index) % this.len;
+    //console.log(this)
+    //image(this.imgs["down"][1], this.x + this.ox, this.y + this.oy);
+    ellipse(this.x, this.y, 25);
+    image(this.img[index], this.x - 64, this.y - 64);
   }
 
-
- animate()  {
+  // Update the player animation
+  animate() {
     this.index += this.speed;
+  }
+}
 
-   }
+class Waypoint {
+  constructor(x, y, t) {
+    this.x = x
+    this.y = y
+    this.r = 25
+    this.team = t
+    this.points = 50
+  }
 }
