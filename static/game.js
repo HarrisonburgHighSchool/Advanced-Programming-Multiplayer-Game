@@ -115,6 +115,8 @@ document.addEventListener('keyup', function(event) {
   }
 });
 
+//
+
 function preload() {
   // Load animation assets
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
