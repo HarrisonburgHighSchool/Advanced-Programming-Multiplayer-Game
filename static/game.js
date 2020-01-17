@@ -278,12 +278,18 @@ function draw() {
     // Enemy = circle()
     // circle(250, 250, 50);
   // Draw the enemies
-  for (var id in waypoints) { /////////////////////////////////////
-    waypoints[id].show();
-    waypoints = waypoints[id];
+  //circle(250, 250, 50);
+  for (var i=0; i<waypoints.length; i++) { /////////////////////////////////////
+    //waypoints[id].show();
+    //waypoints = waypoints[i];
     fill(255);
-    //circle(w.x, w.y, w.r);
-    image(awp, 250, 250);
+    //circle(waypoints[i].x, waypoints[i].y, 100);
+    if(waypoints[i].team == 1) {
+      image(awp, waypoints[i].x, waypoints[i].y);
+    } else {
+      circle(waypoints[i].x, waypoints[i].y, 50)
+    }
+
   }
 
   for (var i = 0; i < bullets.length; i++) {
@@ -504,8 +510,9 @@ socket.on('state', function(me, bullets) {
   player.hp = me.hp
   socket.emit('movement', movement);
 });
-socket.on('waypoints', function(waypointsOnScreen) {
-  waypoints = waypointsOnScreen;
+socket.on('waypoints', function(wp) {
+  waypoints = wp;
+  console.log(wp.length);
 });
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
