@@ -198,14 +198,7 @@ function setup() {
     right.push(img);
   }
 
-  let miniY = map(enemyY, -200, 800, 21, 90);
-    let miniX = map(enemyX, 0, 800, 34, 77);
-    //let miniX = map(
-
-
-    if (dist(50, 50, miniX, miniY) < 40){
-       ellipse(miniX, miniY, 5, 5) // enemy minimap
-    }
+  
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
