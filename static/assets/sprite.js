@@ -6,12 +6,12 @@ class Sprite {
     //this.ox = offsetx;
     //this.oy = offsety;
     this.len = up.length;
-    this.speed = speed;     // Animation speed
-    this.index = 0;         // Animation counter
+    this.speed = speed; // Animation speed
+    this.index = 0; // Animation counter
     this.imgs = {
-      "down": down,         // Down animation
+      "down": down, // Down animation
       "right": right,
-      "up": up,             // Up animation
+      "up": up, // Up animation
       "left": left
     }
     this.img = this.imgs["down"];
@@ -28,12 +28,22 @@ class Sprite {
     let index = floor(this.index) % this.len;
     //console.log(this)
     //image(this.imgs["down"][1], this.x + this.ox, this.y + this.oy);
-    ellipse(this.x, this.y, 5);
-    image(this.img[index], this.x -16, this.y - 16);
+    ellipse(this.x, this.y, 25);
+    image(this.img[index], this.x - 64, this.y - 64);
   }
 
   // Update the player animation
-  animate()  {
+  animate() {
     this.index += this.speed;
+  }
+}
+
+class Waypoint {
+  constructor(x, y, t) {
+    this.x = x
+    this.y = y
+    this.r = 25
+    this.team = t
+    this.points = 50
   }
 }

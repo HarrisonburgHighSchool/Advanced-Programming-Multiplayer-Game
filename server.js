@@ -8,20 +8,13 @@ var server = http.Server(app);
 var io = socketIO(server);app.set('port', 5000);
 app.use(express.static('static'));
 
-var room;
-var start;
-
 // Routing
-var nextteamselect;
 var waypoints = [];
 server.listen(5000, function() {
   console.log('Starting server on port 5000');
   waypoints[0] = new Waypoint(250,250,0)
   waypoints[1] = new Waypoint(500,500,1)
   waypoints[2] = new Waypoint(750,750,2)
-  room = 0;
-  start = false;
-  nextteamselect = 0
 });
 
 // Add the WebSocket handlers
@@ -33,8 +26,6 @@ var players = {};
 var bullets = [];
 
 // updates bullets
-
-
 
 setInterval(function() {
 
@@ -79,11 +70,6 @@ io.on('connection', function(socket) {
     players[socket.id] = new Player(socket.id);
 
     console.log("New Player: " + socket.id)
-
-    room = room + 1;
-    if (room >= 8) {
-      start = true
-    }
 
   });
 
@@ -200,140 +186,6 @@ io.on('connection', function(socket) {
 
 }); //player updates
 
-
-
-
-setInterval(function(){
-  for (pl in players) {
-    // console.log(waypoints.length);
-    for (var i = 0; i < waypoints.length; i++) {
-      // console.log("hello");
-      let player = players[pl];
-      var point_a = player.x - waypoints[i].x
-      var point_b = player.y - waypoints[i].y
-      var point_c = 25*2
-      // console.log(player.teamid);
-      { // Test and send waypoints -------------------------------
-        let send = false;
-        if (point_a*point_a + point_b*point_b <= point_c*point_c) {
-          if (player.teamid == 0){
-            // console.log("score +1");
-            if (waypoints[i].points <= 99) {
-              waypoints[i].points += 1
-              console.log(waypoints[i].points);
-              if (waypoints[i].points >= 56) {
-                waypoints[i].team = 0
-                console.log("Team 0 is winning!");
-              }
-            }
-          }
-          if (player.teamid == 1){
-            // console.log("score -1");
-            if (waypoints[i].points >= 1) {
-              waypoints[i].points -= 1
-              console.log(waypoints[i].points);
-              if (waypoints[i].points <= 44) {
-                waypoints[i].team = 1
-                console.log("Team 1 is winning!");
-              }
-            }
-          }
-        }
-        if(send) {
-          sendWaypoints(waypoints);
-          send = false;
-        }
-      }
-      //--------------------------------------------
-    }
-  }
-}, 1000/5);
-
-function sendWaypoints(waypoints) {
-  let points = [];
-  for (var i = 0; i < waypoints.length; i++) {
-    let point = {
-      "x": waypoints[i].x,
-      "y": waypoints[i].y,
-      "team": waypoints[i].team,
-      "points": waypoints[i].points
-    }
-    points.push(point);
-  }
-  if (start == true) {
-    io.sockets.emit('waypoint', points)
-  }
-}
-
-// setInterval(function() {
-//   io.sockets.emit('waypoint', waypoints)
-// }, 1000/60);
-
-setInterval(function() {
-
-  for (var id in players) {
-
-    var playersOnScreen = [];
-    var player = players[id];
-    for (p2id in players) {
-
-      var p2 = players[p2id];
-      if (player.id != p2.id && p2.id != NaN) {
-
-        var a = player.x - p2.x;
-        var b = player.y - p2.y;
-        var c = 900000;
-        if (a*a + b*b <= c*c) {
-
-          playersOnScreen.push(players[p2id]);
-        }
-      }
-    }
-    if (start == true) {
-      io.sockets.connected[id].emit('state', players[id], bullets);
-      io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
-    }
-    var bulletsOnScreen = [];
-    var player = players[id];
-    for (var i = 0; i < bullets.length; i++) {
-
-      var a = player.x - bullets[i].x;
-      var b = player.y - bullets[i].y;
-      var c = 900000;
-
-      if (a*a + b*b <= c*c) {
-        bulletsOnScreen.push(bullets[i]);
-      }
-    }
-    if (start) {
-      io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
-    }
-  }
-}, 1000 / 60);
-
-// setInterval(function() {
-//   // io.sockets.emit('state', players, bullets);
-//   for (var id in players) {
-//     var bulletsOnScreen = [];
-//     var player = players[id];
-//     for (var i = 0; i < bullets.length; i++) {
-//       console.log("checking a bullet")
-//       // var bullet = i;
-//       var a = player.x - bullets[i].x;
-//       var b = player.y - bullets[i].y;
-//       var c = 900000;
-//       if (a*a + b*b <= c*c) {
-//         console.log("bullet added to table")
-//         bulletsOnScreen.push(bullets[i]);
-//       } else {
-//         console.log("bullet toooooooooooooooooooo farrrrrrr")
-//       }
-//     }
-//     io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
-//   }
-// }, 1000 / 60);
-
-
 class Bullet {
  constructor(player, mx, my) {
     mx = mx + player.x+7 - 450 //mouse x + player x - half of screen width
@@ -367,13 +219,7 @@ class Player {
     this.up = false;
     this.down = false;
     this.id = id;
-    this.teamid = nextteamselect
-    if (this.teamid == 0) {
-      nextteamselect = 1
-    }
-    if (this.teamid == 1) {
-      nextteamselect = 0
-    }
+    this.teamid = Math.floor(Math.random() * Math.floor(2));
     if (this.teamid == 0) {
       this.x = 100;
     } else {
@@ -398,3 +244,178 @@ class Waypoint {
     this.points = 50
   }
 }
+
+//     if (player.x > mx) {
+//       this.dy = -Math.sin(this.orientation)*15;
+//       this.dx = -Math.cos(this.orientation)*15;
+//     } else {
+//       this.dy = Math.sin(this.orientation)*15;
+//       this.dx = Math.cos(this.orientation)*15;
+//     }
+//     // bullet needs to start not inside the players
+//     this.x = this.x + (this.dx*2);
+//     this.y = this.y + (this.dy*2);
+//   }
+// }
+
+// class Player {
+//   constructor(id) {
+//     this.x = 450;
+//     this.y = 400;
+//     this.right = false;
+//     this.left = false;
+//     this.up = false;
+//     this.down = false;
+//     this.id = id;
+//     this.teamid = Math.floor(Math.random() * Math.floor(2));
+//     if (this.teamid == 0) {
+//       this.x = 100;
+//     } else {
+//       this.x = 500;
+//     }
+//     if (this.teamid == 0) {
+//       this.y = 100;
+//     } else {
+//       this.y = 500;
+//     }
+//     this.hp = 10
+//     this.r = 10
+//   }
+// }
+// class Waypoint {
+//   constructor(x, y, t) {
+//     this.x = x
+//     this.y = y
+//     this.r = 25
+//     this.team = t
+//     this.points = 50
+//   }
+// }
+
+
+setInterval(function(){
+  for (pl in players) {
+    // console.log(waypoints.length);
+    for (var i = 0; i < waypoints.length; i++) {
+      // console.log("hello");
+      let player = players[pl];
+      var point_a = player.x - waypoints[i].x
+      var point_b = player.y - waypoints[i].y
+      var point_c = 25*2
+      // console.log(player.teamid);
+      { // Test and send waypoints -------------------------------
+        let send = false;
+        if (point_a*point_a + point_b*point_b <= point_c*point_c) {
+          if (player.teamid == 0){
+            // console.log("score +1");
+            if (waypoints[i].points <= 99) {
+              waypoints[i].points += 1
+              send = true
+              console.log(waypoints[i].points);
+              if (waypoints[i].points >= 56) {
+                waypoints[i].team = 0
+                console.log("Team 0 is winning!");
+              }
+            }
+          }
+          if (player.teamid == 1){
+            // console.log("score -1");
+            if (waypoints[i].points >= 1) {
+              waypoints[i].points -= 1
+              send = true
+              console.log(waypoints[i].points);
+              if (waypoints[i].points <= 44) {
+                waypoints[i].team = 1
+                console.log("Team 1 is winning!");
+              }
+            }
+          }
+        }
+        if(send) {
+          sendWaypoints(waypoints);
+          send = false;
+        }
+      }
+      //--------------------------------------------
+    }
+  }
+}, 1000/5);
+
+function sendWaypoints(waypoints) {
+  let points = [];
+  for (var i = 0; i < waypoints.length; i++) {
+    let point = {
+      "x": waypoints[i].x,
+      "y": waypoints[i].y,
+      "team": waypoints[i].team,
+      "points": waypoints[i].points
+    }
+    points.push(point);
+  }
+  io.sockets.emit('waypoint', points)
+}
+
+// setInterval(function() {
+//   io.sockets.emit('waypoint', waypoints)
+// }, 1000/60);
+
+setInterval(function() {
+
+  for (var id in players) {
+
+    var playersOnScreen = [];
+    var player = players[id];
+    for (p2id in players) {
+
+      var p2 = players[p2id];
+      if (player.id != p2.id && p2.id != NaN) {
+
+        var a = player.x - p2.x;
+        var b = player.y - p2.y;
+        var c = 900000;
+        if (a*a + b*b <= c*c) {
+
+          playersOnScreen.push(players[p2id]);
+        }
+      }
+    }
+
+    io.sockets.connected[id].emit('state', players[id], bullets);
+    io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
+    var bulletsOnScreen = [];
+    var player = players[id];
+    for (var i = 0; i < bullets.length; i++) {
+
+      var a = player.x - bullets[i].x;
+      var b = player.y - bullets[i].y;
+      var c = 900000;
+
+      if (a*a + b*b <= c*c) {
+        bulletsOnScreen.push(bullets[i]);
+      }
+    }
+    io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
+  }
+}, 1000 / 60);
+
+// setInterval(function() {
+//   // io.sockets.emit('state', players, bullets);
+//   for (var id in players) {
+//     var bulletsOnScreen = [];
+//     var player = players[id];
+//     for (var i = 0; i < bullets.length; i++) {
+//       console.log("checking a bullet")
+//       // var bullet = i;
+//       var a = player.x - bullets[i].x;
+//       var b = player.y - bullets[i].y;
+//       var c = 900000;
+//       if (a*a + b*b <= c*c) {
+//         console.log("bullet added to table")
+//         bulletsOnScreen.push(bullets[i]);
+//       } else {
+//         console.log("bullet toooooooooooooooooooo farrrrrrr")
+//       }
+//     }
+//     io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
+//   }
+// }, 1000 / 60);
