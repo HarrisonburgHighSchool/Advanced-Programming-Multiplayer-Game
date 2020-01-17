@@ -213,7 +213,7 @@ function setup() {
   socket.emit('new player');
 }
 
-
+cross = new
 
 // Renderer
 function draw() {
