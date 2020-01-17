@@ -205,8 +205,8 @@ function setup() {
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
-  Enemy = loadImage('assets/Akan Movements 13.png')
-  awp = loadImage('assets/Way Point.png')
+  Enemy = loadImage('assets/Akan Movements 13.png');
+  awp = loadImage('assets/Way Point.png');
 
 
   // Tell the server that a new player is loaded
@@ -235,7 +235,6 @@ function draw() {
   image(imgr, 322, 5);
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
-  image(awp, 235, 225);
 
   player.show();
 
@@ -276,14 +275,15 @@ function draw() {
     //   cross.x = x;
     //   cross.y = y;
     // }
-    Enemy = circle()
-    circle(250, 250, 50);
+    // Enemy = circle()
+    // circle(250, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
     waypoints = waypoints[id];
     //awp = circle()
     fill(w.c);
     circle(w.x, w.y, w.r);
+    // image(awp, 250, 250)
   }
 
   for (var i = 0; i < bullets.length; i++) {
