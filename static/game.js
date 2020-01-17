@@ -16,7 +16,7 @@ let players = {}; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];
 let serverBullets = []; // Store projectiles
-let player = [];
+let waypoints = [];
 
 var player; // The player object will go here, eventually
 
