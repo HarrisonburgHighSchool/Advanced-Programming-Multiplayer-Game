@@ -4,14 +4,13 @@ socket.on('message', function(data) {
   console.log(data);
 });
 
-
-let spritesheet; // temporary spritesheet storage, before slicing
-let spritedata; // spritesheet JSON data
-let down = []; // temporary down animation storage
-let up = []; // temporary up animation storage
-let left = []; // temporary left animation storage
-let right = []; // temporary right animation storage
-//
+let spritesheet;        // temporary spritesheet storage, before slicing
+let spritedata;         // spritesheet JSON data
+let down = [];          // temporary down animation storage
+let up = [];            // temporary up animation storage
+let left = [];          // temporary left animation storage
+let right = [];         // temporary right animation storage
+       //
 let players = {}; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];
@@ -197,7 +196,14 @@ function setup() {
     right.push(img);
   }
 
+  let miniY = map(enemyY, -200, 800, 21, 90);
+    let miniX = map(enemyX, 0, 800, 34, 77);
+    //let miniX = map(
 
+
+    if (dist(50, 50, miniX, miniY) < 40){
+       ellipse(miniX, miniY, 5, 5) // enemy minimap
+    }
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
@@ -313,9 +319,8 @@ function draw() {
   // image(life, 700, .1)
   // image(life, 765, .1)
   // image(life, 835, .1)
-  fill("red");
-  rect(700, .1, 250 * (player.hp / 10), 70)
-  fill("white");
+
+  //Health Bar
 
   // rect(350, 700, 70, 70)
   // rect(450, 700, 70, 70)
@@ -400,6 +405,36 @@ function draw() {
       players[id].down = serverPlayers[i].down;
     }
   }
+
+c = color('hsb(160, 100%, 50%)');
+fill(c);
+ellipse(50, 50, 80, 80);
+
+
+c = color(255, 255, 255);
+fill(c);
+
+
+ellipse(50, 50, 5, 5) // player minimap
+ c = color(255, 0, 0);
+ fill(c);
+
+//place enemies on the minimap
+ for(var p in players){
+   let miniX = map(players[p].x, 0, 800, 34, 77)
+   let miniY = map(players[p].y, -200, 800, 21, 90)
+   if(dist(50, 50, miniX, miniY) < 40) {
+     ellipse(miniX, miniY, 5, 5)
+   }
+ }
+
+
+ fill(255, 0, 0);
+
+
+
+
+
 
   // for(i = 0; i < serverBullets.length; i++) {
   //   let bulletPush = true; // assume the player is new
