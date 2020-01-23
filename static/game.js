@@ -291,9 +291,9 @@ function draw() {
       image(awp, waypoints[i].x, waypoints[i].y);
     } else {
       image(awpB, waypoints[i].x, waypoints[i].y);
-    } else {
-      circle(waypoints[i].x, waypoints[i].y, 50)
-    }
+    } //else {
+      //circle(waypoints[i].x, waypoints[i].y, 50)
+    //}
   }
 
   for (var i = 0; i < bullets.length; i++) {
