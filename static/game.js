@@ -4,19 +4,19 @@ socket.on('message', function(data) {
   console.log(data);
 });
 
-
 let spritesheet;        // temporary spritesheet storage, before slicing
 let spritedata;         // spritesheet JSON data
 let down = [];          // temporary down animation storage
 let up = [];            // temporary up animation storage
 let left = [];          // temporary left animation storage
 let right = [];         // temporary right animation storage
-
+       //
 let players = {}; // Store the enemy players
 let serverPlayers = []; // Temporary storage for players from the server
 let bullets = [];
 let serverBullets = []; // Store projectiles
 let waypoints = [];
+wpoints = 0;
 
 var player; // The player object will go here, eventually
 
@@ -46,7 +46,7 @@ var mouse = {
 }
 
 var pl = {
-  x: 100,
+  x: 0,
   y: 0
 }
 
@@ -58,7 +58,7 @@ document.addEventListener('click', function(event) {
   mouse.my = mouseY;
   socket.emit('mouseclick', mouse);
   let count = 0;
-  for(id in players) {
+  for (id in players) {
     count += 1;
   }
   console.log(count);
@@ -121,8 +121,8 @@ function preload() {
   // Load animation assets
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
-  back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
-  hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
+  back = loadImage('/assets/Akan Movements 16.png'); // Backward walk spritesheet
+  hidari = loadImage('/assets/Akan Movements 17.png'); // Left walk spritesheet
   migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
@@ -135,6 +135,7 @@ function preload() {
 
 // Pointer lock stuff ----------------------------------------------------------
 var canvas;
+
 function lockChangeAlert() {
   // if (document.pointerLockElement === canvas ||
   //     document.mozPointerLockElement === canvas) {
@@ -145,6 +146,7 @@ function lockChangeAlert() {
   //   document.removeEventListener("mousemove", updatePosition, false);
   // }
 }
+
 function updatePosition(e) {
   cross.x += e.movementX;
   cross.y += e.movementY;
@@ -164,10 +166,10 @@ function setup() {
   };
   //canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
   //document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
-// ----------
+  // ----------
 
 
-  noCursor();             // don't show the cursor
+  noCursor(); // don't show the cursor
 
   // Slice up front spritesheet
   let frames = spritedata.frames;
@@ -196,7 +198,7 @@ function setup() {
     right.push(img);
   }
 
-
+  
   // loading assets / naming assets
 
   //Player (down animation, up animation, id, x, y, speed)
@@ -236,44 +238,44 @@ function draw() {
 
   player.show();
 
-    // Draw the enemies
-    for(var id in players) {
-      players[id].show();
-      if (players[id].left == true) {
-        //player.x = player.x - 3;
-        players[id].img = players[id].imgs["left"];
-        players[id].animate();
-      }
-      if (players[id].right == true) {
-        //player.x = player.x + 3
-        players[id].img = players[id].imgs["right"];
-        players[id].animate();
-      }
-      if (players[id].up == true) {
-        //player.y = player.y - 3
-        players[id].img = players[id].imgs["up"];
-        players[id].animate();
-      }
-      if (players[id].down == true) {
-        //player.y = player.y + 3
-        players[id].img = players[id].imgs["down"];
-        players[id].animate();
-      }
+  // Draw the enemies
+  for (var id in players) {
+    players[id].show();
+    if (players[id].left == true) {
+      //player.x = player.x - 3;
+      players[id].img = players[id].imgs["left"];
+      players[id].animate();
     }
+    if (players[id].right == true) {
+      //player.x = player.x + 3
+      players[id].img = players[id].imgs["right"];
+      players[id].animate();
+    }
+    if (players[id].up == true) {
+      //player.y = player.y - 3
+      players[id].img = players[id].imgs["up"];
+      players[id].animate();
+    }
+    if (players[id].down == true) {
+      //player.y = player.y + 3
+      players[id].img = players[id].imgs["down"];
+      players[id].animate();
+    }
+  }
 
-    // {
-    //   let plx = player.x
-    //   let ply = player.y
-    //   let c = dist(cross.x, cross.y, plx, ply);
-    //   let d = constrain(c, 0, 100);
-    //   let x = -((d / c) * (plx - cross.x)) + plx
-    //   let y = -((d / c) * (ply - cross.y)) + ply
-    //   line(player.x, player.y, x, y);
-    //   ellipse(x, y, 10);
-    //   cross.x = x;
-    //   cross.y = y;
-    // }
-    circle(250, 250, 50);
+  // {
+  //   let plx = player.x
+  //   let ply = player.y
+  //   let c = dist(cross.x, cross.y, plx, ply);
+  //   let d = constrain(c, 0, 100);
+  //   let x = -((d / c) * (plx - cross.x)) + plx
+  //   let y = -((d / c) * (ply - cross.y)) + ply
+  //   line(player.x, player.y, x, y);
+  //   ellipse(x, y, 10);
+  //   cross.x = x;
+  //   cross.y = y;
+  // }
+  circle(250, 250, 50);
   // Draw the enemies
   for (var id in waypoints) { /////////////////////////////////////
     w = waypoints[id];
@@ -285,6 +287,7 @@ function draw() {
     fill("black");
     circle(bullets[i].x, bullets[i].y, 5);
   }
+
 
   pop();
 
@@ -298,7 +301,8 @@ function draw() {
     let x = -((d / c) * (plx - mx)) + (plx)
     let y = -((d / c) * (ply - my)) + (ply)
     line(plx, ply, x, y);
-    ellipse(x, y, 5);
+    ellipse(x, y, 10);
+    text()
   }
   //circle(250, 250, 50);
 
@@ -310,16 +314,22 @@ function draw() {
   // image(life, 700, .1)
   // image(life, 765, .1)
   // image(life, 835, .1)
-  fill("red");
-  rect(700, .1, 250 * (player.hp/10), 70)
-  fill("white");
+
+  //Health Bar
 
   // rect(350, 700, 70, 70)
   // rect(450, 700, 70, 70)
   // rect(550, 700, 70, 70)
+  {
+    textSize(32);
+    text(player.hp, 10, 20);
+    text(wpoints, 200, 200)
 
-  text(mouseX + ", " + mouseY, 10, 10);
+    // fill("red");
+    // rect(10,10,70,50);
 
+    // text(mouseX + ", " + mouseY, 10, 10);
+  }
 
   // Draw crosshair
 
@@ -390,6 +400,36 @@ function draw() {
       players[id].down = serverPlayers[i].down;
     }
   }
+
+c = color('hsb(160, 100%, 50%)');
+fill(c);
+ellipse(50, 50, 80, 80);
+
+
+c = color(255, 255, 255);
+fill(c);
+
+
+ellipse(50, 50, 5, 5) // player minimap
+ c = color(255, 0, 0);
+ fill(c);
+
+//place enemies on the minimap
+ for(var p in players){
+   let miniX = map(players[p].x, 0, 800, 34, 77)
+   let miniY = map(players[p].y, -200, 800, 21, 90)
+   if(dist(50, 50, miniX, miniY) < 40) {
+     ellipse(miniX, miniY, 5, 5)
+   }
+ }
+
+
+ fill(255, 0, 0);
+
+
+
+
+
 
   // for(i = 0; i < serverBullets.length; i++) {
   //   let bulletPush = true; // assume the player is new
@@ -496,11 +536,16 @@ socket.on('state', function(me, bullets) {
   cross.y += dy;
   player.x = me.x;
   player.y = me.y;
-  player.hp = me.hp
+  player.hp = me.hp;
   socket.emit('movement', movement);
 });
-socket.on('waypoints', function(wp) {
-  waypoints = wp;
+socket.on('waypoint', function(points) {
+  // waypoints ;
+  wpoints = 0;
+  for (var i = 0; i < points.length; i++) {
+    wpoints = wpoints + points[i].points
+  }
+
 });
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
