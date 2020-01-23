@@ -123,8 +123,8 @@ function preload() {
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
-  migi = loadImage('/assets/Akan Movements 18.png');
-  // // Right walk spritesheet
+  migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
+  // Codework: Left + Up = Hidariue
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
