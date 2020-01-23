@@ -289,9 +289,10 @@ function draw() {
     if(waypoints[i].team == 1) {
       image(awp, waypoints[i].x, waypoints[i].y);
     } else {
+      circle(waypoints[i].x, waypoints[i].y, 50);
+    } else {
       circle(waypoints[i].x, waypoints[i].y, 50)
     }
-
   }
 
   for (var i = 0; i < bullets.length; i++) {
