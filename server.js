@@ -304,7 +304,7 @@ setInterval(function(){
       var point_c = 25*2
       // console.log(player.teamid);
       { // Test and send waypoints -------------------------------
-        let send = false;
+        let send = true;
         if (point_a*point_a + point_b*point_b <= point_c*point_c) {
           if (player.teamid == 0){
             // console.log("score +1");
@@ -352,7 +352,7 @@ function sendWaypoints(waypoints) {
     }
     points.push(point);
   }
-  io.sockets.emit('waypoint', points)
+  io.sockets.emit('waypoints', points)
 }
 
 // setInterval(function() {
