@@ -12,7 +12,6 @@ var room;
 var start;
 
 // Routing
-var nextteamselect;
 var waypoints = [];
 server.listen(5000, function() {
   console.log('Starting server on port 5000');
@@ -34,8 +33,6 @@ var waitingplayers = {};
 var bullets = [];
 
 // updates bullets
-
-
 
 setInterval(function() {
 
@@ -95,7 +92,6 @@ io.on('connection', function(socket) {
 
     waitingplayers[socket.id] = new Player(socket.id);
     room = room + 1
-
 
 
   });
@@ -273,12 +269,13 @@ setInterval(function(){
       var point_c = 25*2
       // console.log(player.teamid);
       { // Test and send waypoints -------------------------------
-        let send = false;
+        let send = true;
         if (point_a*point_a + point_b*point_b <= point_c*point_c) {
           if (player.teamid == 0){
             // console.log("score +1");
             if (waypoints[i].points <= 99) {
               waypoints[i].points += 1
+              send = true
               console.log(waypoints[i].points);
               if (waypoints[i].points >= 56) {
                 waypoints[i].team = 0
@@ -290,6 +287,7 @@ setInterval(function(){
             // console.log("score -1");
             if (waypoints[i].points >= 1) {
               waypoints[i].points -= 1
+              send = true
               console.log(waypoints[i].points);
               if (waypoints[i].points <= 44) {
                 waypoints[i].team = 1
@@ -319,9 +317,7 @@ function sendWaypoints(waypoints) {
     }
     points.push(point);
   }
-  if (start == true) {
-    io.sockets.emit('waypoint', points)
-  }
+  io.sockets.emit('waypoints', points)
 }
 
 // setInterval(function() {
@@ -349,10 +345,9 @@ setInterval(function() {
         }
       }
     }
-    if (start == true) {
-      io.sockets.connected[id].emit('state', players[id], bullets);
-      io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
-    }
+
+    io.sockets.connected[id].emit('state', players[id], bullets);
+    io.sockets.connected[id].emit('nearbyPlayers', playersOnScreen);
     var bulletsOnScreen = [];
     var player = players[id];
     for (var i = 0; i < bullets.length; i++) {
@@ -365,9 +360,7 @@ setInterval(function() {
         bulletsOnScreen.push(bullets[i]);
       }
     }
-    if (start) {
-      io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
-    }
+    io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
   }
 }, 1000 / 60);
 
