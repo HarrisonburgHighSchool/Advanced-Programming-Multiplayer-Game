@@ -209,7 +209,8 @@ function setup() {
   imgt2 = loadImage('assets/tree2.png');
   Enemy = loadImage('assets/Akan Movements 13.png');
   awp = loadImage('assets/Way Point.png');
-
+  awpB = loadImage('assets/Way Point B.png');
+  awpR = loadImage('assets/Way Point R.png');
 
   // Tell the server that a new player is loaded
   socket.emit('new player');
@@ -289,7 +290,7 @@ function draw() {
     if(waypoints[i].team == 1) {
       image(awp, waypoints[i].x, waypoints[i].y);
     } else {
-      circle(waypoints[i].x, waypoints[i].y, 50);
+      image(awpB, waypoints[i].x, waypoints[i].y);
     } else {
       circle(waypoints[i].x, waypoints[i].y, 50)
     }
