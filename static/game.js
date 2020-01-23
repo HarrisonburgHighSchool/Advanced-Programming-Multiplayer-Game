@@ -288,9 +288,9 @@ function draw() {
     fill(255);
     //circle(waypoints[i].x, waypoints[i].y, 100);
     if(waypoints[i].team == 1) {
-      image(awp, waypoints[i].x, waypoints[i].y);
+      image(awpB, waypoints[i].x, waypoints[i].y);
     } else {
-      image(awpB, waypoints[i].x, waypoints[i].y)
+      image(awp, waypoints[i].x, waypoints[i].y)
     } //else {
       //circle(waypoints[i].x, waypoints[i].y, 50)
     //}
