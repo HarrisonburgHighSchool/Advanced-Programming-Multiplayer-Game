@@ -231,7 +231,7 @@ function draw() {
        
         );
       }
-    
+    fill(255);
     }
   }
 
