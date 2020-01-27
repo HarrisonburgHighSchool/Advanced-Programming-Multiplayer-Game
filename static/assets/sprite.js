@@ -28,8 +28,8 @@ class Sprite {
     let index = floor(this.index) % this.len;
     //console.log(this)
     //image(this.imgs["down"][1], this.x + this.ox, this.y + this.oy);
-    ellipse(this.x, this.y, 25);
-    image(this.img[index], this.x - 64, this.y - 64);
+    ellipse(this.x, this.y, 0);
+    image(this.img[index], this.x - 16, this.y - 16);
   }
 
   // Update the player animation
