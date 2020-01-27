@@ -65,7 +65,7 @@ setInterval(function() {
 
     if (collided) {
       bullets.splice(i,1);
-      console.log("cruck");
+      console.log("cronk");
     }
   }
 }, 1000/60); // bullet updates
