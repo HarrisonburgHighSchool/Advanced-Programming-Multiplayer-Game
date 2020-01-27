@@ -124,11 +124,18 @@ function preload() {
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
   migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
+
+  // spritedata2 = loadJSON('/assets/FlinchingAkan.json'); // Frame information
   // Codework: Left + Up = Hidariue
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
   //backleft = loadImage('/assets/Akan Movements 22.png');  // BackwardLeft walk spritesheet
+  // spritedata3 = loadJSON('/assets/Pointer.json'); // Frame information
+  // front3 = loadImage('/assets/Pointer Movements 2.png'); // Forward walk spritesheet
+  // back3 = loadImage('/assets/Pointer Movements 3.png');   // Backward walk spritesheet
+  // hidari3 = loadImage('/assets/Pointer Movements 4.png');  // Left walk spritesheet
+  // migi3 = loadImage('/assets/Pointer Movements 5.png');
 }
 
 // P5js function, runs once
@@ -298,6 +305,7 @@ function draw() {
     //}
   }
 
+  //Projectiles Program
   for (var i = 0; i < bullets.length; i++) {
     fill("blue");
     circle(bullets[i].x, bullets[i].y, 5);
@@ -316,7 +324,7 @@ function draw() {
     let x = -((d / c) * (plx - mx)) + (plx)
     let y = -((d / c) * (ply - my)) + (ply)
     line(plx, ply, x, y);
-    ellipse(x, y, 10);
+    ellipse(x, y, 5); //Aiming Point
     text()
   }
   //circle(250, 250, 50);
