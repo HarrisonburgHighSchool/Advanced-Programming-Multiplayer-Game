@@ -142,8 +142,8 @@ io.on('connection', function(socket) {
 
     //Kill player
     if(player.hp <= 0) {
-      waitingplayers[socket.id] = players[socket.id];
       delete players[socket.id];
+      waitingplayers[socket.id] = new Player(socket.id);
       io.sockets.emit("game over")
     }
 
@@ -195,22 +195,13 @@ io.on('connection', function(socket) {
 
   socket.on('disconnect', function() {
 
-    io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
     delete waitingplayers[socket.id];
     io.sockets.emit('message', 'disconnect recieved');
-    room = room - 1
-
+    // room = room - 1
 
   });
 
-  // socket.on('attack', function(data) {
-  //   var player = players[socket.id] || {};
-  //     if (data.self) {
-  //       player.hp -= 5;
-  //       delete players[socket.id]
-  //     }
-  // });
 
 }); //player updates
 
@@ -234,11 +225,14 @@ setInterval(function(){
     winnerid = id;
   }
   if (start == true) {
-    if (reseti == 0 || reseti == 1) {
+    if (reseti == 0 || reseti == 1) { //ready to reset, only one or zero players left
       console.log("resetting with " + reseti + " in players table")
-      waitingplayers[winnerid] = players[winnerid];
-      delete players[winnerid];
-
+      if (winnerid) {
+        delete players[winnerid];
+        waitingplayers[winnerid] = new Player(winnerid);
+        room = 1;
+      }
+      
       bullets = []
       waypoints[0] = new Waypoint(250,250,0)
       waypoints[1] = new Waypoint(500,500,1)
