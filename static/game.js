@@ -222,12 +222,16 @@ function draw() {
   translate(450 - player.x, 400 - player.y); { // Draw the map
     for (x = 0; x < 20; x++) {
       for (y = 0; y < 20; y++) {
-        image(
-          imgg,
+        fill(0,0,255)
+        rect(
           32 * x,
-          32 * y
+          32 * y,
+          32,
+          32
+       
         );
       }
+    
     }
   }
 
