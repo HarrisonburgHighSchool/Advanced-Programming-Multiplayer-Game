@@ -2,15 +2,11 @@
 
 ## Table of Contents
 
-1. [Art & Animations](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#art--animations)
+[Art & Animations](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#art--animations)
 
- Selection
- Contact with Online
- Instructions
- Spawning Points
- Collision
- Territories and Results
- Loop
+[Client](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#client)
+
+[Server](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#server)
 
  Selection
 
@@ -25,8 +21,6 @@
  Territories and Results
 
  Loop
-
-Art & Animations
 
 ---
 
@@ -362,6 +356,8 @@ function draw() {
   }
 
 ```
+
+---
 
 # Server
 
