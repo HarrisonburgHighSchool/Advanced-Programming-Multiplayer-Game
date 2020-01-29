@@ -1,34 +1,32 @@
 # Advanced Programming Multiplayer Game
 
 ## Table of Contents
+ 
+[Art & Animations](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#art--animations)
 
- Selection
- Contact with Online
- Instructions
- Spawning Points
- Collision
- Territories and Results
- Loop
+[Client](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#client)
 
- Selection
+[Server](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#server)
 
- Contact with Online
-
- Instructions
-
- Spawning Points
-
- Collision
-
- Territories and Results
-
- Loop
-
-Art & Animations
+[When Testing](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#when-testing)
 
 ---
 
 # Art & Animations
+
+Selection
+
+Contact with Online
+
+Instructions
+
+Spawning Points
+
+Collision
+
+Territories and Results
+
+Loop
 
 Title Screen
 * Background Screen for Menu
@@ -447,3 +445,15 @@ Information is sent using `socket.emit` and received with `socket.on`.
  | Player | used by server, is a proper class. Stores coords, health, id | Stored in the players table, called by id. |
  | Bullet | used by server, is a proper class. Stores coords, direction of movement, and id of player that created it. | Stored in bullets table, called by table position. |
  | Waypoint | used by server, is a proper class. Stores coords, size, team who owns it, and points for ownership. | Stored in waypoint table, called by table position. |
+
+
+---
+
+# When testing
+
+Before the game can start, it checks for a couple of things
+
+1. If two or more players are connected to the server
+2. If two or more players have clicked the screen
+
+Then, the game will start. This list is also checked every time the game ends. In that case, the game will restart.
