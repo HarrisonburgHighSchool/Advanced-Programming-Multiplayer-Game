@@ -120,6 +120,12 @@ document.addEventListener('keyup', function(event) {
 function preload() {
   // Load animation assets
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
+  // IMPORTANT SPRITEDATA! DON'T ERASE IT! [
+  //front = loadImage('/assets/Pointer Movements 2.png'); // Forward walk spritesheet
+  //back = loadImage('/assets/Pointer Movements 3.png');   // Backward walk spritesheet
+  //hidari = loadImage('/assets/Pointer Movements 4.png');  // Left walk spritesheet
+  //migi = loadImage('/assets/Pointer Movements 5.png'); // Right walk spritesheet
+  // ]
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
   back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
@@ -131,11 +137,6 @@ function preload() {
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
   //backleft = loadImage('/assets/Akan Movements 22.png');  // BackwardLeft walk spritesheet
-  // spritedata3 = loadJSON('/assets/Pointer.json'); // Frame information
-  // front3 = loadImage('/assets/Pointer Movements 2.png'); // Forward walk spritesheet
-  // back3 = loadImage('/assets/Pointer Movements 3.png');   // Backward walk spritesheet
-  // hidari3 = loadImage('/assets/Pointer Movements 4.png');  // Left walk spritesheet
-  // migi3 = loadImage('/assets/Pointer Movements 5.png');
 }
 
 // P5js function, runs once
