@@ -124,6 +124,8 @@ function preload() {
   back = loadImage('/assets/Akan Movements 16.png'); // Backward walk spritesheet
   hidari = loadImage('/assets/Akan Movements 17.png'); // Left walk spritesheet
   migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
+
+
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
@@ -208,6 +210,8 @@ function setup() {
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
+  image1 = loadImage('assets/Grass1.png');
+  image2 = loadImage('assets/Grass4.png');
 
   // Tell the server that a new player is loaded
   socket.emit('new player');
@@ -219,10 +223,32 @@ function setup() {
 function draw() {
   background(255);
   push();
+
+  var map = [
+    [0, 0, 0, 1, 1, 0, 0],
+    [0, 0, 0, 1, 1, 0, 0],
+    [0, 0, 0, 1, 1, 0, 1],
+    [0, 0, 0, 1, 1, 0, 0],
+    [0, 1, 0, 1, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 1, 0, 0],
+  ]
+  // if (map[x][y]== 0) {
+  //   fill(255,0,0);
+  // } else if(map[x][y]==1) {
+  //   fill(0,0,255);
+  // }
+
+
   translate(450 - player.x, 400 - player.y); { // Draw the map
-    for (x = 0; x < 20; x++) {
+   for (x = 0; x < 20; x++) {
       for (y = 0; y < 20; y++) {
-        fill(0,0,255)
+        //fill(0,0,255)
+        if (map[x][y]== 0) {
+          fill(225,0,0);
+        } else if(map[x][y]==1) {
+          fill(0,0,225);
+        }
         rect(
           32 * x,
           32 * y,
