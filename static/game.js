@@ -225,13 +225,14 @@ function draw() {
   push();
 
   var map = [
-    [0, 0, 0, 1, 1, 0, 0],
-    [0, 0, 0, 1, 1, 0, 0],
-    [0, 0, 0, 1, 1, 0, 1],
-    [0, 0, 0, 1, 1, 0, 0],
-    [0, 1, 0, 1, 1, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 1, 1, 0, 0],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
+    [image1, image1, image1, image2, image2, image1, image1],
   ]
   // if (map[x][y]== 0) {
   //   fill(255,0,0);
@@ -241,23 +242,13 @@ function draw() {
 
 
   translate(450 - player.x, 400 - player.y); { // Draw the map
-   for (x = 0; x < 20; x++) {
-      for (y = 0; y < 20; y++) {
-        //fill(0,0,255)
-        if (map[x][y]== 0) {
-          fill(225,0,0);
-        } else if(map[x][y]==1) {
-          fill(0,0,225);
-        }
-        rect(
-          32 * x,
-          32 * y,
-          32,
-          32
-       
-        );
+    //fill(255);
+    for (x = 0; x < 5; x++) {
+      for (y = 0; y < 5; y++) {
+        image(map[x][y], x * 32, y * 32, 32, 32);
+        //tiles[x][y].draw()
       }
-    fill(255);
+
     }
   }
 
