@@ -2,11 +2,13 @@
 
 ## Table of Contents
 
-[Art & Animations](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#art--animations)
-
-[Client](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#client)
-
-[Server](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#server)
+ Selection
+ Contact with Online
+ Instructions
+ Spawning Points
+ Collision
+ Territories and Results
+ Loop
 
  Selection
 
@@ -21,6 +23,8 @@
  Territories and Results
 
  Loop
+
+Art & Animations
 
 ---
 
@@ -357,8 +361,6 @@ function draw() {
 
 ```
 
----
-
 # Server
 
 ## Table of Contents
@@ -439,5 +441,6 @@ Information is sent using `socket.emit` and received with `socket.on`.
 
  | Name | Info | Stored |
  | ---- | ---- | ------ |
- | Player | used by server, isn't actually a proper class, just a table. Stores coords, health, id | Stored in the players table, called by id |
- | Bullet | used by server, is a proper class, stores coords, direction of movement, and id of player that created it | Stored in bullets table, called by table position |
+ | Player | used by server, is a proper class. Stores coords, health, id | Stored in the players table, called by id. |
+ | Bullet | used by server, is a proper class. Stores coords, direction of movement, and id of player that created it. | Stored in bullets table, called by table position. |
+ | Waypoint | used by server, is a proper class. Stores coords, size, team who owns it, and points for ownership. | Stored in waypoint table, called by table position. |
