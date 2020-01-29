@@ -431,6 +431,9 @@ Information is sent using `socket.emit` and received with `socket.on`.
   | 'disconnect | when client leaves | deletes the player object |
   | 'state' | server sends data that's been updated, like player data and bullet data | client uses this data to update its own and to draw the screen |
   | 'nearbyPlayers' | server calculates which players are in seeing distance and sends them in a table | client uses this to draw the nearby players |
+  | 'game over' | sever tells client that a player has died | client isn't using it yet |
+  | 'isStart' | sever sends that the game has start and the people who are waiting to start | client doesn't use it |
+  | 'waypoints' | sever sends to client all the waypoints and their data | client uses it to render the waypoints and score |
 
  | setIntervals |
  | ------------ |
