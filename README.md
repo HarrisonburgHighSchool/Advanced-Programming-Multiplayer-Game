@@ -2,6 +2,8 @@
 
 ## Table of Contents
 
+1. [Art & Animations](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#art--animations)
+
  Selection
  Contact with Online
  Instructions
