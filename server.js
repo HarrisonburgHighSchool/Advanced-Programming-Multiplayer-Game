@@ -184,7 +184,7 @@ io.on('connection', function(socket) {
 
 
   socket.on('mouseclick', function(data) {
-    if(start) { //TEMP
+    // if(start) { //TEMP
       var player = players[socket.id] || {};
       if (data.left == true) {
 
@@ -192,12 +192,7 @@ io.on('connection', function(socket) {
       }
       console.log(data);
 
-    } else { //TEMP TEST
-      if (data.left == true) {
-        waitingplayers[socket.id].state = "ready";
-      }
-      console.log(""+ socket.id + " is ready to start!");
-    } //TEMP
+    // }
   });
 
   socket.on('disconnect', function() {
@@ -209,6 +204,12 @@ io.on('connection', function(socket) {
 
   });
 
+  socket.on('pressedStart', function() {
+    if(start == false) {
+      waitingplayers[socket.id].state = "ready";
+      console.log(""+ socket.id + " is ready to start!");
+    }
+  });
 
 }); //player updates
 
@@ -327,12 +328,12 @@ function sendWaypoints(waypoints) {
   io.sockets.emit('waypoints', points)
 }
 
-// setInterval(function() {
-//   io.sockets.emit('waypoint', waypoints)
-// }, 1000/60);
-
 setInterval(function() {
   io.sockets.emit("isStart", start, room)
+}, 1000/60);
+
+
+setInterval(function() {
 
   for (var id in players) {
 
