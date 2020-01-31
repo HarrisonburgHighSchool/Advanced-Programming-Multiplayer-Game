@@ -1,34 +1,32 @@
 # Advanced Programming Multiplayer Game
 
 ## Table of Contents
+ 
+[Art & Animations](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#art--animations)
 
- Selection
- Contact with Online
- Instructions
- Spawning Points
- Collision
- Territories and Results
- Loop
+[Client](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#client)
 
- Selection
+[Server](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#server)
 
- Contact with Online
-
- Instructions
-
- Spawning Points
-
- Collision
-
- Territories and Results
-
- Loop
-
-Art & Animations
+[When Testing](https://github.com/HarrisonburgHighSchool/Advanced-Programming-Multiplayer-Game/blob/master/README.md#when-testing)
 
 ---
 
 # Art & Animations
+
+Selection
+
+Contact with Online
+
+Instructions
+
+Spawning Points
+
+Collision
+
+Territories and Results
+
+Loop
 
 Title Screen
 * Background Screen for Menu
@@ -431,6 +429,9 @@ Information is sent using `socket.emit` and received with `socket.on`.
   | 'disconnect | when client leaves | deletes the player object |
   | 'state' | server sends data that's been updated, like player data and bullet data | client uses this data to update its own and to draw the screen |
   | 'nearbyPlayers' | server calculates which players are in seeing distance and sends them in a table | client uses this to draw the nearby players |
+  | 'game over' | sever tells client that a player has died | client isn't using it yet |
+  | 'isStart' | sever sends that the game has start and the people who are waiting to start | client doesn't use it |
+  | 'waypoints' | sever sends to client all the waypoints and their data | client uses it to render the waypoints and score |
 
  | setIntervals |
  | ------------ |
@@ -441,5 +442,18 @@ Information is sent using `socket.emit` and received with `socket.on`.
 
  | Name | Info | Stored |
  | ---- | ---- | ------ |
- | Player | used by server, isn't actually a proper class, just a table. Stores coords, health, id | Stored in the players table, called by id |
- | Bullet | used by server, is a proper class, stores coords, direction of movement, and id of player that created it | Stored in bullets table, called by table position |
+ | Player | used by server, is a proper class. Stores coords, health, id | Stored in the players table, called by id. |
+ | Bullet | used by server, is a proper class. Stores coords, direction of movement, and id of player that created it. | Stored in bullets table, called by table position. |
+ | Waypoint | used by server, is a proper class. Stores coords, size, team who owns it, and points for ownership. | Stored in waypoint table, called by table position. |
+
+
+---
+
+# When testing
+
+Before the game can start, it checks for a couple of things
+
+1. If two or more players are connected to the server
+2. If two or more players have clicked the screen
+
+Then, the game will start. This list is also checked every time the game ends. In that case, the game will restart.

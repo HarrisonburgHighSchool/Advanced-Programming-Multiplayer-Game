@@ -8,6 +8,9 @@ var server = http.Server(app);
 var io = socketIO(server);app.set('port', 5000);
 app.use(express.static('static'));
 
+var room;
+var start;
+
 // Routing
 var waypoints = [];
 server.listen(5000, function() {
@@ -15,6 +18,9 @@ server.listen(5000, function() {
   waypoints[0] = new Waypoint(250,250,0)
   waypoints[1] = new Waypoint(500,500,1)
   waypoints[2] = new Waypoint(750,750,2)
+  room = 0;
+  start = false;
+  nextteamselect = 0
 });
 
 // Add the WebSocket handlers
@@ -23,6 +29,7 @@ io.on('connection', function(socket) {
 });
 
 var players = {};
+var waitingplayers = {};
 var bullets = [];
 
 // updates bullets
@@ -58,7 +65,7 @@ setInterval(function() {
 
     if (collided) {
       bullets.splice(i,1);
-      console.log("cruck");
+      console.log("cronk");
     }
   }
 }, 1000/60); // bullet updates
@@ -67,9 +74,25 @@ io.on('connection', function(socket) {
 
   socket.on('new player', function() {
 
-    players[socket.id] = new Player(socket.id);
+    // if (start == false) {
+    //   // players[socket.id] = new Player(socket.id);
+    //   waitingplayers[socket.id] = new Player(socket.id);
+    //   console.log("New Player: " + socket.id)
+    //   room = room + 1;
+    //   io.sockets.emit("not started")
+    // } else if (start == true){
+    //   waitingplayers[socket.id] = new Player(socket.id);
+    //   io.sockets.emit("already playing", room); //client side needs a screen to come up for this
+    //   let i = 0;
+    //   for (var id in players) {
+    //     i = i + 1;
+    //   }
+    //   console.log("already started", i);
+    // }
 
-    console.log("New Player: " + socket.id)
+    waitingplayers[socket.id] = new Player(socket.id);
+    room = room + 1
+
 
   });
 
@@ -120,6 +143,8 @@ io.on('connection', function(socket) {
     //Kill player
     if(player.hp <= 0) {
       delete players[socket.id];
+      waitingplayers[socket.id] = new Player(socket.id);
+      io.sockets.emit("game over")
     }
 
     var collision = false;
@@ -159,141 +184,88 @@ io.on('connection', function(socket) {
 
 
   socket.on('mouseclick', function(data) {
+    if(start) { //TEMP
+      var player = players[socket.id] || {};
+      if (data.left == true) {
 
-    var player = players[socket.id] || {};
-    if (data.left == true) {
+        bullets.push(new Bullet(player, data.mx, data.my));
+      }
+      console.log(data);
 
-      bullets.push(new Bullet(player, data.mx, data.my));
-    }
-    console.log(data);
+    } else { //TEMP TEST
+      if (data.left == true) {
+        waitingplayers[socket.id].state = "ready";
+      }
+      console.log(""+ socket.id + " is ready to start!");
+    } //TEMP
   });
 
   socket.on('disconnect', function() {
 
-    io.sockets.emit('message', 'disconnect recieved');
     delete players[socket.id]
+    delete waitingplayers[socket.id];
     io.sockets.emit('message', 'disconnect recieved');
+    // room = room - 1
 
   });
 
-  // socket.on('attack', function(data) {
-  //   var player = players[socket.id] || {};
-  //     if (data.self) {
-  //       player.hp -= 5;
-  //       delete players[socket.id]
-  //     }
-  // });
 
 }); //player updates
 
-class Bullet {
- constructor(player, mx, my) {
-    mx = mx + player.x+7 - 450 //mouse x + player x - half of screen width
-    my = my + player.y+9.5 - 400 //gives us mouse relative to player
-    this.pl_id = player.id;
-    this.x = player.x+7-5;
-    this.y = player.y+9.5-5;
-    this.tempx = mx - player.x;
-    this.tempy = my - player.y;
-    this.orientation = Math.atan(this.tempy/this.tempx);
-
-    if (player.x > mx) {
-      this.dy = -Math.sin(this.orientation)*15;
-      this.dx = -Math.cos(this.orientation)*15;
-    } else {
-      this.dy = Math.sin(this.orientation)*15;
-      this.dx = Math.cos(this.orientation)*15;
-    }
-    // bullet needs to start not inside the players
-    this.x = this.x + (this.dx*2);
-    this.y = this.y + (this.dy*2);
-  }
-}
-
-class Player {
-  constructor(id) {
-    this.x = 450;
-    this.y = 400;
-    this.right = false;
-    this.left = false;
-    this.up = false;
-    this.down = false;
-    this.id = id;
-    this.teamid = Math.floor(Math.random() * Math.floor(2));
-    if (this.teamid == 0) {
-      this.x = 100;
-    } else {
-      this.x = 500;
-    }
-    if (this.teamid == 0) {
-      this.y = 100;
-    } else {
-      this.y = 500;
-    }
-    this.hp = 10
-    this.r = 10
-  }
-}
-
-class Waypoint {
-  constructor(x,y,t) {
-    this.x = x
-    this.y = y
-    this.r = 25
-    this.team = t
-    this.points = 50
-  }
-}
-
-//     if (player.x > mx) {
-//       this.dy = -Math.sin(this.orientation)*15;
-//       this.dx = -Math.cos(this.orientation)*15;
-//     } else {
-//       this.dy = Math.sin(this.orientation)*15;
-//       this.dx = Math.cos(this.orientation)*15;
-//     }
-//     // bullet needs to start not inside the players
-//     this.x = this.x + (this.dx*2);
-//     this.y = this.y + (this.dy*2);
-//   }
-// }
-
-// class Player {
-//   constructor(id) {
-//     this.x = 450;
-//     this.y = 400;
-//     this.right = false;
-//     this.left = false;
-//     this.up = false;
-//     this.down = false;
-//     this.id = id;
-//     this.teamid = Math.floor(Math.random() * Math.floor(2));
-//     if (this.teamid == 0) {
-//       this.x = 100;
-//     } else {
-//       this.x = 500;
-//     }
-//     if (this.teamid == 0) {
-//       this.y = 100;
-//     } else {
-//       this.y = 500;
-//     }
-//     this.hp = 10
-//     this.r = 10
-//   }
-// }
-// class Waypoint {
-//   constructor(x, y, t) {
-//     this.x = x
-//     this.y = y
-//     this.r = 25
-//     this.team = t
-//     this.points = 50
-//   }
-// }
-
 
 setInterval(function(){
+  currentreadycount = 0;
+  for (const waitingplayer in waitingplayers) {
+    if (waitingplayers[waitingplayer].state == "ready") {
+      currentreadycount += 1;
+    }
+  }
+  if (currentreadycount >= 2 && start == false) {
+    start = true
+    console.log("game started!!!!!")
+    players = waitingplayers;
+    waitingplayers = {};
+    for (var id in players) {
+
+    }
+  }
+
+  //restting after game end
+  let reseti = 0;
+  let winnerid;
+  for (var id in players) {
+    reseti = reseti + 1;
+    winnerid = id;
+  }
+  if (start == true) {
+    if (reseti == 0 || reseti == 1) { //ready to reset, only one or zero players left
+      console.log("resetting with " + reseti + " in players table")
+      if (winnerid) {
+        delete players[winnerid];
+        waitingplayers[winnerid] = new Player(winnerid);
+        room = 1;
+      }
+      
+      bullets = []
+      waypoints[0] = new Waypoint(250,250,0)
+      waypoints[1] = new Waypoint(500,500,1)
+      waypoints[2] = new Waypoint(750,750,2)
+      start = false;
+      nextteamselect = 0
+      let i = 0;
+      for (var id in waitingplayers) {
+        i = i + 1;
+      }
+      room = i;
+      console.log("restarted with ", + room + "players now waiting")
+    }
+  }
+//next time - set it so players reeset to different spots and their x and y and stuff resets
+//maybe just create new players!
+}, 1000/10)
+
+setInterval(function(){
+
   for (pl in players) {
     // console.log(waypoints.length);
     for (var i = 0; i < waypoints.length; i++) {
@@ -360,6 +332,7 @@ function sendWaypoints(waypoints) {
 // }, 1000/60);
 
 setInterval(function() {
+  io.sockets.emit("isStart", start, room)
 
   for (var id in players) {
 
@@ -419,3 +392,74 @@ setInterval(function() {
 //     io.sockets.connected[id].emit('nearbyBullets', bulletsOnScreen);
 //   }
 // }, 1000 / 60);
+
+function reset() {
+
+}
+
+
+class Bullet {
+ constructor(player, mx, my) {
+    mx = mx + player.x+7 - 450 //mouse x + player x - half of screen width
+    my = my + player.y+9.5 - 400 //gives us mouse relative to player
+    this.pl_id = player.id;
+    this.x = player.x+7-5;
+    this.y = player.y+9.5-5;
+    this.tempx = mx - player.x;
+    this.tempy = my - player.y;
+    this.orientation = Math.atan(this.tempy/this.tempx);
+
+    if (player.x > mx) {
+      this.dy = -Math.sin(this.orientation)*15;
+      this.dx = -Math.cos(this.orientation)*15;
+    } else {
+      this.dy = Math.sin(this.orientation)*15;
+      this.dx = Math.cos(this.orientation)*15;
+    }
+    // bullet needs to start not inside the players
+    this.x = this.x + (this.dx*2);
+    this.y = this.y + (this.dy*2);
+  }
+}
+
+class Player {
+  constructor(id) {
+    this.x = 450;
+    this.y = 400;
+    this.right = false;
+    this.left = false;
+    this.up = false;
+    this.down = false;
+    this.id = id;
+    this.teamid = nextteamselect
+    if (this.teamid == 0) {
+      nextteamselect = 1
+    }
+    if (this.teamid == 1) {
+      nextteamselect = 0
+    }
+    if (this.teamid == 0) {
+      this.x = 100;
+    } else {
+      this.x = 500;
+    }
+    if (this.teamid == 0) {
+      this.y = 100;
+    } else {
+      this.y = 500;
+    }
+    this.hp = 10
+    this.r = 10
+    this.state = "waiting" //waiting or ready
+  }
+}
+
+class Waypoint {
+  constructor(x,y,t) {
+    this.x = x
+    this.y = y
+    this.r = 25
+    this.team = t
+    this.points = 0
+  }
+}
