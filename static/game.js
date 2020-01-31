@@ -21,6 +21,9 @@ let playersinroom = 0; //the number of players waiting
 let isGameStarted = false;
 let pressedStart = false;
 
+let isStarted;
+let roomCount;
+
 var player; // The player object will go here, eventually
 
 var cross = {
@@ -84,10 +87,12 @@ document.addEventListener('keydown', function(event) {
       movement.up = true;
       player.up = true;
       break;
-    case 68: // D
+    case 68: //
       movement.right = true;
       player.right = true;
-      break;
+      break;() => {
+
+      }
     case 83: // S
       movement.down = true;
       player.down = true;
@@ -124,9 +129,10 @@ function preload() {
   // Load animation assets
   spritedata = loadJSON('/assets/Akan.json'); // Frame information
   front = loadImage('/assets/Akan Movements 15.png'); // Forward walk spritesheet
-  back = loadImage('/assets/Akan Movements 16.png'); // Backward walk spritesheet
-  hidari = loadImage('/assets/Akan Movements 17.png'); // Left walk spritesheet
-  migi = loadImage('/assets/Akan Movements 18.png'); // Right walk spritesheet
+  back = loadImage('/assets/Akan Movements 16.png');   // Backward walk spritesheet
+  hidari = loadImage('/assets/Akan Movements 17.png');  // Left walk spritesheet
+  migi = loadImage('/assets/Akan Movements 18.png');
+  // // Right walk spritesheet
   //frontright = loadImage('/assets/Akan Movements 19.png');  // ForwardRight walk spritesheet
   //frontleft = loadImage('/assets/Akan Movements 20.png'); // ForwardLeft walk spritesheet
   //backright = loadImage('/assets/Akan Movements 21.png'); // BackwardRight walk spritesheet
@@ -211,6 +217,10 @@ function setup() {
   imgr = loadImage('assets/Rock1.gif');
   imgt = loadImage('assets/tree1.png');
   imgt2 = loadImage('assets/tree2.png');
+  Enemy = loadImage('assets/Akan Movements 13.png');
+  awp = loadImage('assets/Way Point.png');
+  awpB = loadImage('assets/Way Point B.png');
+  awpR = loadImage('assets/Way Point R.png');
 
   // Tell the server that a new player is loaded
   socket.emit('new player');
@@ -266,28 +276,38 @@ function draw() {
     }
   }
 
-  // {
-  //   let plx = player.x
-  //   let ply = player.y
-  //   let c = dist(cross.x, cross.y, plx, ply);
-  //   let d = constrain(c, 0, 100);
-  //   let x = -((d / c) * (plx - cross.x)) + plx
-  //   let y = -((d / c) * (ply - cross.y)) + ply
-  //   line(player.x, player.y, x, y);
-  //   ellipse(x, y, 10);
-  //   cross.x = x;
-  //   cross.y = y;
-  // }
-  circle(250, 250, 50);
+    // {
+    //   let plx = player.x
+    //   let ply = player.y
+    //   let c = dist(cross.x, cross.y, plx, ply);
+    //   let d = constrain(c, 0, 100);
+    //   let x = -((d / c) * (plx - cross.x)) + plx
+    //   let y = -((d / c) * (ply - cross.y)) + ply
+    //   line(player.x, player.y, x, y);
+    //   ellipse(x, y, 10);
+    //   cross.x = x;
+    //   cross.y = y;
+    // }
+    // Enemy = circle()
+    // circle(250, 250, 50);
   // Draw the enemies
-  for (var id in waypoints) { /////////////////////////////////////
-    w = waypoints[id];
-    fill(w.c);
-    circle(w.x, w.y, w.r);
+  //circle(250, 250, 50);
+  for (var i=0; i<waypoints.length; i++) { /////////////////////////////////////
+    //waypoints[id].show();
+    //waypoints = waypoints[i];
+    fill(255);
+    //circle(waypoints[i].x, waypoints[i].y, 100);
+    if(waypoints[i].team == 1) {
+      image(awpB, waypoints[i].x, waypoints[i].y);
+    } else {
+      image(awp, waypoints[i].x, waypoints[i].y)
+    } //else {
+      //circle(waypoints[i].x, waypoints[i].y, 50)
+    //}
   }
 
   for (var i = 0; i < bullets.length; i++) {
-    fill("black");
+    fill("blue");
     circle(bullets[i].x, bullets[i].y, 5);
   }
 
@@ -553,6 +573,13 @@ ellipse(50, 50, 5, 5) // player minimap
 //   }
 // }
 
+socket.on('isStart', function(s, r) {
+  isStarted = s;
+  roomCount = r;
+  // console.log(isStarted);
+  // console.log(roomCount);
+});
+
 socket.on('state', function(me, bullets) {
   let dx = me.x - player.x;
   let dy = me.y - player.y;
@@ -563,13 +590,9 @@ socket.on('state', function(me, bullets) {
   player.hp = me.hp;
   socket.emit('movement', movement);
 });
-socket.on('waypoint', function(points) {
-  // waypoints ;
-  wpoints = 0;
-  for (var i = 0; i < points.length; i++) {
-    wpoints = wpoints + points[i].points
-  }
-
+socket.on('waypoints', function(wp) {
+  waypoints = wp;
+  console.log(wp.length);
 });
 
 socket.on('isStart', function(start, room ){
