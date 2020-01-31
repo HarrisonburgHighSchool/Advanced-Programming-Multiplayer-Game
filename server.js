@@ -65,7 +65,7 @@ setInterval(function() {
 
     if (collided) {
       bullets.splice(i,1);
-      console.log("cruck");
+      console.log("cronk");
     }
   }
 }, 1000/60); // bullet updates
@@ -184,13 +184,20 @@ io.on('connection', function(socket) {
 
 
   socket.on('mouseclick', function(data) {
+    if(start) { //TEMP
+      var player = players[socket.id] || {};
+      if (data.left == true) {
 
-    var player = players[socket.id] || {};
-    if (data.left == true) {
+        bullets.push(new Bullet(player, data.mx, data.my));
+      }
+      console.log(data);
 
-      bullets.push(new Bullet(player, data.mx, data.my));
-    }
-    console.log(data);
+    } else { //TEMP TEST
+      if (data.left == true) {
+        waitingplayers[socket.id].state = "ready";
+      }
+      console.log(""+ socket.id + " is ready to start!");
+    } //TEMP
   });
 
   socket.on('disconnect', function() {
@@ -207,7 +214,13 @@ io.on('connection', function(socket) {
 
 
 setInterval(function(){
-  if (room >= 2 && start == false) {
+  currentreadycount = 0;
+  for (const waitingplayer in waitingplayers) {
+    if (waitingplayers[waitingplayer].state == "ready") {
+      currentreadycount += 1;
+    }
+  }
+  if (currentreadycount >= 2 && start == false) {
     start = true
     console.log("game started!!!!!")
     players = waitingplayers;
@@ -437,7 +450,7 @@ class Player {
     }
     this.hp = 10
     this.r = 10
-    this.state = "waiting"
+    this.state = "waiting" //waiting or ready
   }
 }
 
