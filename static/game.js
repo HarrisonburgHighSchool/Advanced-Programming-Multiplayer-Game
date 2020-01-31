@@ -342,8 +342,17 @@ function draw() {
   // rect(550, 700, 70, 70)
   {
     textSize(32);
-    text(player.hp, 10, 20);
-    text(wpoints, 200, 200)
+    {fill("black")
+    rect(130, 130, 200, 50)}
+
+    {fill("red")
+    rect(130, 130, player.hp*20, 50)}
+    
+    text(player.hp, 160, 220);
+    text("|", 200, 220);
+
+    text(wpoints, 215, 220)
+
 
     // fill("red");
     // rect(10,10,70,50);
