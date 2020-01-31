@@ -17,6 +17,9 @@ let bullets = [];
 let serverBullets = []; // Store projectiles
 let waypoints = [];
 wpoints = 0;
+let playersinroom = 0; //the number of players waiting
+let isGameStarted = false;
+let pressedStart = false;
 
 var player; // The player object will go here, eventually
 
@@ -323,15 +326,16 @@ function draw() {
   {
     textSize(32);
     {fill("black")
-    rect(130, 130, 200, 50)}
+    rect(120, 20, 200, 50)}
 
     {fill("red")
-    rect(130, 130, player.hp*20, 50)}
+    rect(120, 20, player.hp*20, 50)}
     
-    text(player.hp, 160, 220);
-    text("|", 200, 220);
-
-    text(wpoints, 215, 220)
+    {fill("black")
+    text(player.hp, 360, 60);
+    text("|", 400, 60);
+    text(wpoints, 415, 60)
+    }
 
 
     // fill("red");
@@ -436,8 +440,19 @@ ellipse(50, 50, 5, 5) // player minimap
  fill(255, 0, 0);
 
 
-
-
+ if (isGameStarted == false) {
+  //  fill(255,255,255)
+   x = 300
+   y = 300
+   w = 100
+   h = 50
+   rect(x,y,w,h)
+   if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h && pressedStart == false) {
+    mouse.left = true;
+    pressedStart = true;
+    socket.emit('pressedStart', player.id);
+   }
+ }
 
 
   // for(i = 0; i < serverBullets.length; i++) {
@@ -555,6 +570,11 @@ socket.on('waypoint', function(points) {
     wpoints = wpoints + points[i].points
   }
 
+});
+
+socket.on('isStart', function(start, room ){
+  playersinroom = room
+  isGameStarted = start
 });
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
