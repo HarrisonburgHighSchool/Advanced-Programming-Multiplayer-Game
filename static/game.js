@@ -18,6 +18,9 @@ let serverBullets = []; // Store projectiles
 let waypoints = [];
 wpoints = 0;
 
+let isStarted;
+let roomCount;
+
 var player; // The player object will go here, eventually
 
 var cross = {
@@ -81,10 +84,12 @@ document.addEventListener('keydown', function(event) {
       movement.up = true;
       player.up = true;
       break;
-    case 68: // D
+    case 68: //
       movement.right = true;
       player.right = true;
-      break;
+      break;() => {
+
+      }
     case 83: // S
       movement.down = true;
       player.down = true;
@@ -346,8 +351,17 @@ function draw() {
   // rect(550, 700, 70, 70)
   {
     textSize(32);
-    text(player.hp, 10, 20);
-    text(wpoints, 200, 200)
+    {fill("black")
+    rect(130, 130, 200, 50)}
+
+    {fill("red")
+    rect(130, 130, player.hp*20, 50)}
+    
+    text(player.hp, 160, 220);
+    text("|", 200, 220);
+
+    text(wpoints, 215, 220)
+
 
     // fill("red");
     // rect(10,10,70,50);
@@ -552,6 +566,13 @@ ellipse(50, 50, 5, 5) // player minimap
 //     image(this.img[index], this.x, this.y);
 //   }
 // }
+
+socket.on('isStart', function(s, r) {
+  isStarted = s;
+  roomCount = r;
+  // console.log(isStarted);
+  // console.log(roomCount);
+});
 
 socket.on('state', function(me, bullets) {
   let dx = me.x - player.x;
