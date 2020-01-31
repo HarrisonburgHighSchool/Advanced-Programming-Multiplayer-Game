@@ -17,9 +17,10 @@ let bullets = [];
 let serverBullets = []; // Store projectiles
 let waypoints = [];
 wpoints = 0;
+let playersinroom = 0; //the number of players waiting
+let isGameStarted = false;
+let pressedStart = false;
 
-let isStarted;
-let roomCount;
 
 var player; // The player object will go here, eventually
 
@@ -68,9 +69,9 @@ document.addEventListener('click', function(event) {
 
 });
 
-// document.addEventListener('mousereleased', function(event) {
-//   mouse.left = false;
-// });
+document.addEventListener('mousereleased', function(event) {
+  mouse.left = false;
+});
 
 // Listens for keypresses on the DOM,
 // updates relevant data structures
@@ -343,15 +344,16 @@ function draw() {
   {
     textSize(32);
     {fill("black")
-    rect(130, 130, 200, 50)}
+    rect(120, 20, 200, 50)}
 
     {fill("red")
-    rect(130, 130, player.hp*20, 50)}
+    rect(120, 20, player.hp*20, 50)}
     
-    text(player.hp, 160, 220);
-    text("|", 200, 220);
-
-    text(wpoints, 215, 220)
+    {fill("black")
+    text(player.hp, 360, 60);
+    text("|", 400, 60);
+    text(wpoints, 415, 60)
+    }
 
 
     // fill("red");
@@ -455,8 +457,24 @@ ellipse(50, 50, 5, 5) // player minimap
 
  fill(255, 0, 0);
 
-
-
+ document.addEventListener('click', function(event) {
+  if (isGameStarted == false) {
+    console.log(isGameStarted)
+    //  fill(255,255,255)
+     x = 0
+     y = 0
+     w = 100
+     h = 50
+     rect(x,y,w,h)
+     if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h && pressedStart == false) {
+      // if (mouse.left = true) {
+        pressedStart = true;
+        socket.emit('pressedStart');
+        console.log('bruh');
+      // }
+     }
+   }
+});
 
 
 
@@ -558,12 +576,6 @@ ellipse(50, 50, 5, 5) // player minimap
 //   }
 // }
 
-socket.on('isStart', function(s, r) {
-  isStarted = s;
-  roomCount = r;
-  // console.log(isStarted);
-  // console.log(roomCount);
-});
 
 socket.on('state', function(me, bullets) {
   let dx = me.x - player.x;
@@ -578,6 +590,17 @@ socket.on('state', function(me, bullets) {
 socket.on('waypoints', function(wp) {
   waypoints = wp;
   console.log(wp.length);
+});
+//receives is game has started, and how many players are in room
+socket.on('isStart', function(start, room ){
+  playersinroom = room
+  isGameStarted = start
+  console.log("room = " + room)
+  console.log("start = " + start)
+});
+//when player dies
+socket.on('game over', function(){
+  pressedStart = false //lets player press ready button again
 });
 // Server sends table full of nearby players
 socket.on('nearbyPlayers', function(playersOnScreen) {
