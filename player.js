@@ -59,6 +59,24 @@ class Bullet {
         // bullet needs to start not inside the players
         this.x = this.x + (this.dx*2);
         this.y = this.y + (this.dy*2);
+        this.collided = false
+    }
+    update() {
+        this.x = this.x + this.dx;
+        this.y = this.y + this.dy;
+        //wall collision
+        if (this.x >= 3900) {
+            this.collided = true;
+        }
+        if (this.x <= 0) {
+            this.collided = true;
+        }
+        if (this.y >= 3900) {
+            this.collided = true;
+        }
+        if (this.y <= 0) {
+            this.collided = true;
+        }
     }
 }
 
