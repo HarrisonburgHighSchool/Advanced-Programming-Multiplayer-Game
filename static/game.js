@@ -471,13 +471,11 @@ ellipse(50, 50, 5, 5) // player minimap
    {fill("white")
    textSize(20)
    text("Click to start", 5, 125)}  // click to start
-     if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h && pressedStart == false) {
-      // if (mouse.left = true) {
-        pressedStart = true;
-        socket.emit('pressedStart');
-        console.log('bruh');
-      // }
-     }
+  // if (mouse.left = true) {
+    pressedStart = true;
+    socket.emit('pressedStart');
+    console.log('bruh');
+  // }
    }
 });
 
