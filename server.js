@@ -205,6 +205,12 @@ io.on('connection', function (socket) {
 
   });
 
+  socket.on('pressedStart', function() {
+    if(start == false) {
+      waitingplayers[socket.id].state = "ready";
+      console.log(""+ socket.id + " is ready to start!");
+    }
+  });
 
 }); //player updates
 
@@ -310,11 +316,6 @@ function update() {
     }
 
 
-  
-
-  // setInterval(function() {
-  //   io.sockets.emit('waypoint', waypoints)
-  // }, 1000/60);
 
     io.sockets.emit("isStart", start, room)
 
