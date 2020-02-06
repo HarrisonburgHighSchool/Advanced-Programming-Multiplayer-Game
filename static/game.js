@@ -226,6 +226,7 @@ function setup() {
   awp = loadImage('assets/Way Point.png');
   awpB = loadImage('assets/Way Point B.png');
   awpR = loadImage('assets/Way Point R.png');
+  rdr = loadImage('assets/Radar-2.png.png');
 
   // Tell the server that a new player is loaded
   socket.emit('new player');
@@ -253,6 +254,7 @@ function draw() {
   image(imgr, 322, 5);
   image(imgt, 0, 10);
   image(imgt2, 200, 5);
+  image(rdr, -450, -100)
 
   player.show();
 
