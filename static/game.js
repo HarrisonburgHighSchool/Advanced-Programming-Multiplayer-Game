@@ -588,6 +588,7 @@ socket.on('state', function(me, bullets) {
   player.x = me.x;
   player.y = me.y;
   player.hp = me.hp;
+  console.log(me.clipamount);
   socket.emit('movement', movement);
 });
 socket.on('waypoints', function(wp) {
