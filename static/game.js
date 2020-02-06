@@ -460,13 +460,20 @@ ellipse(50, 50, 5, 5) // player minimap
  fill(255, 0, 0);
 
 
- if (isGameStarted == false) {
+ if (isGameStarted == false) {  // start game when screen clicked
   //  fill(255,255,255)
-   x = 300
-   y = 300
-   w = 100
+   x = 5
+   y = 100
+   w = 120
    h = 50
-   rect(x,y,w,h)
+   {fill("black")
+   rect(x,y,w,h)}  //click to start backgroud stuff
+
+   {fill("white")
+   textSize(20)
+   text("Click to start", 5, 125)}  // click to start
+
+    fill("red")
    if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h && pressedStart == false) {
     mouse.left = true;
     pressedStart = true;
