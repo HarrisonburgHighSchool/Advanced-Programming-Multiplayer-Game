@@ -10,7 +10,7 @@ app.use(express.static('static'));
 
 var room;
 var start;
-
+// >: ( ) 
 // Routing
 var waypoints = [];
 server.listen(5000, function() {
@@ -98,7 +98,15 @@ io.on('connection', function(socket) {
 
   socket.on('movement', function(data) {
 
-    var player = players[socket.id] || {};
+    var player = players[socket.id] || {}; 
+
+    if (start = true) {
+      player.update();// Right now, this just updates the player.clipamount
+    }
+
+    // if (player.clipamount < 300) {
+    //   player.clipamount = player.clipamount + 1
+    // }
 
     if (data.left) {
       if (player.x - 20 >= 0 - 63) {
@@ -172,7 +180,6 @@ io.on('connection', function(socket) {
         collision = true;
         player.hp = player.hp - 1;
         bullets.splice(i,1);
-        console.log("bullet hit " + player.id);
       }
     }
     if (collision == true) {
@@ -180,24 +187,27 @@ io.on('connection', function(socket) {
     } else {
       player.color = 'green';
     }
-  });
+  }); 
 
 
   socket.on('mouseclick', function(data) {
-    if(start) { //TEMP
+    // if(start) { //TEMP
       var player = players[socket.id] || {};
       if (data.left == true) {
-
-        bullets.push(new Bullet(player, data.mx, data.my));
+        if (player.clipamount >= 45) {
+          if (player.clipamount >= 150) {
+            bullets.push(new Bullet(player, data.mx + 25, data.my * 1.1));
+            bullets.push(new Bullet(player, data.mx, data.my)); 
+            bullets.push(new Bullet(player, data.mx - 25, data.my * 0.9));
+            player.clipamount = player.clipamount - 45
+          } else {
+              bullets.push(new Bullet(player, data.mx, data.my));
+              player.clipamount = player.clipamount - 45
+            }
+        }
       }
-      console.log(data);
 
-    } else { //TEMP TEST
-      if (data.left == true) {
-        waitingplayers[socket.id].state = "ready";
-      }
-      console.log(""+ socket.id + " is ready to start!");
-    } //TEMP
+    // }
   });
 
   socket.on('disconnect', function() {
@@ -209,6 +219,12 @@ io.on('connection', function(socket) {
 
   });
 
+  socket.on('pressedStart', function() {
+    if(start == false) {
+      waitingplayers[socket.id].state = "ready";
+      console.log(""+ socket.id + " is ready to start!");
+    }
+  });
 
 }); //player updates
 
@@ -327,12 +343,12 @@ function sendWaypoints(waypoints) {
   io.sockets.emit('waypoints', points)
 }
 
-// setInterval(function() {
-//   io.sockets.emit('waypoint', waypoints)
-// }, 1000/60);
-
 setInterval(function() {
   io.sockets.emit("isStart", start, room)
+}, 1000/60);
+
+
+setInterval(function() {
 
   for (var id in players) {
 
@@ -408,7 +424,6 @@ class Bullet {
     this.tempx = mx - player.x;
     this.tempy = my - player.y;
     this.orientation = Math.atan(this.tempy/this.tempx);
-
     if (player.x > mx) {
       this.dy = -Math.sin(this.orientation)*15;
       this.dx = -Math.cos(this.orientation)*15;
@@ -432,6 +447,7 @@ class Player {
     this.down = false;
     this.id = id;
     this.teamid = nextteamselect
+    this.clipamount = 300
     if (this.teamid == 0) {
       nextteamselect = 1
     }
@@ -451,6 +467,11 @@ class Player {
     this.hp = 10
     this.r = 10
     this.state = "waiting" //waiting or ready
+  }
+  update() {
+    if (this.clipamount < 300) {
+      this.clipamount = this.clipamount + 1
+    }
   }
 }
 
