@@ -476,14 +476,17 @@ ellipse(50, 50, 5, 5) // player minimap
      y = 0
      w = 100
      h = 50
-     rect(x,y,w,h)
-     if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h && pressedStart == false) {
-      // if (mouse.left = true) {
-        pressedStart = true;
-        socket.emit('pressedStart');
-        console.log('bruh');
-      // }
-     }
+     {fill("black")
+   rect(x,y,w,h)}  //click to start backgroud stuff
+
+   {fill("white")
+   textSize(20)
+   text("Click to start", 5, 125)}  // click to start
+  // if (mouse.left = true) {
+    pressedStart = true;
+    socket.emit('pressedStart');
+    console.log('bruh');
+  // }
    }
 });
 
@@ -596,6 +599,7 @@ socket.on('state', function(me, bullets) {
   player.x = me.x;
   player.y = me.y;
   player.hp = me.hp;
+  console.log(me.clipamount);
   socket.emit('movement', movement);
 });
 socket.on('waypoints', function(wp) {
